@@ -4,6 +4,7 @@ class record  {
 
     public $dsp;
     public $__tablename__  = '';
+    protected $errors = array();
 
     protected $table_structure = array();
 
@@ -30,6 +31,9 @@ class record  {
     } // GetItem()
 
     protected function tableStructure() { }
+
+    protected function checkUpdate($item) { }
+
 
 }
 

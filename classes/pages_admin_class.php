@@ -80,6 +80,13 @@ class pages_admin extends record {
         $save = $_POST['record'];
         if (trim($save['translit']) == '') $save['translit'] = translit($save['title']);
 
+        $this->errors = $this->checkUpdate($save);
+
+        if (count($this->errors) > 0)
+        {
+            return;
+        }
+
         if ($id > 0)
         {
             $sql = "update `".$this->__tablename__."` set
@@ -90,12 +97,18 @@ class pages_admin extends record {
                 where `id` = ?
             ".'';
             $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $id);
+            Redirect('/admin/?op=pages&act=edit&id='.$id);
         } else {
             $sql = "insert into `pages` (`id`, `title`, `translit`, `text`) values (0, ?, ?)".'';
             $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0);
 
             Redirect('/admin/?op=pages&act=edit&id='.$this->dsp->db->LastInsertId());
         }
+    }
+
+    protected function checkUpdate($item)
+    {
+
     }
 
 }

@@ -13,5 +13,10 @@
         } // if
     } // if
 
-    Redirect($_SERVER['REQUEST_URI']);
+    if (isset($_POST['no_redirect']) &&  $_POST['no_redirect'])
+    {
+
+    } else {
+        Redirect($_SERVER['REQUEST_URI']);
+    }
 ?>
