@@ -11,7 +11,10 @@
     <!-- EDIT -->
 
     <xsl:template match="field" mode="table_row">
-        <tr valign="top"><td align="right"><xsl:value-of select="./@title"/></td><td><xsl:apply-templates select="." mode="input"/></td></tr>
+        <tr valign="top"><td align="right">
+            <xsl:value-of select="./@title"/></td><td><xsl:apply-templates select="." mode="input"/>
+            <xsl:if test="./@error != ''"><br /><span class="error"><xsl:value-of select="./@error"/></span></xsl:if>
+        </td></tr>
     </xsl:template>
 
 
@@ -45,6 +48,7 @@
             <input type="hidden" name="do_save" value="1" />
             <input type="hidden" name="op" value="{/root/common/op}" />
             <input type="hidden" name="opcode" value="item_edit" />
+            <input type="hidden" name="no_redirect" value="1" />
         </form>
     </xsl:template>
 
@@ -59,6 +63,7 @@
             <td><div class="drag"></div></td>
             <xsl:apply-templates select="field" mode="list_field" />
             <td><a href="/admin/?op={/root/common/op}&amp;act=edit&amp;id={field[@name='id']}"><img src="/admin/static/img/edit.png" /></a></td>
+            <td><a class="delete" href="/admin/?op={/root/common/op}&amp;act=delete&amp;id={field[@name='id']}"><img src="/admin/static/img/del.png" /></a></td>
         </tr>
     </xsl:template>
 
@@ -66,6 +71,10 @@
 
     <xsl:template match="field[@showtype='label']" mode="list_field">
         <td><xsl:value-of select="." /></td>
+    </xsl:template>
+
+    <xsl:template match="field[@showtype='link_children']" mode="list_field">
+        <td><a href="/admin/?op={/root/common/op}&amp;pid={../field[@name='id']}"><xsl:value-of select="." /></a></td>
     </xsl:template>
 
     <xsl:template match="field[@showtype!='none']" mode="list_header">
@@ -80,9 +89,29 @@
                 <th></th>
                 <xsl:apply-templates select="../fields/field" mode="list_header" />
                 <th></th>
+                <th></th>
             </tr>
             <xsl:apply-templates select="item" mode="list_item"/>
         </table>
     </xsl:template>
+
+    <!-- PATH -->
+
+    <xsl:template match="block[@name='path']">
+        <ul class="path">
+            <xsl:for-each select="item">
+                <li>
+                    <xsl:choose>
+                        <xsl:when test="position() = count(../item) and /root/mod_params/act = 'list'"><xsl:value-of select="title"/></xsl:when>
+                        <xsl:otherwise><a href="/admin/?op={/root/common/op}&amp;pid={id}"><xsl:value-of select="title"/></a></xsl:otherwise>
+                    </xsl:choose>
+                </li>
+                <xsl:if test="position() &lt; count(../item)">
+                    <li>&#187;</li>
+                </xsl:if>
+            </xsl:for-each>
+        </ul>
+    </xsl:template>
+
 
 </xsl:stylesheet>

@@ -86,3 +86,20 @@ tr.table_header {
 tr.unactive {
     background-color: #ddd;
 }
+
+.edit_item_form td.error input {
+    background-color: #f00;
+}
+
+span.error {
+    color: red;
+}
+
+ul.path {
+    list-style: none;
+    outline: 0;
+}
+
+ul.path li {
+    display: inline;
+}

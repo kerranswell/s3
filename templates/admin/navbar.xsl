@@ -5,7 +5,7 @@
         <ul class="main_menu">
             <xsl:for-each select="item">
                 <li><xsl:if test="/root/common/op = ./op"><xsl:attribute name="class">active</xsl:attribute></xsl:if>
-                    <a href="/admin/?op={op}"><xsl:value-of select="title"/></a></li>
+                    <a href="{link}"><xsl:value-of select="title"/></a></li>
             </xsl:for-each>
         </ul>
     </xsl:template>

@@ -3,6 +3,8 @@
 class pages_admin extends record {
 
     public $__tablename__  = 'pages';
+    public $pid = 0;
+    public $act = 'list';
 
     protected $table_structure = array(
         'id' => array('type' => 'int', 'params' => array(
@@ -15,7 +17,7 @@ class pages_admin extends record {
         ), 'title' => 'PID'),
         'title' => array('type' => 'string', 'params' => array(
             'edit' => array('showtype' => 'string'),
-            'list' => array('showtype' => 'label'),
+            'list' => array('showtype' => 'link_children'),
         ), 'title' => 'Заголовок'),
         'translit' => array('type' => 'string', 'params' => array(
             'edit' => array('showtype' => 'string'),
@@ -35,9 +37,43 @@ class pages_admin extends record {
         ), 'title' => 'Статус'),
     );
 
+    protected function init()
+    {
+        $this->pid = empty($_REQUEST['pid']) ? 0 : (int)$_REQUEST['pid'];
+        if (empty($_SESSION[$this->__tablename__]['pid'])) $_SESSION[$this->__tablename__]['pid'] = $this->pid;
+
+        if (isset($_REQUEST['pid'])) $_SESSION[$this->__tablename__]['pid'] = $this->pid;
+        else $this->pid = $_SESSION[$this->__tablename__]['pid'];
+
+        if ($this->pid > 0)
+        {
+            $this->table_structure['title']['params']['list']['showtype'] = 'label';
+        }
+
+        $this->act = empty($_REQUEST['act']) ? 'list' : $_REQUEST['act'];
+    }
+
+    public function getPath($pid = -1)
+    {
+        if ($pid < 0) $pid = $this->pid;
+
+        $rows = array();
+
+        if ($pid > 0)
+        {
+            $row = $this->GetItem($pid, '`id`, `pid`, `title`');
+            $rows[] = $row;
+            $rows = array_merge($this->getPath($row['pid']), $rows);
+        } else {
+            $rows = array_merge(array(array('id' => 0, 'pid' => -1, 'title' => 'Корень')), $rows);
+        }
+
+        return $rows;
+    }
+
     public function getList()
     {
-        $pid = empty($_REQUEST['pid']) ? 0 : (int)$_REQUEST['pid'];
+        $pid = $this->pid;
 
         $sql = "select `id`, `pid`, `title`, `pos`, `status` from `pages` p
                 where p.`pid` = ? order by `pos` asc".'';
@@ -78,6 +114,8 @@ class pages_admin extends record {
     {
         $id = $_REQUEST['id'];
         $save = $_POST['record'];
+        $save['id'] = $id;
+        $pid = $this->pid;
         if (trim($save['translit']) == '') $save['translit'] = translit($save['title']);
 
         $this->errors = $this->checkUpdate($save);
@@ -99,8 +137,10 @@ class pages_admin extends record {
             $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $id);
             Redirect('/admin/?op=pages&act=edit&id='.$id);
         } else {
-            $sql = "insert into `pages` (`id`, `title`, `translit`, `text`) values (0, ?, ?)".'';
-            $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0);
+            $pos = $this->dsp->db->SelectValue("select `pos` from `pages` where `pid` = ? order by `pos` desc limit 1".'', $pid);
+            if (!$pos) $pos = 0; else $pos++;
+            $sql = "insert into `pages` (`id`, `pid`, `title`, `translit`, `text`, `status`, `pos`) values (0, ?, ?, ?, ?, ?, ?)".'';
+            $this->dsp->db->Execute($sql, $pid, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $pos);
 
             Redirect('/admin/?op=pages&act=edit&id='.$this->dsp->db->LastInsertId());
         }
@@ -108,7 +148,13 @@ class pages_admin extends record {
 
     protected function checkUpdate($item)
     {
+        $errors = array();
+        if (trim($item['title']) == '') $errors['title'] = 'Необходимо заполнить это поле';
+        $sql = "select count(*) from `".$this->__tablename__."` where `translit` = ? and `id` != ?".'';
+        $v = $this->dsp->db->SelectValue($sql, $item['translit'], $item['id']);
+        if ($v > 0) $errors['translit'] = 'Такой url уже существует';
 
+        return $errors;
     }
 
 }
