@@ -58,4 +58,7 @@ define('ARTICLE_TITLE_DELIMITER', "<br>"); // this value must be preg_match patt
 
 if (!defined('HOST')) define('HOST', 'tsi.elle.www.hsmdev.ru');
 
+/* THUMBNAILS CODES */
+define('TH_BG_IMAGE_ADMIN', 1);
+
 ?>

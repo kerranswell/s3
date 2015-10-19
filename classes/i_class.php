@@ -28,6 +28,7 @@
         private $gITCache = array();
         private $secure = '@wdwfghd0=0w\$_4gj*0-=\12kdfdfb7xcvxcv789!7455-*A*+*';
         public $doNotExec = false;
+        public $default_path;
 
         private $max_width = '5000'; //px
         private $max_height = '5000'; //px
@@ -42,7 +43,7 @@
         */
         private $allow_types = array( 1, 2, 3 );
         private $image_dir = 'images/';
-        private $th_dir = 'images/th/';
+        private $th_dir = 'images/c/';
         private $th_whitemargin = false;
         private $th_jpeg_quality = 85;
         private $folder_length = 4; // число символов в имени подпапки
@@ -72,6 +73,8 @@
             if(!isset($this->dsp)){
                 $this->dsp = $dsp;
             }
+
+            $this->default_path = SITE.'/'.$this->th_dir;
         }
 
         //add image to db layer
@@ -295,16 +298,36 @@
 
             $all = $this->dsp->db->Select( 'select * from images where `name` = ?--', $name );
             foreach( $all as $c ){
+                $dir = '';
                 if( $c['th'] ) {
-                    $path = $this->imagePattern( $c['th'], $c['name'], str_replace( '.', '', $this->image_type_to_extension( $c['type'] ) ) );
+                    $path = $this->imagePattern( $c['th'], $c['name'], str_replace( '.', '', $this->image_type_to_extension( $c['type'] ) ), $this->hashme($c['name']) );
+                    $dir = $this->th_dir . $c['th'] .'/' . $this->subfolder( $name );
                 }
                 else {
                     $path = $this->image_dir . $c['width'] . '/' . $c['height'] . '/' . $c['name'] . '.' . $this->image_type_to_extension( $c['type'] );
+                    $dir = $this->image_dir . $c['width'] . '/' . $c['height'];
                 }
+
                 $my_del = unlink( ROOT_DIR . $path );
+                $this->removeDirs(ROOT_DIR . $dir);
             }
             $this->dsp->db->Execute( 'delete from images where `name` = ?--', $name );
             return $this->dsp->db->last_errno ? 'false' : 'true';
+        }
+
+        function removeDirs($dir)
+        {
+            $t = explode('/', $dir);
+            $last = array_pop($t);
+            if ($last == 'c') return;
+
+            $files = scandir($dir);
+            $del = 1;
+            foreach ($files as $f) if ($f != '.' && $f != '..') {$del = 0; break;}
+            if ($del) rmdir($dir);
+            else return;
+            $dir = implode("/", $t);
+            $this->removeDirs($dir);
         }
 
         function clearByIDX( $idx, $user_id = 0 ){
@@ -643,6 +666,12 @@
             //return ROOT_DIR . $this->image_dir . $name . '.' . $this->image_type_to_extension( $s[2] );
         }
 
+        function clearTHByURL($url)
+        {
+            $file = ROOT_DIR.$this->th_dir.$url;
+            if (file_exists($file)) unlink($file);
+        }
+
         function thumbnailGenerator(){
             $requestedUrl = ( isset( $_REQUEST['url'] ) ) ? $_REQUEST['url'] : $_SERVER['REDIRECT_URL'];
             $image = $this->imageValidatePath( $requestedUrl );
@@ -870,6 +899,17 @@
         public function setUser ( $idx, $user_id )
         {
             $r = $this->dsp->db->Execute( 'UPDATE `images` SET `user_id` = ? WHERE `idx` = ?', $user_id, $idx );
+        }
+
+        public function getFileFromArray($_f, $name)
+        {
+            $f = array();
+            $f['name'] = $_f['name'][$name];
+            $f['type'] = $_f['type'][$name];
+            $f['tmp_name'] = $_f['tmp_name'][$name];
+            $f['error'] = $_f['error'][$name];
+            $f['size'] = $_f['size'][$name];
+            return $f;
         }
     }
 

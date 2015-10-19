@@ -3,8 +3,7 @@
 $id = $_REQUEST['id'];
 $item = $dsp->pages_admin->blankItem();
 if ($id > 0) $item = $dsp->pages->GetItem($id);
-
-
+if ($item['bg_image'] > 0) $item['bg_image'] = $dsp->i->default_path.$dsp->i->resize($item['bg_image'], TH_BG_IMAGE_ADMIN);
 $b = $dsp->_BuilderPatterns->create_block('pages_edit', 'pages_edit', 'center');
 $params = $dsp->pages_admin->getParams('edit');
 

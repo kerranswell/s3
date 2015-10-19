@@ -22,6 +22,11 @@
         <input type="text" value="{.}" name="record[{./@name}]" />
     </xsl:template>
 
+    <xsl:template match="field[@showtype='image']" mode="input">
+        <input type="file" value="" name="record[{./@name}]" />
+        <xsl:if test=". != 0"><br /><input type="checkbox" name="{./@name}_delete" value="1" /> Удалить<br /><img src="{.}" /></xsl:if>
+    </xsl:template>
+
 
     <xsl:template match="field[@showtype='editor']" mode="input">
         <textarea class="ckeditor" name="record[{./@name}]"><xsl:value-of select="."/></textarea>
@@ -36,7 +41,7 @@
 
 
     <xsl:template match="item" mode="edit_item">
-        <form method="post" class="edit_item_form" action="">
+        <form method="post" class="edit_item_form" action="" enctype="multipart/form-data">
             <table border="0" width="80%">
                 <tr>
                 <th width="200px"></th>

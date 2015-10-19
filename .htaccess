@@ -1,26 +1,22 @@
+ErrorDocument 404 /rewrite.php?er=1
+
+	Options -MultiViews
+
+	RewriteEngine On
+
+    RewriteRule ^images/c/(.*)$ th.php?url=$1 [L,QSA]
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteRule ^(.*)$ rewrite.php?p_=$1 [L,QSA]
+
 AddDefaultCharset utf-8
 
-php_value upload_max_filesize 20M
-php_value post_max_size 20M
-php_value max_execution_time 200
-php_value max_input_time 200
+AddCharset utf-8 *
 
-RewriteEngine on
-RewriteBase /
+<IfModule mod_charset.c>
 
-#RewriteCond %{REQUEST_URI} !^(.*)\.html$
-#RewriteRule ^(.*)[^/]$ $1/ [R=301]
+CharsetSourceEnc utf-8
 
-RewriteRule ^$ index.php?url=news&%{QUERY_STRING} [L]
-RewriteRule ^en(/?)$ index.php?url=en/news&%{QUERY_STRING} [L]
+CharsetDefault utf-8
 
-#RewriteCond %{REQUEST_URI} ^te$
-#Redirect / news
-
-RewriteCond %{REQUEST_URI} !^/tools/(.*)$
-RewriteCond %{REQUEST_URI} !^(.*)\.(jpg|gif|png|css|js|zip|rar|swf|ttf|woff|svg|eot|ico)$
-RewriteRule ^(.*)$ index.php?url=$1&%{QUERY_STRING} [L]
-
-#RewriteCond %{REQUEST_URI} !^(.*)\.(jpg|gif|png|css|js|zip|rar|swf|ttf|woff|svg|eot|ico)$
-#RewriteCond %{REQUEST_URI} !^ip/(.*)$
-#RewriteRule ^(.*)$ index.php?url=$1&%{QUERY_STRING} [L]
+</IfModule>

@@ -31,6 +31,10 @@ class pages_admin extends record {
             'edit' => array('showtype' => 'none'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Позиция'),
+        'bg_image' => array('type' => 'int', 'params' => array(
+            'edit' => array('showtype' => 'image'),
+            'list' => array('showtype' => 'none'),
+        ), 'title' => 'Фон'),
         'status' => array('type' => 'int', 'params' => array(
             'edit' => array('showtype' => 'checkbox'),
             'list' => array('showtype' => 'none'),
@@ -113,10 +117,29 @@ class pages_admin extends record {
     public function updateItem()
     {
         $id = $_REQUEST['id'];
+        if ($id > 0)
+        {
+            $item = $this->GetItem($id, 'bg_image');
+        }
+
         $save = $_POST['record'];
         $save['id'] = $id;
         $pid = $this->pid;
         if (trim($save['translit']) == '') $save['translit'] = translit($save['title']);
+
+        # delete background image
+        if ((isset($_POST['bg_image_delete']) || !empty($_FILES['record']['tmp_name']['bg_image'])) && $item['bg_image'] > 0)
+        {
+//            $this->dsp->i->clearTHByURL($this->dsp->i->resize($item['bg_image'], TH_BG_IMAGE_ADMIN));
+            $this->dsp->i->clearByIDX($item['bg_image']);
+            $save['bg_image'] = 0;
+        }
+
+        if (!empty($_FILES['record']['tmp_name']['bg_image']))
+        {
+            $f = $this->dsp->i->getFileFromArray($_FILES['record'], 'bg_image');
+            list($save['bg_image'],) = $this->dsp->i->putToPlace($f);
+        }
 
         $this->errors = $this->checkUpdate($save);
 
@@ -127,20 +150,22 @@ class pages_admin extends record {
 
         if ($id > 0)
         {
+            if (!isset($save['bg_image'])) $save['bg_image'] = $item['bg_image'];
             $sql = "update `".$this->__tablename__."` set
                 `title` = ?,
                 `translit` = ?,
                 `text` = ?,
-                `status` = ?
+                `status` = ?,
+                `bg_image` = ?
                 where `id` = ?
             ".'';
-            $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $id);
+            $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $save['bg_image'], $id);
             Redirect('/admin/?op=pages&act=edit&id='.$id);
         } else {
             $pos = $this->dsp->db->SelectValue("select `pos` from `pages` where `pid` = ? order by `pos` desc limit 1".'', $pid);
             if (!$pos) $pos = 0; else $pos++;
-            $sql = "insert into `pages` (`id`, `pid`, `title`, `translit`, `text`, `status`, `pos`) values (0, ?, ?, ?, ?, ?, ?)".'';
-            $this->dsp->db->Execute($sql, $pid, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $pos);
+            $sql = "insert into `pages` (`id`, `pid`, `title`, `translit`, `text`, `status`, `pos`) values (0, ?, ?, ?, ?, ?, ?, ?)".'';
+            $this->dsp->db->Execute($sql, $pid, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $pos, $save['bg_image']);
 
             Redirect('/admin/?op=pages&act=edit&id='.$this->dsp->db->LastInsertId());
         }
