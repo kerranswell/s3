@@ -43,10 +43,6 @@ $nodes = explode('/', trim($_REQUEST['p_'], '/'));
 $full_path = SITE."/".implode("/", $nodes)."/";
 $dsp->_Builder->addArray(array('path' => $full_path), 'path_origin');
 
-// редирект в подиум
-if (isset($_REQUEST['p_']) && trim($_REQUEST['p_'], '/') == 'moda/podium')
-    Redirect('/podium/', 301);
-
 if(!empty($_REQUEST['p_']) && mb_substr($_REQUEST['p_'], -1) != '/' && !preg_match( '/\/[a-zA-Z0-9-_]+\.[a-z]{2,5}$/', $_REQUEST['p_'] ) ) {
     Redirect(SITE . '/' . $_REQUEST['p_'] . '/' . $query_string, 301);
 }
@@ -67,56 +63,14 @@ if ( array_search('page', $nodes) ) {
     $_REQUEST['p_'] = implode('/', $nodes) . '/';
 }
 
-if ($dsp->auth->isLogged()) {
+/*if ($dsp->auth->isLogged()) {
     $dsp->_Builder->addArray($dsp->auth->user, 'user');
 } elseif (isset($_SESSION['notLocalUser'])) {
     $dsp->_Builder->addArray(array('not_local_user' => $_SESSION['notLocalUser']));  
-}
+}*/
 
-$dsp->social_connect->addSocialSettings();
-
-/* #15938 выпилить капчу */ 
-//if ($dsp->login_attempts->maxAttemptsReached()) {
-//    $dsp->_Builder->addArray(array('need_captcha' => 1));
-//}
-
-// токен для логирования ошибок js
-if ( strpos( $_SERVER['REQUEST_URI'], '/autologin/' ) === false )
-{
-    $log_token = md5( session_id() . time() );
-    $dsp->_Builder->addArray(array('log_error_token' => $log_token ));
-    $_SESSION['log_error_token'] = $log_token;
-}
-
-// These URLs don't exist but shouldn't give us 404 error, show index page instead
-$reservedUrls = array(
-    'qsubscribe_success'    => '/',
-    'qsubscribe_fail'       => '/',
-);
-if (isset($reservedUrls[trim($_REQUEST['p_'], '/')])) {
-	$_REQUEST['p_'] = $reservedUrls[trim($_REQUEST['p_'], '/')];
-    require(ROOT_DIR . 'pages.php');
-    exit;
-}
-
-// Controllers for mobile version should lay in 'mobile' folder, it has its own rewrite.php
-if (_isMobile() && !defined('MOBILE_404')) {
-    require(ROOT_DIR . 'mobile/rewrite.php');
-}
-if (!_isMobile() && !empty($nodes[0]) && $nodes[0] == 'madv') {
-    if (!empty($_REQUEST['redirect_url'])) Redirect($_REQUEST['redirect_url'], 301);
-    else Redirect("/");
-}
-$dsp->blocks->setPlacementTable('placement');
-/*$dsp->_Builder->addArray(array(
-                            'timestamp'           => time(),
-                        ));*/
 
 if (!empty($nodes[0])) {
-	if (in_array($nodes[0], array('author', 'brand', 'person')))
-	{
-		require(ROOT_DIR.'author/rewrite.php');
-	} else
     if (is_file(ROOT_DIR . $nodes[0] . "/rewrite.php")) {
         $path = ROOT_DIR . $nodes[0] . "/rewrite.php";
         array_shift($nodes);
