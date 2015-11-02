@@ -80,10 +80,8 @@ a:hover {
 }
 
 #wrapper {
-    /*border: 1px solid yellow;*/
     width: 1327px;
     min-height: 100%;
-    /*position: relative;*/
     background-image: url(/static/i/back1.jpg);
     background-position: top left;
     background-repeat: no-repeat;
@@ -97,12 +95,16 @@ a:hover {
     width: 100%;
     padding-top: 100px;
     padding-bottom: 100px;
-    border: 1px solid yellow;
 }
 
 .content {
-    margin-left: 200px;
+    position: absolute;
+    left: 200px;
+    top: 200px;
     width: 1000px;
+    height: 500px;
+    /*border: 1px solid yellow;*/
+    /*overflow: hidden;*/
 }
 
 .left_bar {
@@ -123,8 +125,26 @@ a:hover {
     text-align: center;
 }
 
+.page {
+    position: absolute;
+    width: 1000px;
+    height: 500px;
+    overflow-y: scroll;
+    display: none;
+}
+
+.page p {
+    line-height: 30px;
+    font-size: 18px;
+    margin-bottom: 50px;
+}
+
 .button_down {
     font-size: 20px;
+}
+
+.page_button {
+    font-size: 18px;
 }
 
 .page_button a {
@@ -135,13 +155,13 @@ a:hover {
 .button_left {
     position: absolute;
     top: 50%;
-    left: 50px;
+    left: -70px;
 }
 
 .button_right {
     position: absolute;
     top: 50%;
-    right: 50px;
+    right: -70px;
 }
 
 
@@ -237,16 +257,6 @@ ul.social_menu li a {
     display: block;
     text-decoration: none;
     color: #43AEDA;
-}
-
-.content p {
-    line-height: 30px;
-    font-size: 18px;
-    margin-bottom: 50px;
-}
-
-.page {
-
 }
 
 .left_menu {
