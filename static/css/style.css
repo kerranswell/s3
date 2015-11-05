@@ -42,20 +42,22 @@ tr.act {
 tr.act td{text-shadow: 1px 1px 0 #000000;}
 tr.act a{color: #ffffff;}
 .clr { clear: both; }
+/*
 @font-face {
-    font-family: FuturaDemiC; /* Гарнитура шрифта */
-    src: url(../fonts/futurademic.otf); /* Путь к файлу со шрифтом */
+    font-family: FuturaDemiC;
+    src: url(../fonts/futurademic.otf);
 }
 
 @font-face {
-    font-family: FuturaBookC; /* Гарнитура шрифта */
-    src: url(../fonts/futurabookc.otf); /* Путь к файлу со шрифтом */
+    font-family: FuturaBookC;
+    src: url(../fonts/futurabookc.otf);
 }
 
 @font-face {
-    font-family: FuturaLightC; /* Гарнитура шрифта */
-    src: url(../fonts/futuralightc.otf); /* Путь к файлу со шрифтом */
+    font-family: FuturaLightC;
+    src: url(../fonts/futuralightc.otf);
 }
+*/
 
 html, body {
    height: 100%;
@@ -66,7 +68,7 @@ html, body {
    /*background-color: #000000;*/
    background-color: #2c65a9;
    color: #fff;
-   font-family: FuturaDemiC;
+   font-family: Arial;
    font-size: 12px;
  }
 
@@ -86,7 +88,7 @@ a:hover {
 #wrapper {
     width: 1327px;
     min-height: 100%;
-    background-image: url(/static/i/back1.jpg);
+    background-image: url(/static/i/back2.jpg);
     background-position: top left;
     background-repeat: no-repeat;
 
@@ -115,7 +117,7 @@ a:hover {
     left: auto;
     top: 100px;
     width: 125px;
-    padding: 0px 20px 0px 20px;
+    padding: 0px 20px 0px 35px;
 }
 
 .footer {
@@ -124,7 +126,7 @@ a:hover {
     bottom: 0;
     width: 100%;
     height: 100px;
-    background-color: #000;
+    /*background-color: #000;*/
     text-align: center;
 }
 
@@ -183,6 +185,7 @@ a:hover {
     height: 66px;
     display: block;
     background-color: #ffffff;
+    z-index: 500;
 }
 
 .header {
@@ -191,16 +194,31 @@ a:hover {
     background-color: #fff;
     margin: 0 auto;
     color: #43AEDA;
+    vertical-align: middle;
 }
 
 .logo {
-    width: 138px;
-    height: 100%;
-    text-align: center;
-    color: black;
-    font-size: 14px;
-    border: 1px solid black;
+    display: block;
+    height: 42px;
     float: left;
+    margin-top: 12px;
+}
+
+.logo-title {
+    width: 86px;
+    height: 100%;
+    background-image: url(/static/i/logo.png);
+    background-repeat: no-repeat;
+    display: block;
+    margin-left: 28px;
+    padding-left: 43px;
+    float: left;
+    color: black;
+    font-size: 11px;
+    font-weight: bold;
+    text-align: left;
+    text-transform: uppercase;
+    text-decoration: none;
 }
 
 .header .right_block
@@ -219,11 +237,10 @@ ul.main_menu {
 ul.main_menu li {
     text-transform: uppercase;
     display: inline-block;
-    /*border: 1px solid black;*/
     line-height: 66px;
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
-    margin-right: 23px;
+    margin-right: 22px;
 }
 
 ul.main_menu li a {
@@ -232,12 +249,20 @@ ul.main_menu li a {
     color: #43AEDA;
 }
 
+ul.main_menu li.active {
+    background-image: url(/static/i/menu_arrow.png);
+    background-repeat: no-repeat;
+    background-position: center 46px;
+    color: #f28e00;
+}
+
 ul.main_menu li a:hover, ul.main_menu li.active a {
     color: #f28e00;
 }
 
 .phone_number {
-    margin-left: 10px;
+    padding-left: 23px;
+    margin-left: 14px;
     margin-right: 20px;
     float: left;
     height: 100%;
@@ -245,13 +270,16 @@ ul.main_menu li a:hover, ul.main_menu li.active a {
     font-weight: bold;
     color: #000000;
     font-size: 16px;
+    background-image: url(/static/i/phone.png);
+    background-repeat: no-repeat;
+    background-position: left center;
 }
 
 ul.social_menu {
     float: left;
     list-style: none;
-    margin: 0;
-    height: 100%;
+    margin-top: 22px;
+    height: 21px;
 }
 
 ul.social_menu li {
@@ -262,8 +290,8 @@ ul.social_menu li {
 }
 
 ul.social_menu li a {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 21px;
     display: block;
     text-decoration: none;
     color: #43AEDA;
@@ -273,5 +301,18 @@ ul.social_menu li a {
 }
 
 .left_menu li {
-    font-size: 16px;
+    line-height: 25px;
+    font-size: 15px;
+}
+
+.btn-vk {
+    background: url(/static/i/btn_vk.png) no-repeat;
+}
+
+.btn-fb {
+    background: url(/static/i/btn_fb.png) no-repeat;
+}
+
+.btn-in {
+    background: url(/static/i/btn_in.png) no-repeat;
 }
