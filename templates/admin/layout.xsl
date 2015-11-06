@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.1">
 	<xsl:import href="common.xsl"/>
+	<xsl:import href="content_blocks.xsl"/>
 	<xsl:import href="navbar.xsl"/>
 	
 	<xsl:output method="html" indent="yes"

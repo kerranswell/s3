@@ -39,6 +39,10 @@ class pages_admin extends record {
             'edit' => array('showtype' => 'checkbox'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Статус'),
+        'xml' => array('type' => 'text', 'params' => array(
+            'edit' => array('showtype' => 'xml'),
+            'list' => array('showtype' => 'none'),
+        ), 'title' => 'Контент'),
     );
 
     protected function init()

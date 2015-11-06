@@ -103,3 +103,97 @@ ul.path {
 ul.path li {
     display: inline;
 }
+
+.content_main {
+    float: left;
+    border: 1px solid #aaa;
+    padding: 5px 5px 5px 5px;
+    min-width: 600px;
+    min-height: 300px;
+}
+
+.content_toolbar {
+    float: left;
+    min-height: 300px;
+    margin-left: 50px;
+}
+
+.column-cell {
+    padding: 5px;
+    border: 2px outset #ccc;
+    min-width: 200px;
+    min-height: 20px;
+    margin: 5px;
+}
+
+.clr {
+    clear: both;
+}
+
+.open_ckeditor img {
+    width: 40px;
+    height: 40px;
+}
+
+.empty {
+    color: #aaa;
+}
+
+.content-block {
+
+    /*background-color: #eee;*/
+}
+
+.content-block table {
+    width: 100%;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.content-block table td {
+    margin: 0;
+}
+
+.block-column1 {
+    width: 100%;
+}
+
+.block-column2 {
+    width: 50%;
+}
+
+.block-column3 {
+    width: 33%;
+}
+
+.block-column4 {
+    width: 25%;
+}
+
+.block-column1_2.first {
+    width: 50%;
+}
+
+.block-column1_2.second {
+    width: 25%;
+}
+
+.block-column2_1.first {
+    width: 25%;
+}
+
+.block-column2_1.second {
+    width: 50%;
+}
+
+.block-tools {
+    float:left;
+    padding: 5px;
+}
+
+.block-tools .block-drag img {
+    width: 32px;
+    height: 32px;
+    cursor: move;
+}

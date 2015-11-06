@@ -7,6 +7,8 @@ if ($item['bg_image'] > 0) $item['bg_image'] = $dsp->i->default_path.$dsp->i->re
 $b = $dsp->_BuilderPatterns->create_block('pages_edit', 'pages_edit', 'center');
 $params = $dsp->pages_admin->getParams('edit');
 
+$dsp->content->makeBlock();
+
 $b_item = $dsp->_Builder->addNode($dsp->_Builder->createNode('item', array()), $b);
 foreach ($item as $f => $v)
 {

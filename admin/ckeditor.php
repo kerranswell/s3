@@ -1,15 +1,10 @@
-<script>
-//alert(window.opener);
-</script>
+<link rel="stylesheet" type="text/css" href="/admin/static/css/admin.css" />
+<link rel="stylesheet" type="text/css" href="/admin/static/jquery-ui/themes/base/jquery-ui.css" />
 
-<?php
-    $rid = ''.$_REQUEST['return_id'];
-?>
-<link rel="stylesheet" type="text/css" href="/admin/static/css/arteditor.css"/>
-<script type="text/javascript" src="/static/js/jquery.js"></script>
-<!--<script type="text/javascript" src="/admin/static/tiny_mce/tiny_mce.js"></script>-->
-<script type="text/javascript" src="/admin/static/tinymce/tinymce.min.js"></script>
-<script type="text/javascript" src="/admin/js/jquery.msword_html_filter.js"></script>
+<script src="/static/js/jquery.js"></script>
+<script src="/admin/static/js/jquery-ui.js"></script>
+<script src="/admin/static/ckeditor/ckeditor.js" ></script>
+
 <body>
 <script>
 function htmlspecialchars_decode (string, quote_style) {
@@ -74,78 +69,7 @@ function htmlspecialchars_decode (string, quote_style) {
 
 
 $(document).ready(function(){
-
-        tinymce.init({
-            selector: "textarea",
-
-            <? if ( !empty($_GET['type']) && ($_GET['type'] == 'bulleted_list' || $_GET['type'] == 'bulleted_list_recept')): ?>
-                toolbar: "bullist",
-            <? elseif ( !empty($_GET['type']) && ( $_GET['type'] == 'num_list' || $_GET['type'] == 'recipe_num_list' ) ): ?>
-                toolbar: "numlist",
-            <? elseif ( !empty($_GET['type']) && $_GET['type'] == 'text' ): ?>
-                toolbar: "link",
-            <? else: ?>
-                toolbar: "undo redo | " +
-                    "bold italic underline strikethrough superscript subscript | " +
-                    "link | " +
-                    "charmap code | " +
-                    "bullist numlist | " +
-                    "<?php echo ( ( !empty($_GET['type']) && $_GET['type'] == 'styles' ) ? ' styleselect':'' )?>" +
-                    "<?php echo ( ( !empty($_GET['type']) && $_GET['type'] == 'quote' ) ? ' quote':'' )?>",
-            <? endif; ?>
-
-            plugins: "link charmap code wordcount lists textcolor",
-            menubar: false,
-            height: 400,
-            setup : function(editor) {
-                editor.on('Init', function(e) {
-                    var url = window.location.href;
-                    var content = $(window.opener.document).find('body #<?php echo mysql_escape_string( $rid )?>').html();
-
-                    if ( url.indexOf('&type=num_list') != -1 )
-                    {
-                        content = content.replace(/<span>/g,"<p>");
-                        content = content.replace(/<\/span>/g,"<\/p>");
-                        content = content.replace(/<\/br>/g,"");
-                        content = content.replace(/<br>/g,"");
-                    }
-
-                    content = htmlspecialchars_decode( content );
-
-                    content = content.replace(/rel="nofollow"/g,"");
-                    content = content.replace(/<!--noindex-->/g,"");
-                    content = content.replace(/<!--\/noindex-->/g,"");
-
-                    editor.focus(false);
-                    editor.setContent( content );
-                });
-                editor.addButton('quote', {
-                    title : 'Цитата',
-                    image : './static/tinymce/skins/lightgray/img/ico27.png',
-                    onclick : function() {
-                        editor.focus();
-                        editor.selection.setContent('{цитата}');
-                    }
-                });
-                editor.on('PostProcess', function(ed) {
-                    ed.content = ed.content.replace(/(<p>&nbsp;<\/p>)/gi,'<br />');
-                });
-                console.log(tinymce);
-            },
-            element_format : "xhtml",
-            relative_urls : false,
-
-            style_formats: [
-                {title: 'Заголовок H2', block: 'h2'}
-            ],
-
-            <? if (isset($_GET['extended']) && $_GET['extended']): ?>
-                invalid_elements  : "font",
-                extended_valid_elements : 'span[*]'
-            <? else: ?>
-                invalid_elements  : "span,font,div,iframe"
-            <? endif; ?>
-        });
+    $('#ckeditor').val($(window.opener.document).find('#ckeditor_temp').val());
 
 });
 
@@ -234,69 +158,15 @@ function word_filter(editor){
 
 function go(){
     var url = window.location.href;
-    var content = tinyMCE.activeEditor.getContent();
-    var re = /<a href="http:\/\/([w\.]*)elle\.ru([^"]+)"([^>]*)>/ig;
-    content = content.replace( re, '<a href="$2"$3>' );
+    var content = CKEDITOR.instances.ckeditor.getData();
 
-    re = /<p><span[^>]*>{цитата}<\/span><\/p>/ig;
-    content = content.replace( re, '<p>{цитата}</p>' );
-
-    if ( $('#noindex:checked').length == 0 )
-    {
-        var re = /<a href="([^"]+)"([^>]*)>([^<]+)<\/a>/ig;
-        content = content.replace( re, function(a,b,c,d){
-            var str = '';
-            if ( b.indexOf('elle.ru') !== -1 || b.charAt(0) == '/' )
-            {
-                str = a;
-            }
-            else
-            {
-                str = '<!--noindex--><a href="'+b+'"'+c+' rel="nofollow">'+d+'</a><!--/noindex-->';
-            }
-
-            return str;
-        } );
-    }
-
-    if ( url.indexOf('&type=num_list') != -1 )
-    {
-        content = content.replace(/<p>/g,"<span>");
-        content = content.replace(/<\/p>/g," <\/span>");
-    }
-
-    if ( url.indexOf('&type=bulleted_list_recept') != -1 )
-    {
-        content = content.replace(/<li>/g,'<li class="ingredient">');
-    }
-
-    if ( url.indexOf('&type=recipe_num_list') != -1 )
-    {
-        content = content.replace(/<li>/g,'<li class="instruction">');
-        content = content.replace(/<p>/g,'<p class="instruction">');
-    }
-
-	$(window.opener.document).find('body #<?php echo mysql_escape_string( $rid )?>').html( content );
-    word_filter($(window.opener.document).find('body #<?php echo mysql_escape_string( $rid )?>'));
-
-    var short_elem = $(window.opener.document).find('body #<?php echo mysql_escape_string( $rid )?>-m');
-
-    if ( short_elem.length == 1 )
-    {
-        var short = content.replace(/<\/?[^>]+>/gi, '').replace(/[\r\n]/gi, ' ');
-        if ( short.length > 100 ) short = short.substr(0,100)+'...';
-        short_elem.html( short );
-    }
+	$(window.opener.document).find('#ckeditor_temp').val( content );
 
 	window.close();
 }
 
 </script>
-<textarea></textarea>
-<br />
-<input type="checkbox" id="noindex" /> <label for="noindex">не закрывать ссылки от индексации</label>
-<br />
-<br />
+<textarea class="ckeditor" id="ckeditor" name="text"></textarea>
 <input type="button" class="tynimce btn btn-success" value="Готово" onClick="go()" />
 
 </body>

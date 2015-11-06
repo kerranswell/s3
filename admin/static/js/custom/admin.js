@@ -51,4 +51,36 @@ $(function() {
 
     });
 
+    $('#toolbar_add').click(function () {
+        var block_name = $('#toolbar_block').val();
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'text',
+            url: '/admin/',
+            data: { 'opcode': 'content', 'act' : 'getBlockHtml', block_name : block_name},
+            success: function(result){
+                $('.content_main').append(result);
+            }
+        });
+    });
+
+    $('.open_ckeditor').live('click', function () {
+        var $thiscont = $(this).closest('.column-cell').find('.column-content');
+        $thiscont.find('.empty').remove();
+        $('#ckeditor_temp').val($thiscont.html());
+        var w = window.open('/admin/ckeditor.php', 'ckeditor');
+
+
+        var pollTimer = window.setInterval(function() {
+            if (w.closed !== false) { // !== is required for compatibility with Opera
+                window.clearInterval(pollTimer);
+                $thiscont.html($('#ckeditor_temp').val());
+                if ($('#ckeditor_temp').val().trim() == '') $thiscont.html('<span class="empty">Пусто</span>');
+            }
+        }, 200);
+
+        return false;
+    });
+
 });

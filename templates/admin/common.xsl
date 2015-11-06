@@ -37,6 +37,14 @@
         <input type="checkbox" name="record[{./@name}]" value="1"><xsl:if test=". = 1"><xsl:attribute name="checked">checked</xsl:attribute></xsl:if></input>
     </xsl:template>
 
+    <xsl:template match="field[@showtype='xml']" mode="input">
+        <div id="ckeditor_temp" style="display:none"></div>
+        <div class="content_main"></div>
+        <div class="content_toolbar">
+            <xsl:apply-templates select="/node()/block[@name='content_blocks']"/>
+        </div>
+    </xsl:template>
+
     <xsl:template match="field[@showtype='none']" mode="table_row" />
 
 

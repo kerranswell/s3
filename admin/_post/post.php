@@ -11,7 +11,18 @@
         } else {
             
         } // if
+
+
+        switch ($_POST['opcode'])
+        {
+            case 'content' :
+                $dsp->content->ajax();
+                break;
+        }
+
     } // if
+
+
 
     if (isset($_POST['no_redirect']) &&  $_POST['no_redirect'])
     {
