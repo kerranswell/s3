@@ -39,10 +39,11 @@
 
     <xsl:template match="field[@showtype='xml']" mode="input">
         <div id="ckeditor_temp" style="display:none"></div>
-        <div class="content_main"></div>
         <div class="content_toolbar">
             <xsl:apply-templates select="/node()/block[@name='content_blocks']"/>
         </div>
+        <div class="content_main"></div>
+        <textarea id="blocks_input" name="record[{./@name}]"><xsl:value-of select="."/></textarea>
     </xsl:template>
 
     <xsl:template match="field[@showtype='none']" mode="table_row" />
@@ -50,9 +51,9 @@
 
     <xsl:template match="item" mode="edit_item">
         <form method="post" class="edit_item_form" action="" enctype="multipart/form-data">
-            <table border="0" width="80%">
+            <table border="0" width="100%">
                 <tr>
-                <th width="200px"></th>
+                <th width="100px"></th>
                 <th></th>
                 </tr>
                 <xsl:apply-templates select="field" mode="table_row"/>

@@ -160,16 +160,17 @@ class pages_admin extends record {
                 `translit` = ?,
                 `text` = ?,
                 `status` = ?,
-                `bg_image` = ?
+                `bg_image` = ?,
+                `xml` = ?
                 where `id` = ?
             ".'';
-            $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $save['bg_image'], $id);
+            $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $save['bg_image'], $save['xml'], $id);
             Redirect('/admin/?op=pages&act=edit&id='.$id);
         } else {
             $pos = $this->dsp->db->SelectValue("select `pos` from `pages` where `pid` = ? order by `pos` desc limit 1".'', $pid);
             if (!$pos) $pos = 0; else $pos++;
-            $sql = "insert into `pages` (`id`, `pid`, `title`, `translit`, `text`, `status`, `pos`) values (0, ?, ?, ?, ?, ?, ?, ?)".'';
-            $this->dsp->db->Execute($sql, $pid, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $pos, $save['bg_image']);
+            $sql = "insert into `pages` (`id`, `pid`, `title`, `translit`, `text`, `status`, `pos`, `bg_image`, `xml`) values (0, ?, ?, ?, ?, ?, ?, ?, ?)".'';
+            $this->dsp->db->Execute($sql, $pid, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $pos, $save['bg_image'], $save['xml']);
 
             Redirect('/admin/?op=pages&act=edit&id='.$this->dsp->db->LastInsertId());
         }

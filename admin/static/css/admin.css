@@ -72,11 +72,26 @@ div.photo
     text-decoration: none;
 }
 
-.drag {
+.drag, .block-drag {
     width: 16px;
     height: 16px;
     background: url(/admin/static/img/icons.png) no-repeat;
     cursor: move;
+}
+
+.block-del {
+    width: 16px;
+    height: 16px;
+    background: url(/admin/static/img/del.png) no-repeat;
+    cursor: pointer;
+}
+
+.float-left {
+    float: left;
+}
+
+.float-right {
+    float: right;
 }
 
 tr.table_header {
@@ -113,17 +128,19 @@ ul.path li {
 }
 
 .content_toolbar {
-    float: left;
-    min-height: 300px;
-    margin-left: 50px;
+    margin-bottom: 15px;
 }
 
 .column-cell {
     padding: 5px;
     border: 2px outset #ccc;
-    min-width: 200px;
+    min-width: 125px;
     min-height: 20px;
     margin: 5px;
+}
+
+.column-content {
+    overflow: hidden;
 }
 
 .clr {
@@ -140,8 +157,7 @@ ul.path li {
 }
 
 .content-block {
-
-    /*background-color: #eee;*/
+    background-color: #fff;
 }
 
 .content-block table {
@@ -188,12 +204,24 @@ ul.path li {
 }
 
 .block-tools {
-    float:left;
-    padding: 5px;
+    background-color: #eee;
+    padding: 8px 5px 5px 5px;
+    margin: 0 5px 0 5px;
+    margin-top: -2px;
+    z-index: -10;
+    min-height: 18px;
 }
 
 .block-tools .block-drag img {
     width: 32px;
     height: 32px;
     cursor: move;
+}
+
+#toolbar_block { margin-left: 15px;}
+
+#blocks_input {display:none;}
+
+.block-value {
+    display: none;
 }

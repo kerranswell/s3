@@ -35,7 +35,9 @@ class content {
         $this->dsp->_Builder->addArray(array('block_name' => $block_name), '', array(), $dom_block, false);
 
 
-        $this->dsp->_Builder->Transform('admin/ajax.xsl');
+        $r = $this->dsp->_Builder->Transform('admin/ajax.xsl', true);
+        $r = str_replace('<?xml version="1.0"?>'.PHP_EOL, '', $r);
+        echo $r;
         exit;
     }
 
