@@ -191,7 +191,11 @@ a:hover {
 }
 
 .button_down {
+    background: url(../i/arrow_down.png) left top no-repeat;
+    width: 76px;
+    height: 32px;
     font-size: 20px;
+    margin: auto;
 }
 
 .page_button {
@@ -201,15 +205,22 @@ a:hover {
 .page_button a {
     color: white;
     display: block;
+    height: 100%;
 }
 
 .button_left {
+    background: url(../i/arrow_left.png);
+    width: 32px;
+    height: 76px;
     position: absolute;
     top: 50%;
     left: -70px;
 }
 
 .button_right {
+    background: url(../i/arrow_right.png);
+    width: 32px;
+    height: 76px;
     position: absolute;
     top: 50%;
     right: -70px;

@@ -6,6 +6,11 @@ $(function() {
         $win.setContentTop();
     });
 
+    $( window).on('mousewheel', function(event) {
+//        console.log(event.deltaX, event.deltaY, event.deltaFactor);
+        pager.pageSlide(event.deltaY, 0);
+    });
+
     $win.setContentTop();
 
     $('.button_right a').click(function () {
@@ -20,6 +25,11 @@ $(function() {
 
     $('.button_down a').click(function () {
         pager.pageSlide(1, 0);
+        return false;
+    });
+
+    $('.left_menu li a, .main_menu li a').live('click', function () {
+        pager.pageJump($(this).closest('li').data('id'));
         return false;
     });
 
@@ -98,30 +108,60 @@ CPager.prototype.init_pages = function(pages)
     pages.checkButtonRight();
 }
 
+CPager.prototype.pageJump = function(page_id)
+{
+    if (this.page_ids[page_id] === undefined) return;
+    var next_page = this.page_ids[page_id];
+
+    var page = next_page.parent;
+    if (page.childs == null) return;
+
+    var prev_page = page.childs[page.child_index];
+
+    if (prev_page.id == next_page.id) return;
+
+    var k = prev_page.my_index < next_page.my_index ? 1 : -1;
+
+    this.pageSwitch(k, page, prev_page, next_page);
+}
+
 CPager.prototype.pageSlide = function(k, page_id)
 {
-    if (this.busy) return;
-
-    this.busy = true;
-
     if (this.page_ids[page_id] === undefined) return;
     var page = this.page_ids[page_id];
 
     if (page.childs == null) return;
 
-    var prev_index = page.child_index;
-    var cur_page = page.childs[page.child_index].obj;
-    var cur_leftbar = page.childs[page.child_index].leftbar;
+    var index = page.child_index;
+
+    var prev_page = page.childs[index];
     if (k > 0)
     {
-        page.child_index++;
-        if (page.child_index > page.childs.length-1) page.child_index = 0;
+        index++;
+        if (index > page.childs.length-1) index = 0;
     } else {
-        page.child_index--;
-        if (page.child_index < 0) page.child_index = page.childs.length-1;
+        index--;
+        if (index < 0) index = page.childs.length-1;
     }
-    var next_page = page.childs[page.child_index].obj;
-    var next_leftbar = page.childs[page.child_index].leftbar;
+    var next_page = page.childs[index];
+
+    this.pageSwitch(k, page, prev_page, next_page);
+}
+
+CPager.prototype.pageSwitch = function(k, page, prev_child, next_child)
+{
+    if (this.busy) return;
+
+    this.busy = true;
+
+    var prev_index = page.child_index;
+    var cur_page = prev_child.obj;
+    var cur_leftbar = prev_child.leftbar;
+
+    page.child_index = next_child.my_index;
+
+    var next_page = next_child.obj;
+    var next_leftbar = next_child.leftbar;
 
     var o = {};
     if (page.type == 'h') o.marginLeft = (k > 0 ? "-=" : "+=") + $win.content_width;
@@ -143,11 +183,11 @@ CPager.prototype.pageSlide = function(k, page_id)
     next_page.animate(o, function () {
         if (page.type == 'h')
         {
-            self.deactivateLI(page.childs[prev_index].getActiveChildProperty('id'), 'left_menu');
-            self.activateLI(page.childs[page.child_index].getActiveChildProperty('id'), 'left_menu');
+            self.deactivateLI(prev_child.getActiveChildProperty('id'), 'left_menu');
+            self.activateLI(next_child.getActiveChildProperty('id'), 'left_menu');
         } else {
-            self.deactivateLI(page.childs[prev_index].id, 'main_menu');
-            self.activateLI(page.childs[page.child_index].id, 'main_menu');
+            self.deactivateLI(prev_child.id, 'main_menu');
+            self.activateLI(next_child.id, 'main_menu');
         }
         self.busy = false;
     });
@@ -171,13 +211,13 @@ CPager.prototype.pageSlide = function(k, page_id)
         back1 = $win.back2;
         back2 = $win.back1;
     }
-    back2.css('background-image', 'url(' + page.childs[page.child_index].getActiveChildProperty('background') + ')');
+    back2.css('background-image', 'url(' + next_child.getActiveChildProperty('background') + ')');
     back1.switchClass('fadeIn', 'fadeOut');
     back2.switchClass('fadeOut', 'fadeIn');
 
-    $win.switchBodyClass(page.childs[prev_index].body_class, page.childs[page.child_index].getActiveChildProperty('body_class'));
+    $win.switchBodyClass(prev_child.getActiveChildProperty('body_class'), next_child.getActiveChildProperty('body_class'));
 
-    window.history.pushState("object or string", "Title", '/' + page.childs[page.child_index].getActiveChildProperty('url') + '/');
+    window.history.pushState("object or string", "Title", '/' + next_child.getActiveChildProperty('url') + '/');
 }
 
 CPager.prototype.activateLI = function (id, cs)
@@ -226,7 +266,12 @@ function CPage(args) {
 
 CPage.prototype.getActiveChildProperty = function (p)
 {
-    if (!this.childs) return this[p];
+    var par = this.parent[p];
+    var ret = this[p] ? this[p] : par;
+
+    if (!this.childs) return ret;
+
+    if (!this.childs[this.child_index][p]) return ret;
 
     return this.childs[this.child_index][p];
 }

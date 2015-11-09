@@ -14,6 +14,7 @@
                 <link rel="stylesheet" href="/static/css/style.css" type="text/css" media="all" />
                 <script src="/static/js/jquery.js"></script>
                 <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
+                <script src="/static/js/jquery-mousewheel-master/jquery.mousewheel.min.js"></script>
                 <script src="/static/js/custom/main.js"></script>
             </head>
 
@@ -57,6 +58,17 @@
                             <xsl:choose>
                                 <xsl:when test="/root/pages_class/pages/item[id = $item_id]/bg_image != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $item_id]/bg_image"/></xsl:when>
                                 <xsl:when test="/root/pages_class/pages/item[id = $item_id]/bg_image_inherit != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $item_id]/bg_image_inherit"/></xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:choose>
+                                        <xsl:when test="/root/pages_class/pages/item[id = $item_id]/pid &gt; 0">
+                                            <xsl:variable name="pid" select="/root/pages_class/pages/item[id = $item_id]/pid"/>
+                                            <xsl:choose>
+                                                <xsl:when test="/root/pages_class/pages/item[id = $pid]/bg_image != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $pid]/bg_image"/></xsl:when>
+                                                <xsl:when test="/root/pages_class/pages/item[id = $pid]/bg_image_inherit != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $pid]/bg_image_inherit"/></xsl:when>
+                                            </xsl:choose>
+                                        </xsl:when>
+                                    </xsl:choose>
+                                </xsl:otherwise>
                             </xsl:choose>
                         </xsl:variable>
                         <xsl:attribute name="style">background-image: url(<xsl:value-of select="$bg_image"/>);</xsl:attribute>
@@ -88,18 +100,20 @@ $(function() {
 --><xsl:for-each select="/root/pages_class/pages/item[pid = 0]"><xsl:variable name="id" select="id"/>
     <xsl:variable name="bg_image">
         <xsl:choose>
-            <xsl:when test="bg_image != 0"><xsl:value-of select="bg_image"/></xsl:when>
-            <xsl:when test="bg_image_inherit != 0"><xsl:value-of select="bg_image_inherit"/></xsl:when>
+            <xsl:when test="bg_image != 0">'<xsl:value-of select="bg_image"/>'</xsl:when>
+            <xsl:when test="bg_image_inherit != 0">'<xsl:value-of select="bg_image_inherit"/>'</xsl:when>
+            <xsl:otherwise>0</xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    p = new CPage({id:<xsl:value-of select="id"/>,url:'<xsl:value-of select="url"/>',body_class:'<xsl:value-of select="body_class"/>',background:'<xsl:value-of select="$bg_image"/>',type:'h',active:<xsl:choose><xsl:when test="is_active = 1">true</xsl:when><xsl:otherwise>false</xsl:otherwise></xsl:choose>});
+    p = new CPage({id:<xsl:value-of select="id"/>,url:'<xsl:value-of select="url"/>',body_class:'<xsl:value-of select="body_class"/>',background:<xsl:value-of select="$bg_image"/>,type:'h',active:<xsl:choose><xsl:when test="is_active = 1">true</xsl:when><xsl:otherwise>false</xsl:otherwise></xsl:choose>});
     <xsl:for-each select="/root/pages_class/pages/item[pid = $id]"><xsl:variable name="pid" select="pid"/>
         <xsl:variable name="bg_image2">
             <xsl:choose>
-                <xsl:when test="bg_image != 0"><xsl:value-of select="bg_image"/></xsl:when>
-                <xsl:when test="bg_image_inherit != 0"><xsl:value-of select="bg_image_inherit"/></xsl:when>
+                <xsl:when test="bg_image != 0">'<xsl:value-of select="bg_image"/>'</xsl:when>
+                <xsl:when test="bg_image_inherit != 0">'<xsl:value-of select="bg_image_inherit"/>'</xsl:when>
+                <xsl:otherwise>0</xsl:otherwise>
             </xsl:choose>
-        </xsl:variable>p.addChild({id:<xsl:value-of select="id"/>,url:'<xsl:value-of select="url"/>',body_class:'<xsl:value-of select="body_class"/>',background:'<xsl:value-of select="$bg_image2"/>',active:<xsl:choose><xsl:when test="(is_active = 1) or (not(is_active) and position() = 1 and not(/root/pages_class/pages/item[id = $pid]/is_active))">true</xsl:when><xsl:otherwise>false</xsl:otherwise></xsl:choose>});
+        </xsl:variable>p.addChild({id:<xsl:value-of select="id"/>,url:'<xsl:value-of select="url"/>',body_class:'<xsl:value-of select="body_class"/>',background:<xsl:value-of select="$bg_image2"/>,active:<xsl:choose><xsl:when test="(is_active = 1) or (not(is_active) and position() = 1 and not(/root/pages_class/pages/item[id = $pid]/is_active))">true</xsl:when><xsl:otherwise>false</xsl:otherwise></xsl:choose>});
     </xsl:for-each><!--
 -->main_page.addChild({o:p});
 </xsl:for-each>
@@ -110,8 +124,8 @@ $(function() {
                             <xsl:for-each select="/root/pages_class/pages/item[pid = 0]"><xsl:variable name="id" select="id"/>
                                 <div class="v-page page" data-id="{id}">
                                     <xsl:if test="count(/root/pages_class/pages/item[pid = $id]) &gt; 1">
-                                        <div class="page_button button_left"><a href="#">Влево</a></div>
-                                        <div class="page_button button_right"><a href="#">Вправо</a></div>
+                                        <div class="page_button button_left"><a href="#"></a></div>
+                                        <div class="page_button button_right"><a href="#"></a></div>
                                     </xsl:if>
                                     <xsl:for-each select="/root/pages_class/pages/item[pid = $id]">
                                         <div class="h-page page" data-id="{id}">
@@ -122,9 +136,11 @@ $(function() {
                             </xsl:for-each>
                         </div>
                     </div>
+<!--
                     <div class="footer">
-                        <div class="page_button button_down"><a href="#">Вниз</a></div>
+                        <div class="page_button button_down"><a href="#"></a></div>
                     </div>
+-->
                 </div>
             </body>
 
