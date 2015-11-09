@@ -1,3 +1,4 @@
 ./core/db_access.php
+./images/*
 .idea/*
 .DS_Store
