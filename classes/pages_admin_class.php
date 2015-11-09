@@ -35,15 +35,35 @@ class pages_admin extends record {
             'edit' => array('showtype' => 'image'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Фон'),
+        'bg_image_inherit' => array('type' => 'int', 'params' => array(
+            'edit' => array('showtype' => 'select', 'xml_options' => '/root/pages_admin_class/inherit_image_pages'),
+            'list' => array('showtype' => 'none'),
+        ), 'title' => 'Использовать фон из'),
         'status' => array('type' => 'int', 'params' => array(
             'edit' => array('showtype' => 'checkbox'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Статус'),
+        'template' => array('type' => 'int', 'params' => array(
+            'edit' => array('showtype' => 'select', 'xml_options' => '/root/pages_class/templates'),
+            'list' => array('showtype' => 'none'),
+        ), 'title' => 'Шаблон'),
         'xml' => array('type' => 'text', 'params' => array(
             'edit' => array('showtype' => 'xml'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Контент'),
+        'url' => array('type' => 'text', 'params' => array(
+            'edit' => array('showtype' => 'none'),
+            'list' => array('showtype' => 'none'),
+        ), 'title' => 'Url'),
     );
+
+    public function makeInheritPages($id)
+    {
+        $sql = "select `title`, `bg_image` as 'value' from `pages` where `bg_image` > 0 and `id` != ?";
+        $rows = $this->dsp->db->Select($sql, $id);
+        $rows = array_merge(array(array('value' => 0, 'title' => '---')), $rows);
+        $this->dsp->_Builder->addArray(array('inherit_image_pages' => $rows), '', array(), $this->getBuilderBlock(), false);
+    }
 
     protected function init()
     {
@@ -77,6 +97,17 @@ class pages_admin extends record {
         }
 
         return $rows;
+    }
+
+    public function sortFields($item)
+    {
+        $new = array();
+        foreach ($this->table_structure as $name => $t)
+        {
+//            if (isset($item[$name]))
+        }
+
+        return $item;
     }
 
     public function getList()
@@ -118,6 +149,25 @@ class pages_admin extends record {
         return $ar;
     }
 
+    private function makeUrl($pid = 0, $translit = '')
+    {
+        $url = array();
+
+        if ($pid > 0)
+        {
+            $sql = "select `pid`, `translit` from pages where `id` = ?";
+            $row = $this->dsp->db->SelectRow($sql, $pid);
+            if ($row['translit'] != '') $url[] = $row['translit'];
+
+            $url2 = $this->makeUrl($row['pid']);
+            $url = array_merge($url2, $url);
+        }
+
+        if ($translit != '') $url[] = $translit;
+
+        return $url;
+    }
+
     public function updateItem()
     {
         $id = $_REQUEST['id'];
@@ -125,11 +175,13 @@ class pages_admin extends record {
         {
             $item = $this->GetItem($id, 'bg_image');
         }
-
+//echo '<pre>'; print_r($_POST); echo '</pre>'; exit;
         $save = $_POST['record'];
         $save['id'] = $id;
         $pid = $this->pid;
         if (trim($save['translit']) == '') $save['translit'] = translit($save['title']);
+        $url = $this->makeUrl($pid, $save['translit']);
+        $save['url'] = implode("/", $url);
 
         # delete background image
         if ((isset($_POST['bg_image_delete']) || !empty($_FILES['record']['tmp_name']['bg_image'])) && $item['bg_image'] > 0)
@@ -161,16 +213,19 @@ class pages_admin extends record {
                 `text` = ?,
                 `status` = ?,
                 `bg_image` = ?,
-                `xml` = ?
+                `bg_image_inherit` = ?,
+                `template` = ?,
+                `xml` = ?,
+                `url` = ?
                 where `id` = ?
             ".'';
-            $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $save['bg_image'], $save['xml'], $id);
+            $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $save['bg_image'], $save['bg_image_inherit'], $save['template'], $save['xml'], $save['url'], $id);
             Redirect('/admin/?op=pages&act=edit&id='.$id);
         } else {
             $pos = $this->dsp->db->SelectValue("select `pos` from `pages` where `pid` = ? order by `pos` desc limit 1".'', $pid);
             if (!$pos) $pos = 0; else $pos++;
-            $sql = "insert into `pages` (`id`, `pid`, `title`, `translit`, `text`, `status`, `pos`, `bg_image`, `xml`) values (0, ?, ?, ?, ?, ?, ?, ?, ?)".'';
-            $this->dsp->db->Execute($sql, $pid, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $pos, $save['bg_image'], $save['xml']);
+            $sql = "insert into `pages` (`id`, `pid`, `title`, `translit`, `text`, `status`, `pos`, `bg_image`, `bg_image_inherit`, `template`, `xml`, `url`) values (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)".'';
+            $this->dsp->db->Execute($sql, $pid, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $pos, $save['bg_image'], $save['bg_image_inherit'], $save['template'], $save['xml'], $save['url']);
 
             Redirect('/admin/?op=pages&act=edit&id='.$this->dsp->db->LastInsertId());
         }

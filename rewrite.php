@@ -5,6 +5,8 @@ require_once(dirname(__FILE__) . "/core/core.php");
 //require_once(CLASS_DIR . "/record_admin_class.php");
 $dsp->_Builder->addArray(array('timestamp' => time()));
 
+if ($_REQUEST['p_'] == '') $_REQUEST['p_'] = 'services/it-director';
+
 if (empty($_REQUEST['p_']) && $_SERVER['QUERY_STRING'] == 'er=1')
 {
     $req = $_SERVER['REQUEST_URI'];
@@ -40,7 +42,8 @@ if (!empty($query_string))
     $query_string = '?' . $query_string;
 
 $nodes = explode('/', trim($_REQUEST['p_'], '/'));
-$full_path = SITE."/".implode("/", $nodes)."/";
+$inodes = implode("/", $nodes);
+$full_path = SITE."/".($inodes != '' ? implode("/", $nodes)."/" : "");
 $dsp->_Builder->addArray(array('path' => $full_path), 'path_origin');
 
 if(!empty($_REQUEST['p_']) && mb_substr($_REQUEST['p_'], -1) != '/' && !preg_match( '/\/[a-zA-Z0-9-_]+\.[a-z]{2,5}$/', $_REQUEST['p_'] ) ) {

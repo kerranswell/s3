@@ -11,6 +11,19 @@ class record  {
 
     protected $table_structure = array();
 
+    private $builder_block;
+
+    public function getBuilderBlock()
+    {
+        if (!$this->builder_block) $this->builder_block = $this->dsp->_Builder->addNode($this->dsp->_Builder->createNode(strtolower(get_class($this)).'_class', array()));
+        return $this->builder_block;
+    }
+
+    public function addValueToXml($v)
+    {
+        $this->dsp->_Builder->addArray($v, '', array(), $this->getBuilderBlock(), false);
+    }
+
     public function record()
     {
         global $dsp;

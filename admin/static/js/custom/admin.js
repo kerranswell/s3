@@ -74,7 +74,7 @@ $(function() {
     $('.open_ckeditor').live('click', function () {
         var $thiscont = $(this).closest('.column-cell').find('.column-content');
         $thiscont.find('.empty').remove();
-        $('#ckeditor_temp').val($thiscont.html());
+        $('#ckeditor_temp').val($(this).closest('.column-cell').find('.block-value').html());
         var w = window.open('/admin/ckeditor.php', 'ckeditor');
 
 
@@ -120,6 +120,19 @@ $(function() {
         return true;
     });
 
+    // preparing cell previews
+    if ($('.content_main').length > 0)
+    {
+        $('.content_main').find('.column-cell').each(function () {
+            var s = $(this).find('.block-value').html();
+            s = strip_tags(s).substring(0,50);
+            if (s.trim() != '')
+            {
+                $(this).find('span.empty').remove();
+                $(this).find('.column-content').html(s);
+            }
+        });
+    }
 });
 
 function strip_tags(OriginalString)

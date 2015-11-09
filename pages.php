@@ -1,2 +1,5 @@
 <?php
 
+
+$dsp->pages->show();
+

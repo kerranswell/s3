@@ -25,6 +25,22 @@ class content {
         }
     }
 
+    public function makeXml(&$xml)
+    {
+        if (!is_array($xml)) return;
+        foreach ($xml as &$item)
+        {
+            foreach ($this->block_types as $b)
+            {
+                if ($b['name'] == $item['name'])
+                {
+                    $item['type'] = $b['type'];
+                    break;
+                }
+            }
+        }
+    }
+
     private function getBlockHtml()
     {
         $block_name = $_REQUEST['block_name'];

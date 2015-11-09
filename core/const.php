@@ -20,7 +20,7 @@ if (empty($_SERVER['DOCUMENT_ROOT'])) {
 define("SERVER_PROTOCOL", "http://");
 define("SERVER_REL_PATH", '');
 define("ROOT_DIR", $DOCUMENT_ROOT . SERVER_REL_PATH . "/");
-define("IMAGE_FOLDER", "/img/");
+define("IMAGE_FOLDER", "/images/");
 define("IMAGE_DIR", $DOCUMENT_ROOT . IMAGE_FOLDER);
 define("SHOWS_DIR", "shows/") ;
 define("TPL_DIR", ROOT_DIR . "templates/");
@@ -37,6 +37,7 @@ define("ADMIN_TPL_DIR", ADMIN_DIR . "templates/");
 define("ADMIN_POST_DIR", ADMIN_DIR . '_post/');
 
 define("LOG_ACTION", true);
+define("DB_LOG", false);
 
 
 $months         = array('', 'январь', 'февраль', 'март', 'апрель', 'май', 'июнь', 'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь');

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?> 
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dyn="http://exslt.org/dynamic"
+                extension-element-prefixes="dyn" version="1.0">
 
 
     <xsl:template name="button1">
@@ -27,7 +28,6 @@
         <xsl:if test=". != 0"><br /><input type="checkbox" name="{./@name}_delete" value="1" /> Удалить<br /><img src="{.}" /></xsl:if>
     </xsl:template>
 
-
     <xsl:template match="field[@showtype='editor']" mode="input">
         <textarea class="ckeditor" name="record[{./@name}]"><xsl:value-of select="."/></textarea>
     </xsl:template>
@@ -37,12 +37,25 @@
         <input type="checkbox" name="record[{./@name}]" value="1"><xsl:if test=". = 1"><xsl:attribute name="checked">checked</xsl:attribute></xsl:if></input>
     </xsl:template>
 
+    <xsl:template match="field[@showtype='select']" mode="input">
+        <xsl:variable name="value" select="."/>
+        <select name="record[{./@name}]">
+            <xsl:for-each select="dyn:evaluate(./@xml_options)/item">
+                <option value="{value}">
+                    <xsl:if test="$value = value"><xsl:attribute name="selected">selected</xsl:attribute></xsl:if>
+                    <xsl:value-of select="title"/></option>
+            </xsl:for-each>
+        </select>
+    </xsl:template>
+
     <xsl:template match="field[@showtype='xml']" mode="input">
         <div id="ckeditor_temp" style="display:none"></div>
         <div class="content_toolbar">
             <xsl:apply-templates select="/node()/block[@name='content_blocks']"/>
         </div>
-        <div class="content_main"></div>
+        <div class="content_main">
+            <xsl:apply-templates select="item" mode="blocks_admin" />
+        </div>
         <textarea id="blocks_input" name="record[{./@name}]"><xsl:value-of select="."/></textarea>
     </xsl:template>
 
