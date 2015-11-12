@@ -19,6 +19,27 @@
             </head>
 
             <body class="{/root/common_class/body_class}">
+                <div class="back fadeIn" id="back1">
+                    <xsl:variable name="bg_image">
+                        <xsl:choose>
+                            <xsl:when test="/root/pages_class/pages/item[id = $item_id]/bg_image != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $item_id]/bg_image"/></xsl:when>
+                            <xsl:when test="/root/pages_class/pages/item[id = $item_id]/bg_image_inherit != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $item_id]/bg_image_inherit"/></xsl:when>
+                            <xsl:otherwise>
+                                <xsl:choose>
+                                    <xsl:when test="/root/pages_class/pages/item[id = $item_id]/pid &gt; 0">
+                                        <xsl:variable name="pid" select="/root/pages_class/pages/item[id = $item_id]/pid"/>
+                                        <xsl:choose>
+                                            <xsl:when test="/root/pages_class/pages/item[id = $pid]/bg_image != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $pid]/bg_image"/></xsl:when>
+                                            <xsl:when test="/root/pages_class/pages/item[id = $pid]/bg_image_inherit != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $pid]/bg_image_inherit"/></xsl:when>
+                                        </xsl:choose>
+                                    </xsl:when>
+                                </xsl:choose>
+                            </xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:attribute name="style">background-image: url(<xsl:value-of select="$bg_image"/>);</xsl:attribute>
+                </div>
+                <div class="back fadeOut" id="back2"></div>
                 <div class="header_strip">
                     <div class="header">
                         <div class="logo"><a class="logo-title" href="#">Центр<br />IT-Поддержки<br />Бизнеса</a></div>
@@ -53,27 +74,6 @@
                     </div>
                 </div>
                 <div id="wrapper">
-                    <div class="back fadeIn" id="back1">
-                        <xsl:variable name="bg_image">
-                            <xsl:choose>
-                                <xsl:when test="/root/pages_class/pages/item[id = $item_id]/bg_image != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $item_id]/bg_image"/></xsl:when>
-                                <xsl:when test="/root/pages_class/pages/item[id = $item_id]/bg_image_inherit != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $item_id]/bg_image_inherit"/></xsl:when>
-                                <xsl:otherwise>
-                                    <xsl:choose>
-                                        <xsl:when test="/root/pages_class/pages/item[id = $item_id]/pid &gt; 0">
-                                            <xsl:variable name="pid" select="/root/pages_class/pages/item[id = $item_id]/pid"/>
-                                            <xsl:choose>
-                                                <xsl:when test="/root/pages_class/pages/item[id = $pid]/bg_image != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $pid]/bg_image"/></xsl:when>
-                                                <xsl:when test="/root/pages_class/pages/item[id = $pid]/bg_image_inherit != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $pid]/bg_image_inherit"/></xsl:when>
-                                            </xsl:choose>
-                                        </xsl:when>
-                                    </xsl:choose>
-                                </xsl:otherwise>
-                            </xsl:choose>
-                        </xsl:variable>
-                        <xsl:attribute name="style">background-image: url(<xsl:value-of select="$bg_image"/>);</xsl:attribute>
-                    </div>
-                    <div class="back fadeOut" id="back2"></div>
                     <div class="main">
                         <div class="left_bar">
                             <xsl:for-each select="/root/pages_class/pages/item[pid = 0]"><xsl:variable name="id" select="id"/>

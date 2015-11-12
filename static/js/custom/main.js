@@ -4,7 +4,10 @@ $(function() {
 
     $( window ).resize(function() {
         $win.setContentTop();
+        $win.setBackShifts();
     });
+
+    $win.setBackShifts();
 
     $( window).on('mousewheel', function(event) {
 //        console.log(event.deltaX, event.deltaY, event.deltaFactor);
@@ -43,15 +46,43 @@ var pager;
 function CWin() {
     this.content = $('.content');
     this.wrapper = $('#wrapper');
+    this.body = $('body');
     this.content_width = this.content.width();
     this.content_height = this.content.height();
     this.header_height = $('.header_strip').height();
     this.top_offset = $('.footer').height() + this.header_height;
     this.min_top = this.header_height + 20;
     this.max_top = this.header_height + this.content_height;
+    this.backs = $('.back');
     this.back1 = $('#back1');
     this.back2 = $('#back2');
     this.body = $('body');
+}
+
+CWin.prototype.setBackShifts = function () {
+    var w = this.body.width();
+    var h = this.body.height();
+    var k_h = h/w;
+    var koff_h = 0.74;
+//    var back = this.back1.css('opacity') > 0 ? this.back1 : this.back2;
+//    var koff_h = back.height()/back.width();
+    var k_w = w/h;
+    var koff_w = 1/koff_h;
+    var posx = '0px';
+    var posy = '66px';
+
+    if (k_h < koff_h)
+    {
+        var t = 66 - Math.floor(((koff_h - k_h)/2)*w);
+        posy = t + 'px';
+    }
+    if (k_w < koff_w)
+    {
+        posx = '-' + Math.floor(((koff_w - k_w)/2)*h) + 'px';
+    }
+
+    this.backs.css('background-position-x', posx);
+    this.backs.css('background-position-y', posy);
 }
 
 CWin.prototype.setContentTop = function ()
@@ -218,6 +249,7 @@ CPager.prototype.pageSwitch = function(k, page, prev_child, next_child)
     $win.switchBodyClass(prev_child.getActiveChildProperty('body_class'), next_child.getActiveChildProperty('body_class'));
 
     window.history.pushState("object or string", "Title", '/' + next_child.getActiveChildProperty('url') + '/');
+    $win.setBackShifts();
 }
 
 CPager.prototype.activateLI = function (id, cs)
