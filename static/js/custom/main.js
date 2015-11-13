@@ -1,13 +1,16 @@
 $(function() {
 
+    backs = {};
+    $('.back').each(function () {
+        backs[$(this).data('id')] = new CBack($(this));
+    });
+
     $win = new CWin();
 
     $( window ).resize(function() {
         $win.setContentTop();
         $win.setBackShifts();
     });
-
-    $win.setBackShifts();
 
     $( window).on('mousewheel', function(event) {
 //        console.log(event.deltaX, event.deltaY, event.deltaFactor);
@@ -40,10 +43,11 @@ $(function() {
 
 var main_page;
 var pager;
+var backs;
 
 /* CWIN() */
 
-function CWin() {
+function CWin(pager) {
     this.content = $('.content');
     this.wrapper = $('#wrapper');
     this.body = $('body');
@@ -64,10 +68,11 @@ CWin.prototype.setBackShifts = function () {
     var w = this.body.width();
     var h = this.body.height();
     var k_h = h/w;
-//    var koff_h = 0.74;
-    var back = this.back1.css('opacity') > 0 ? this.back1 : this.back2;
     var page = pager.getCurrentPage();
-    var koff_h = page.back_height/page.back_width;
+    var back = backs[page.getActiveChildProperty('background')];
+//    var koff_h = 0.74;
+
+    var koff_h = back.height/back.width;
     var k_w = w/h;
     var koff_w = 1/koff_h;
     var posx = '0px';
@@ -83,8 +88,7 @@ CWin.prototype.setBackShifts = function () {
         posx = '-' + Math.floor(((koff_w - k_w)/2)*h) + 'px';
     }
 
-    this.backs.css('background-position-x', posx);
-    this.backs.css('background-position-y', posy);
+    back.moveBackground(posx, posy);
 }
 
 CWin.prototype.setContentTop = function ()
@@ -114,6 +118,13 @@ function CPager(p) {
     this.init_pages(this.pages);
 };
 
+CPager.prototype.showCurrentBack = function ()
+{
+    var back = backs[this.getCurrentPage().getActiveChildProperty('background')];
+    for (var i in backs) if (backs[i].id != back.id && backs[i].active) backs[i].hide();
+    back.show();
+}
+
 CPager.prototype.init_pages = function(pages)
 {
     if (!pages.childs) return;
@@ -127,7 +138,6 @@ CPager.prototype.init_pages = function(pages)
 
         if (pages.childs[i].active)
         {
-//            pages.childs[i].child_index = i;
             pages.child_index = i;
             pages.childs[i].showAll();
         }
@@ -257,19 +267,16 @@ CPager.prototype.pageSwitch = function(k, page, prev_child, next_child)
         next_leftbar.show().animate({opacity: 1});
     }
 
-    var back1;
-    var back2;
-    if ($win.back2.hasClass('fadeOut'))
+    var pb = prev_child.getActiveChildProperty('background');
+    var nb = next_child.getActiveChildProperty('background');
+    if (pb != nb)
     {
-        back1 = $win.back1;
-        back2 = $win.back2;
-    } else if ($win.back1.hasClass('fadeOut')) {
-        back1 = $win.back2;
-        back2 = $win.back1;
+        var back1 = backs[pb];
+        var back2 = backs[nb];
+
+        back1.hideAnimated();
+        back2.showAnimated();
     }
-    back2.css('background-image', 'url(' + next_child.getActiveChildProperty('background') + ')');
-    back1.switchClass('fadeIn', 'fadeOut');
-    back2.switchClass('fadeOut', 'fadeIn');
 
     $win.switchBodyClass(prev_child.getActiveChildProperty('body_class'), next_child.getActiveChildProperty('body_class'));
 
@@ -391,4 +398,44 @@ CPage.prototype.addChild = function (args)
 
     if (this.childs == null) this.childs = new Array();
     this.childs.push(p);
+}
+
+/* BACKS */
+function CBack($div)
+{
+    this.obj = $div;
+    this.width = $div.data('width');
+    this.height = $div.data('height');
+    this.id = $div.data('id');
+    this.active = false;
+}
+
+CBack.prototype.show = function ()
+{
+    this.active = true;
+    this.obj.removeClass('fadeOut').addClass('fadeIn');
+}
+
+CBack.prototype.hide = function ()
+{
+    this.active = false;
+    this.obj.removeClass('fadeIn').addClass('fadeOut');
+}
+
+CBack.prototype.showAnimated = function ()
+{
+    this.active = true;
+    this.obj.switchClass('fadeOut', 'fadeIn');
+}
+
+CBack.prototype.hideAnimated = function ()
+{
+    this.active = false;
+    this.obj.switchClass('fadeIn', 'fadeOut');
+}
+
+CBack.prototype.moveBackground = function (posx, posy)
+{
+    this.obj.css('background-position-x', posx);
+    this.obj.css('background-position-y', posy);
 }

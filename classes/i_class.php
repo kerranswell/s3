@@ -271,8 +271,8 @@
 
         public function getOriginalFromData( $image )
         {
-            $ext = $this->image_type_to_extension( (int)$image['image_type'] );
-            $path = $image['image_width'] .'/'. $image['image_height'] .'/'. $image['image_name'] . '.' . $ext;
+            $ext = $this->image_type_to_extension( (int)$image['type'] );
+            $path = $image['width'] .'/'. $image['height'] .'/'. $image['name'] . '.' . $ext;
 
             return $path;
         }

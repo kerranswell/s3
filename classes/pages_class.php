@@ -7,6 +7,7 @@ class pages extends record {
         2 => array('title' => 'Слайдер, темный', 'value' => 2, 'params' => array('body_class' => 'dark', 'xslt' => 'slider')),
     );
     private $structure = 0;
+    private $backs = array();
 
     public function getTemplates()
     {
@@ -22,9 +23,7 @@ class pages extends record {
     {
         if (!$this->structure)
         {
-            $sql = "select p.*, i.name as image_name, i.type as image_type, IF(i.width > 0, i.width, 0) as image_width, IF(i.height > 0, i.height, 0) as image_height, i.idx as image_id from `pages` p
-                    left join `images` i on (i.idx = IF(p.bg_image_inherit > 0, p.bg_image_inherit, p.bg_image))
-                    where p.`status` = 1";
+            $sql = "select p.*, IF(p.bg_image_inherit > 0, p.bg_image_inherit, p.bg_image) as image_id from `pages` p where p.`status` = 1";
             $rows = $this->dsp->db->Select($sql);
 
             $this->structure = array();
@@ -35,17 +34,39 @@ class pages extends record {
                 $this->structure['id'][$row['id']] = $row;
                 $this->structure['pid'][$row['pid']][$row['id']] = &$this->structure['id'][$row['id']];
             }
+
+            $this->prepareBacks();
         }
 
         return $this->structure;
     }
 
+    private function prepareBacks()
+    {
+        $ids = array();
+        foreach ($this->backs as $image_id => &$back)
+        {
+            $ids[] = $image_id;
+        }
+
+        if (count($ids) > 0)
+        {
+            $sql = "select * from `images` where `idx` in (".implode(",", $ids).")";
+            $rows = $this->dsp->db->Select($sql);
+
+            foreach ($rows as $r)
+            {
+                $r['url'] = SITE.IMAGE_FOLDER.$this->dsp->i->getOriginalFromData($r);
+                $this->backs[$r['idx']] = $r;
+            }
+        }
+    }
+
     public function preparePage(&$page)
     {
-//            $page['bg_image_th'] = $this->dsp->i->default_path.$this->dsp->i->resize($page['bg_image'], TH_IMAGE_EDIT_ADMIN);
-        if ($page['image_id'] > 0)
+        if ($page['image_id'] > 0 && !isset($this->backs[$page['image_id']]))
         {
-            $page['bg_image'] = SITE.IMAGE_FOLDER.$this->dsp->i->getOriginalFromData($page);
+            $this->backs[$page['image_id']] = array();
         }
 
         $page['body_class'] = $this->templates[$page['template']]['params']['body_class'];
@@ -71,7 +92,7 @@ class pages extends record {
         $page = $this->structure['id'][$page_id];
         $this->setActiveItems($page_id);
 
-        $this->addValueToXml(array('pages' => $this->structure['id']));
+        $this->addValueToXml(array('pages' => $this->structure['id'], 'backs' => $this->backs));
         $this->dsp->common->addValueToXml(array('item_id' => $page_id, 'body_class' => $this->templates[$page['template']]['params']['body_class']));
 
         $template = $this->templates[$page['template']]['params']['xslt'];

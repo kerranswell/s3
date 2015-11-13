@@ -19,25 +19,13 @@
             </head>
 
             <body class="{/root/common_class/body_class}">
-                <div class="back fadeIn" id="back1">
-                    <xsl:variable name="bg_image">
-                        <xsl:choose>
-                            <xsl:when test="/root/pages_class/pages/item[id = $item_id]/image_id != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $item_id]/bg_image"/></xsl:when>
-                            <xsl:otherwise>
-                                <xsl:choose>
-                                    <xsl:when test="/root/pages_class/pages/item[id = $item_id]/pid &gt; 0">
-                                        <xsl:variable name="pid" select="/root/pages_class/pages/item[id = $item_id]/pid"/>
-                                        <xsl:choose>
-                                            <xsl:when test="/root/pages_class/pages/item[id = $pid]/image_id != 0"><xsl:value-of select="/root/pages_class/pages/item[id = $pid]/bg_image"/></xsl:when>
-                                        </xsl:choose>
-                                    </xsl:when>
-                                </xsl:choose>
-                            </xsl:otherwise>
-                        </xsl:choose>
-                    </xsl:variable>
-                    <xsl:attribute name="style">background-image: url(<xsl:value-of select="$bg_image"/>);</xsl:attribute>
-                </div>
-                <div class="back fadeOut" id="back2"></div>
+
+                <xsl:for-each select="/root/pages_class/backs/item">
+                    <div class="back fadeOut" data-id="{idx}" data-width="{width}" data-height="{height}">
+                        <xsl:attribute name="style">background-image: url(<xsl:value-of select="url"/>);</xsl:attribute>
+                    </div>
+                </xsl:for-each>
+
                 <div class="header_strip">
                     <div class="header">
                         <div class="logo"><a class="logo-title" href="#">Центр<br />IT-Поддержки<br />Бизнеса</a></div>
@@ -96,24 +84,24 @@ $(function() {
     main_page = new CPage({id:0,type:'v'});
     var p;<!--
 --><xsl:for-each select="/root/pages_class/pages/item[pid = 0]"><xsl:variable name="id" select="id"/>
-    <xsl:variable name="bg_image">
+<!--
+    <xsl:variable name="image_id">
         <xsl:choose>
-            <xsl:when test="image_id != 0">'<xsl:value-of select="bg_image"/>'</xsl:when>
+            <xsl:when test="bg_image != 0">'<xsl:value-of select="bg_image"/>'</xsl:when>
+            <xsl:when test="bg_image_inherit != 0">'<xsl:value-of select="bg_image_inherit"/>'</xsl:when>
             <xsl:otherwise>0</xsl:otherwise>
         </xsl:choose>
     </xsl:variable>
-    p = new CPage({id:<xsl:value-of select="id"/>,url:'<xsl:value-of select="url"/>',body_class:'<xsl:value-of select="body_class"/>',background:<xsl:value-of select="$bg_image"/>,back_width:<xsl:value-of select="image_width"/>,back_height:<xsl:value-of select="image_height"/>,type:'h',active:<xsl:choose><xsl:when test="is_active = 1">true</xsl:when><xsl:otherwise>false</xsl:otherwise></xsl:choose>});
+-->
+    p = new CPage({id:<xsl:value-of select="id"/>,url:'<xsl:value-of select="url"/>',body_class:'<xsl:value-of select="body_class"/>',background:<xsl:value-of select="image_id"/>,type:'h',active:<xsl:choose><xsl:when test="is_active = 1">true</xsl:when><xsl:otherwise>false</xsl:otherwise></xsl:choose>});
     <xsl:for-each select="/root/pages_class/pages/item[pid = $id]"><xsl:variable name="pid" select="pid"/>
-        <xsl:variable name="bg_image2">
-            <xsl:choose>
-                <xsl:when test="image_id != 0">'<xsl:value-of select="bg_image"/>'</xsl:when>
-                <xsl:otherwise>0</xsl:otherwise>
-            </xsl:choose>
-        </xsl:variable>p.addChild({id:<xsl:value-of select="id"/>,url:'<xsl:value-of select="url"/>',body_class:'<xsl:value-of select="body_class"/>',background:<xsl:value-of select="$bg_image2"/>,back_width:<xsl:value-of select="image_width"/>,back_height:<xsl:value-of select="image_height"/>,active:<xsl:choose><xsl:when test="(is_active = 1) or (not(is_active) and position() = 1 and not(/root/pages_class/pages/item[id = $pid]/is_active))">true</xsl:when><xsl:otherwise>false</xsl:otherwise></xsl:choose>});
+    p.addChild({id:<xsl:value-of select="id"/>,url:'<xsl:value-of select="url"/>',body_class:'<xsl:value-of select="body_class"/>',background:<xsl:value-of select="image_id"/>,active:<xsl:choose><xsl:when test="(is_active = 1) or (not(is_active) and position() = 1 and not(/root/pages_class/pages/item[id = $pid]/is_active))">true</xsl:when><xsl:otherwise>false</xsl:otherwise></xsl:choose>});
     </xsl:for-each><!--
 -->main_page.addChild({o:p});
 </xsl:for-each>
     pager = new CPager(main_page);
+    pager.showCurrentBack();
+    $win.setBackShifts();
 });
 </script>
                         <div class="content">
