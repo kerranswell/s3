@@ -92,7 +92,7 @@ body.light {
 }
 
 body.dark {
-    background-color: #3472bd;
+    background-color: #2c65a9;
     color: #fff;
 }
 
@@ -383,4 +383,11 @@ ul.social_menu li a {
     border-radius: 4px;
     background-color: #FF8644;
     text-transform: uppercase;
+}
+
+.circle1 {
+    width: 144px;
+    height: 144px;
+    border-radius: 72px;
+    overflow: hidden;
 }

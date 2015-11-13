@@ -50,6 +50,7 @@ function CWin() {
     this.content_width = this.content.width();
     this.content_height = this.content.height();
     this.header_height = $('.header_strip').height();
+    this.header_height_px = this.header_height + 'px';
     this.top_offset = $('.footer').height() + this.header_height;
     this.min_top = this.header_height + 20;
     this.max_top = this.header_height + this.content_height;
@@ -63,9 +64,10 @@ CWin.prototype.setBackShifts = function () {
     var w = this.body.width();
     var h = this.body.height();
     var k_h = h/w;
-    var koff_h = 0.74;
-//    var back = this.back1.css('opacity') > 0 ? this.back1 : this.back2;
-//    var koff_h = back.height()/back.width();
+//    var koff_h = 0.74;
+    var back = this.back1.css('opacity') > 0 ? this.back1 : this.back2;
+    var page = pager.getCurrentPage();
+    var koff_h = page.back_height/page.back_width;
     var k_w = w/h;
     var koff_w = 1/koff_h;
     var posx = '0px';
@@ -73,7 +75,7 @@ CWin.prototype.setBackShifts = function () {
 
     if (k_h < koff_h)
     {
-        var t = 66 - Math.floor(((koff_h - k_h)/2)*w);
+        var t = this.header_height - Math.floor(((koff_h - k_h)/2)*w);
         posy = t + 'px';
     }
     if (k_w < koff_w)
@@ -137,6 +139,29 @@ CPager.prototype.init_pages = function(pages)
 
     pages.checkButtonLeft();
     pages.checkButtonRight();
+}
+
+CPager.prototype.getCurrentPage = function () {
+    return this.getCurrentPage_(this.pages);
+}
+
+CPager.prototype.getCurrentPage_ = function (root) {
+    if (!root.childs) return 0;
+    for (var i in root.childs)
+    {
+        if (root.childs[i].active)
+        {
+            if (root.childs[i].childs && root.childs[i].childs.length > 0)
+            {
+                var t = this.getCurrentPage_(root.childs[i]);
+                if (t) return t; else return root.childs[i];
+            } else {
+                return root.childs[i];
+            }
+        }
+    }
+
+    return 0;
 }
 
 CPager.prototype.pageJump = function(page_id)
@@ -285,6 +310,8 @@ function CPage(args) {
     this.buttons = {};
     this.leftbar = 0;
     this.background = 0;
+    this.back_width = 0;
+    this.back_height = 0;
     this.body_class = 0;
     this.url = 0;
 
@@ -293,6 +320,8 @@ function CPage(args) {
     if (args.active !== undefined) this.active = args.active;
     if (args.background !== undefined) this.background = args.background;
     if (args.body_class !== undefined) this.body_class = args.body_class;
+    if (args.back_width !== undefined) this.back_width = args.back_width;
+    if (args.back_height !== undefined) this.back_height = args.back_height;
     if (args.url !== undefined) this.url = args.url;
 };
 

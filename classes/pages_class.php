@@ -22,7 +22,9 @@ class pages extends record {
     {
         if (!$this->structure)
         {
-            $sql = "select * from `pages` where `status` = 1";
+            $sql = "select p.*, i.name as image_name, i.type as image_type, IF(i.width > 0, i.width, 0) as image_width, IF(i.height > 0, i.height, 0) as image_height, i.idx as image_id from `pages` p
+                    left join `images` i on (i.idx = IF(p.bg_image_inherit > 0, p.bg_image_inherit, p.bg_image))
+                    where p.`status` = 1";
             $rows = $this->dsp->db->Select($sql);
 
             $this->structure = array();
@@ -41,14 +43,9 @@ class pages extends record {
     public function preparePage(&$page)
     {
 //            $page['bg_image_th'] = $this->dsp->i->default_path.$this->dsp->i->resize($page['bg_image'], TH_IMAGE_EDIT_ADMIN);
-        if ($page['bg_image'] > 0)
+        if ($page['image_id'] > 0)
         {
-            $page['bg_image'] = SITE.IMAGE_FOLDER.$this->dsp->i->getOriginal($page['bg_image']);
-        }
-
-        if ($page['bg_image_inherit'] > 0)
-        {
-            $page['bg_image_inherit'] = SITE.IMAGE_FOLDER.$this->dsp->i->getOriginal($page['bg_image_inherit']);
+            $page['bg_image'] = SITE.IMAGE_FOLDER.$this->dsp->i->getOriginalFromData($page);
         }
 
         $page['body_class'] = $this->templates[$page['template']]['params']['body_class'];
@@ -59,8 +56,6 @@ class pages extends record {
 
     public function show()
     {
-        $template = 'slider';
-
         global $nodes;
         $this->getStructure();
 
