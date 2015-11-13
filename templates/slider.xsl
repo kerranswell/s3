@@ -121,6 +121,7 @@ $(function() {
 });
 </script>
                         <div class="content">
+                            <!--<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="146" height="146"><defs><filter id="filter"><feGaussianBlur stdDeviation="1"></feGaussianBlur></filter><mask id="mask"><circle cx="72" cy="72" r="72" fill="white" filter="url(#filter)"></circle></mask></defs><image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/static/i/Lighthouse.jpg" width="143" height="143" mask="url(#mask)"></image></svg>-->
                             <xsl:for-each select="/root/pages_class/pages/item[pid = 0]"><xsl:variable name="id" select="id"/>
                                 <div class="v-page page" data-id="{id}">
                                     <xsl:if test="count(/root/pages_class/pages/item[pid = $id]) &gt; 1">
