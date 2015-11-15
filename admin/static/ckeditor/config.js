@@ -8,14 +8,16 @@ CKEDITOR.editorConfig = function( config )
 	// Define changes to default configuration here. For example:
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
-config.toolbar =
+    config.enterMode = CKEDITOR.ENTER_P;
+
+    config.toolbar =
     [
         ['Source','-','NewPage'],
         ['Cut','Copy','Paste','PasteText','Undo','Redo'],
         ['Find','Replace','-','SelectAll','-','SpellChecker', 'Scayt'],
         [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ],
         [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ],
-        [ 'Image', 'Link','Unlink','Anchor' ],
+        [ 'Table', 'Image', 'Link','Unlink','Anchor' ],
         [ 'SpecialChar'],
         [ 'Maximize', 'ShowBlocks','-','About' ]
     ];

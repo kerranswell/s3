@@ -1,11 +1,11 @@
 <?php
-
+ob_start();
 //$_core_mode_ = 'wrapper';
 require_once(dirname(__FILE__) . "/core/core.php");
 //require_once(CLASS_DIR . "/record_admin_class.php");
 $dsp->_Builder->addArray(array('timestamp' => time()));
 
-if ($_REQUEST['p_'] == '') $_REQUEST['p_'] = 'services/it-director/';
+if ($_REQUEST['p_'] == '') $_REQUEST['p_'] = 'about/mission/';
 
 if (empty($_REQUEST['p_']) && $_SERVER['QUERY_STRING'] == 'er=1')
 {

@@ -223,5 +223,12 @@ ul.path li {
 #blocks_input {display:none;}
 
 .block-value {
+}
+
+.hidden {
     display: none;
+}
+
+textarea.quote {
+    width: 95%;
 }

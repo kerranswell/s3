@@ -110,7 +110,7 @@ a:hover {
 }
 
 #wrapper {
-    width: 1280px;
+    width: 1200px;
     min-height: 100%;
     background-position: top left;
     background-repeat: no-repeat;
@@ -131,6 +131,37 @@ a:hover {
     z-index: -100;
 }
 
+.back.map {
+    padding-top: 66px;
+    /*z-index: 1;*/
+}
+
+.map-over-top {
+    position: absolute;
+    width: 100%;
+    background-color: #fff;
+    opacity: 0.7;
+    left: 0px;
+    top: 66px;
+    z-index: 2;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.map-over-bottom {
+    position: absolute;
+    width: 100%;
+    background-color: #fff;
+    opacity: 0.7;
+    left: 0px;
+    top: 666px;
+    z-index: 2;
+}
+
 .fadeOut {opacity:0;}
 .fadeIn {opacity:1;}
 
@@ -143,15 +174,12 @@ a:hover {
 
 .content {
     position: absolute;
-    left: 200px;
-    top: 200px;
-    width: 800px;
-    height: 500px;
-    /*border: 1px solid yellow;*/
-}
-
-.content {
-    font-size: 14px;
+    left: 121px;
+    top: 116px;
+    width: 960px;
+    height: 579px;
+    font-size: 15px;
+    line-height: 22px;
     font-family: 'PT Sans';
 }
 
@@ -159,8 +187,10 @@ a:hover {
     position: absolute;
     left: auto;
     top: 100px;
-    width: 125px;
-    padding: 0px 20px 0px 35px;
+    width: 300px;
+    padding: 0px 20px 0px 33px;
+    font-family: 'FuturaBookC';
+    z-index: 6;
 }
 
 .footer {
@@ -175,22 +205,61 @@ a:hover {
 
 .v-page {
     position: absolute;
-    width: 1000px;
-    height: 500px;
+    width: 960px;
+    /*height: 500px;*/
     display: none;
+    text-align: center;
+    z-index: 5;
 }
 
 .h-page {
     position: absolute;
-    width: 1000px;
-    height: 500px;
-    overflow: hidden;
+    width: 960px;
     display: none;
+    z-index: 5;
+    text-align: center;
 }
 
-.h-page p {
-    line-height: 30px;
-    margin-bottom: 50px;
+.h-page[data-id="0"] {
+    display: block;
+}
+
+.h-page h2 {
+    text-transform: uppercase;
+    font-size: 30px;
+    font-family: 'FuturaBookC';
+    margin-top: 29px;
+    letter-spacing: 1px;
+}
+
+.dots {
+    position: absolute;
+    width: 100%;
+    top: 550px;
+    text-align: center;
+}
+
+.dots ul {
+    list-style: none;
+}
+
+.dots ul li {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    background-image: url(../i/dots.png);
+    background-repeat: no-repeat;
+    background-position-x: -7px;
+    background-position-y: top;
+    margin-right: 15px;
+}
+
+.dots ul li.last {
+    margin-right: 0px;
+}
+
+.dots ul li.active {
+    background-position-x: left;
 }
 
 .button_down {
@@ -216,8 +285,8 @@ a:hover {
     width: 32px;
     height: 76px;
     position: absolute;
-    top: 50%;
-    left: -70px;
+    top: 260px;
+    left: -79px;
 }
 
 .button_right {
@@ -225,8 +294,8 @@ a:hover {
     width: 32px;
     height: 76px;
     position: absolute;
-    top: 50%;
-    right: -70px;
+    top: 260px;
+    right: -82px;
 }
 
 
@@ -243,7 +312,7 @@ a:hover {
 }
 
 .header {
-    width: 1280px;
+    width: 1200px;
     height: 100%;
     background-color: #fff;
     margin: 0 auto;
@@ -361,7 +430,7 @@ ul.social_menu li a {
 
 .left_menu li {
     line-height: 25px;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .btn-vk {
@@ -391,4 +460,185 @@ ul.social_menu li a {
     height: 144px;
     border-radius: 72px;
     overflow: hidden;
+}
+
+.toptitle {
+    width: 89px;
+    height: 103px;
+    text-align: center;
+    margin: 0 auto;
+    text-transform: uppercase;
+    letter-spacing: normal;
+    /*opacity: 0;*/
+}
+
+.toptitle h1 {
+    line-height: 103px;
+    font-size: 17px;
+    font-family: 'FuturaBookC';
+}
+
+.toptitle.light {
+    background: url(/static/i/polygon_light.png) left top no-repeat;
+}
+
+.toptitle.dark {
+    background: url(/static/i/polygon.png) left top no-repeat;
+}
+
+.quote {
+    font-family: 'FuturaLightC';
+    font-size: 27px;
+    /*padding-left: 65px;*/
+    /*padding-right: 60px;*/
+    text-align: left;
+    font-style: italic;
+    font-weight: bold;
+    line-height: 37px;
+    position: relative;
+    letter-spacing: 1px;
+    display: inline-block;
+
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 19px;
+    margin-bottom: 66px;
+}
+
+.quote .left {
+    width: 63px;
+    height: 76px;
+    position: absolute;
+    margin-top: -19px;
+    margin-left: -80px;
+}
+
+.quote .left.light {
+    background: url(../i/quote_left_light.png) left top no-repeat;
+}
+
+.quote .left.dark {
+    background: url(../i/quote_left.png) left top no-repeat;
+}
+
+.quote .right {
+    width: 63px;
+    height: 76px;
+    position: absolute;
+    bottom: -21px;
+    right: -80px;
+}
+
+.quote .right.light {
+    background: url(../i/quote_right_light.png) left top no-repeat;
+}
+
+.quote .right.dark {
+    background: url(../i/quote_right.png) left top no-repeat;
+}
+
+.block p {
+    margin-bottom: 30px;
+}
+
+.block {
+    text-align: left;
+    margin-top: 26px;
+}
+
+.block.columns2 .column {
+    width: 465px;
+    float: left;
+}
+.block.columns2 .column2 {margin-left:30px;}
+.block.columns2 .column1 p {
+    width: 432px;
+}
+.block.columns2 .column2 p {
+    width: 460px;
+}
+
+.block.columns2 table  {
+    width: 460px;
+}
+
+.block table td {
+    width: 215px;
+}
+
+.block.columns2 table td:nth-child(2) {
+    padding-left: 30px;
+}
+
+.block.columns1 table td:nth-child(1n+2) {
+    padding-left: 30px;
+}
+
+.block table, .block em {
+    font-size:13px;
+    line-height: 16px;
+}
+.block table p {
+    width: 100% !important;
+    margin-bottom: 18px;
+}
+
+.block table ul {
+    list-style-type: disc;
+}
+
+.contacts-icons {
+    height: 22px;
+    margin-top: 29px;
+}
+
+.contacts {
+    margin-top: 17px;
+}
+
+.contacts, .contacts-icons {
+    text-align: center;
+    width: 100%;
+}
+
+.contacts div, .contacts-icons div {
+    width: 320px;
+    float: left;
+}
+
+.contacts-icons div {display: block; text-align: center;}
+
+.contacts .address span {
+    display: inline-block;
+    text-align: left;
+    width: 245px;
+}
+
+.contacts-icons .address{
+    background-position-x: 0px;
+}
+
+.contacts-icons .phone{
+    background-position-x: -23px;
+}
+
+.contacts-icons .email {
+    background-position-x: -45px;
+}
+
+body.light .contacts .email a {
+    color: black;
+}
+body.dark .contacts .email a {
+    color: white;
+}
+
+.contacts-icons span {
+    margin: auto;
+    display: block;
+    width: 22px;
+    height: 22px;
+    background-image: url(../i/icons.png);
+    background-repeat: no-repeat;
+    background-position-y: top;
 }

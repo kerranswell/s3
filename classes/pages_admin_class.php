@@ -59,7 +59,7 @@ class pages_admin extends record {
 
     public function makeInheritPages($id)
     {
-        $sql = "select `title`, `bg_image` as 'value' from `pages` where `bg_image` > 0 and `id` != ?";
+        $sql = "select `title`, `bg_image` as 'value' from `pages` where `bg_image` > 0 and `id` != ? order by `pid` asc, `pos` asc";
         $rows = $this->dsp->db->Select($sql, $id);
         $rows = array_merge(array(array('value' => 0, 'title' => '---')), $rows);
         $this->dsp->_Builder->addArray(array('inherit_image_pages' => $rows), '', array(), $this->getBuilderBlock(), false);
@@ -179,7 +179,7 @@ class pages_admin extends record {
         $save = $_POST['record'];
         $save['id'] = $id;
         $pid = $this->pid;
-        if (trim($save['translit']) == '') $save['translit'] = translit($save['title']);
+//        if (trim($save['translit']) == '') $save['translit'] = translit($save['title']);
         $url = $this->makeUrl($pid, $save['translit']);
         $save['url'] = implode("/", $url);
 

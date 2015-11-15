@@ -105,10 +105,17 @@ $(function() {
             $('.content_main').find('.content-block').each(function () {
                 var block = {};
                 block.name = $(this).data('name');
+                block.type = $(this).data('type');
                 block.cells = {};
                 var j = 0;
                 $(this).find('.block-value').each(function () {
-                    block.cells[j++] = $(this).html();
+                    var v;
+                    switch (block.type)
+                    {
+                        case 'column' : v = $(this).html(); break;
+                        case 'quote' : case 'contacts' : v = $(this).val(); break;
+                    }
+                    block.cells[j++] = v;
                 });
 
                 xml[i++] = block;

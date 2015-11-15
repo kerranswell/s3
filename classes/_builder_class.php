@@ -301,7 +301,7 @@ class _Builder {
      * @param array $attrs - list of index that will be traslated to attributes not to nodes.
      * @return DOMnode node - node that array added into (tha same as $node on input).
      */
-    private function _addArray2Node($array, $node, $asItems = false, $attrs = array()) {
+    private function _addArray2Node($array, $node, $asItems = false, $attrs = array(), $child_cdata = false) {
         if (!empty($array['#text'])) {
             $t = $this->doc->createTextNode($array['#text']);
             unset($array['#text']);
@@ -321,21 +321,21 @@ class _Builder {
                         $attr_list[$attr] = $avalue;
                     }
                 } // foreach
-                $this->_addArray2Node($value, $new, $asItems, $attrs);
-            } else {
 
+                $this->_addArray2Node($value, $new, $asItems, $attrs, $idx == 'cells' ? true : false);
+            } else {
                 //--------------------------------------------------------------------------------
                 // FIX: unterminated entity reference
                 //
                 // $new = $this->doc->createElement($idx, $value);
                 //--------------------------------------------------------------------------------
                 $new = $this->doc->createElement($idx);
-                if ($idx == 'xml'){
-                    $new = $this->createXMLNode('<xml>'.$value.'</xml>');
-                }
-                else{
-                    $new->nodeValue = trim(htmlspecialchars($value, ENT_QUOTES, 'UTF-8'));
-                }
+
+                if (preg_match("|<\!\[CDATA\[(.*)\]\]>|", $value, $matches))
+                {
+                    $cd = $this->doc->createCDATASection($matches[1]);
+                    $new->appendChild($cd);
+                } else $new->nodeValue = trim(htmlspecialchars($value, ENT_QUOTES, 'UTF-8'));
 
                 //--------------------------------------------------------------------------------
 

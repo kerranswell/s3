@@ -10,7 +10,7 @@
 
     <xsl:template match="item" mode="blocks_admin">
         <xsl:variable name="block_name" select="name"/>
-        <div class="content-block" data-name="{name}">
+        <div class="content-block" data-name="{name}" data-type="{type}">
             <table><tbody><tr>
                 <xsl:choose>
                     <xsl:when test="/node()/block[@name='content_blocks']/item[name=$block_name]/params/count &gt; 0">
@@ -80,7 +80,38 @@
 
     <xsl:template name="block_value">
         <xsl:param name="value"/>
-        <div class="block-value"><xsl:value-of select="$value" disable-output-escaping="yes"/></div>
+        <div class="block-value hidden"><xsl:value-of select="$value" disable-output-escaping="yes"/></div>
     </xsl:template>
+
+    <xsl:template match="item[type='quote']" mode="content_block">
+        <td class="column-cell">Цитата:<br/><textarea class="quote block-value"><xsl:value-of select="cells/item"/></textarea></td>
+    </xsl:template>
+
+
+
+    <xsl:template match="item[type='contacts']" mode="content_block">
+        <xsl:param name="cell_number"/>
+        <xsl:apply-templates select="." mode="contacts-cell">
+            <xsl:with-param name="cell_number" select="$cell_number"/>
+            <xsl:with-param name="class">block-<xsl:value-of select="name"/></xsl:with-param>
+        </xsl:apply-templates>
+    </xsl:template>
+
+    <xsl:template match="item" mode="contacts-cell">
+        <xsl:param name="class"/>
+        <xsl:param name="cell_number"/>
+        <td>
+            <xsl:attribute name="class">column-cell <xsl:value-of select="$class"/></xsl:attribute>
+            <div class="column-content">
+                <xsl:choose>
+                    <xsl:when test="$cell_number = 1">Адрес</xsl:when>
+                    <xsl:when test="$cell_number = 2">Телефон</xsl:when>
+                    <xsl:when test="$cell_number = 3">E-mail</xsl:when>
+                </xsl:choose>:
+                <input type="text" class="block-value" value="{cells/item[@_key = ($cell_number - 1)]}" />
+            </div>
+        </td>
+    </xsl:template>
+
 
 </xsl:stylesheet>

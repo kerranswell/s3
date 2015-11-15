@@ -79,6 +79,7 @@ class Dispatcher {
         if (is_callable(array($this->installed[$className], "Init"))) {
             call_user_func(array($this->installed[$className], "Init"), $params);
         }
+
         return $this->installed[$className];
     } // Init()
 

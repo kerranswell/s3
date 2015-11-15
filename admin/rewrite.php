@@ -1,4 +1,5 @@
 <?php
+//error_reporting(E_ALL);
 //$_core_mode_ = 'wrapper';
 require_once(dirname(__FILE__) . "/../core/core.php");
 include_once(dirname(__FILE__) . '/const.php');

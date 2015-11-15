@@ -7,9 +7,11 @@ class content {
     public function content () {
         $this->block_types[] = array('name' => 'column1', 'type' => 'column', 'title' => '1 колонка', 'params' => array('count' => 1));
         $this->block_types[] = array('name' => 'column2', 'type' => 'column', 'title' => '2 колонки', 'params' => array('count' => 2));
-        $this->block_types[] = array('name' => 'column2_1', 'type' => 'column', 'title' => '2 и 1 колонки', 'params' => array());
-        $this->block_types[] = array('name' => 'column1_2', 'type' => 'column', 'title' => '1 и 2 колонки', 'params' => array());
-        $this->block_types[] = array('name' => 'column4', 'type' => 'column', 'title' => '4 колонки', 'params' => array('count' => 4));
+        $this->block_types[] = array('name' => 'quote', 'type' => 'quote', 'title' => 'Цитата', 'params' => array('count' => 1));
+        $this->block_types[] = array('name' => 'contacts', 'type' => 'contacts', 'title' => 'Контакты', 'params' => array('count' => 3));
+//        $this->block_types[] = array('name' => 'column2_1', 'type' => 'column', 'title' => '2 и 1 колонки', 'params' => array());
+//        $this->block_types[] = array('name' => 'column1_2', 'type' => 'column', 'title' => '1 и 2 колонки', 'params' => array());
+//        $this->block_types[] = array('name' => 'column4', 'type' => 'column', 'title' => '4 колонки', 'params' => array('count' => 4));
     }
 
     public function makeBlock() {
