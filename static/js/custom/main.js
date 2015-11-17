@@ -14,7 +14,7 @@ $(function() {
 
     $( window).on('mousewheel', function(event) {
 //        console.log(event.deltaX, event.deltaY, event.deltaFactor);
-        if (event.deltaY != 0 && event.deltaX == 0) pager.pageSlide(event.deltaY, 0);
+        if (event.deltaY != 0 && event.deltaX == 0) pager.pageSlide(-1*event.deltaY, 0);
 
         return false;
     });
@@ -40,6 +40,17 @@ $(function() {
         pager.pageJump($(this).closest('li').data('id'));
         return false;
     });
+
+    $('.input-checkbox').click(function () {
+        if ($(this).hasClass('checked'))
+        {
+            $(this).removeClass('checked');
+        } else {
+            $(this).addClass('checked');
+        }
+    });
+
+    $('.left_menu li a').click(function () {return false;});
 
 });
 
@@ -148,7 +159,7 @@ CPager.prototype.init_pages = function(pages)
     {
         pages.childs[i].obj = $('.page[data-id="' + pages.childs[i].id + '"]');
         pages.childs[i].initButtons();
-        pages.childs[i].initLeftBar();
+//        pages.childs[i].initLeftBar();
         pages.childs[i].my_index = i;
 
         if (pages.childs[i].active)
@@ -237,12 +248,12 @@ CPager.prototype.pageSwitch = function(k, page, prev_child, next_child)
 
     var prev_index = page.child_index;
     var cur_page = prev_child.obj;
-    var cur_leftbar = prev_child.leftbar;
+//    var cur_leftbar = prev_child.leftbar;
 
     page.child_index = next_child.my_index;
 
     var next_page = next_child.obj;
-    var next_leftbar = next_child.leftbar;
+//    var next_leftbar = next_child.leftbar;
 
     var o = {};
     if (page.type == 'h') o.marginLeft = (k > 0 ? "-=" : "+=") + $win.content_width;
@@ -272,11 +283,13 @@ CPager.prototype.pageSwitch = function(k, page, prev_child, next_child)
     page.checkButtonLeft();
     page.checkButtonRight();
 
+/*
     if (page.type == 'v')
     {
         cur_leftbar.animate({opacity: 0}, function () {$(this).hide()});
         next_leftbar.show().animate({opacity: 1});
     }
+*/
 
     var dots = page.dots;
     if (dots)
@@ -343,7 +356,7 @@ function CPage(args) {
     this.parent = 0;
     this.child_index = 0;
     this.buttons = {};
-    this.leftbar = 0;
+//    this.leftbar = 0;
     this.background = 0;
     this.back_width = 0;
     this.back_height = 0;
@@ -420,6 +433,7 @@ CPage.prototype.initButtons = function ()
 //    this.buttons.down = $button_down;
 }
 
+/*
 CPage.prototype.initLeftBar = function ()
 {
     if (!this.obj) return;
@@ -427,11 +441,12 @@ CPage.prototype.initLeftBar = function ()
 
     this.leftbar = $('.left_bar_page[data-id="' + this.id + '"]');
 }
+*/
 
 CPage.prototype.showAll = function ()
 {
     this.obj.show();
-    if (this.leftbar) this.leftbar.show();
+//    if (this.leftbar) this.leftbar.show();
 }
 
 CPage.prototype.checkButtonLeft = function()

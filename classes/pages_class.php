@@ -6,6 +6,8 @@ class pages extends record {
         1 => array('title' => 'Слайдер, светлый', 'value' => 1, 'params' => array('body_class' => 'light', 'xslt' => 'slider')),
         2 => array('title' => 'Слайдер, темный', 'value' => 2, 'params' => array('body_class' => 'dark', 'xslt' => 'slider')),
         3 => array('title' => 'Слайдер, карта', 'value' => 3, 'params' => array('body_class' => 'light', 'xslt' => 'slider')),
+        4 => array('title' => 'Слайдер, калькулятор, темный', 'value' => 4, 'params' => array('body_class' => 'dark', 'xslt' => 'slider')),
+//        5 => array('title' => 'Слайдер, калькулятор, светлый', 'value' => 5, 'params' => array('body_class' => 'light', 'xslt' => 'slider')),
     );
     private $structure = 0;
     private $backs = array();
@@ -75,6 +77,7 @@ class pages extends record {
         $page['xml'] = json_decode($page['xml'], true);
         foreach ($page['xml'] as &$b)
         {
+//            if (!isset($b['type'])) continue;
             if (isset($b['cells']) && is_array($b['cells'])) {
                 foreach ($b['cells'] as &$c) {
                     if (in_array($b['type'], array('quote')))
@@ -86,6 +89,7 @@ class pages extends record {
                     $this->dsp->transforms->replaceEntityBack( $c );
                     $this->dsp->transforms->replaceEntity2Simbols( $c );
                     $this->dsp->transforms->removeCKShit( $c );
+//                    print_r($c); exit;
                     $c = '<![CDATA['.$c.']]>';
                 }
             }
@@ -101,6 +105,7 @@ class pages extends record {
 
         $url = implode("/",$nodes);
         if ($url == "") $url = "/";
+
         $page_id = $this->getPageIdFromStructureByUrl($url);
 
         if (!$page_id)
@@ -117,26 +122,7 @@ class pages extends record {
         }
         $this->setActiveItems($page_id);
         $this->addValueToXml(array('pages' => $this->structure['id'], 'backs' => $this->backs));
-/*        $pages_node = $this->dsp->_Builder->addNode($this->dsp->_Builder->createNode('pages', array()), $this->getBuilderBlock());
-        foreach ($this->structure['id'] as $page)
-        {
-            $xml = $page['xml'];
-            unset($page['xml']);
-            $node = $this->dsp->_Builder->createNode('item', array('_key' => $page['id']));
-            $this->dsp->_Builder->addArray($page, '', array(), $node, false);
-            $this->dsp->_Builder->addNode($node, $pages_node);
-        }*/
 
-//        $this->addValueToXml(array('backs' => $this->backs));
-/*
-        $xml = '<rt>Test</rt>';
-//        $x = $this->dsp->_Builder->createXMLNode($xml);
-
-        $doc = new SimpleXMLElement($xml);
-        $res = $doc->xpath("rt");
-        */
-
-//        $this->dsp->_Builder->addNode($x, $this->getBuilderBlock());
         $this->dsp->common->addValueToXml(array('item_id' => $page_id, 'body_class' => $this->templates[$page['template']]['params']['body_class']));
 
         $template = $this->templates[$page['template']]['params']['xslt'];
@@ -157,6 +143,7 @@ class pages extends record {
     private function getPageIdFromStructureByUrl($url)
     {
         $this->getStructure();
+
         foreach ($this->structure['id'] as $id => $r)
         {
             if ($r['url'] == $url) return $id;

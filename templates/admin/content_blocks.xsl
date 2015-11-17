@@ -87,6 +87,9 @@
         <td class="column-cell">Цитата:<br/><textarea class="quote block-value"><xsl:value-of select="cells/item"/></textarea></td>
     </xsl:template>
 
+    <xsl:template match="item[type='abstract_block']" mode="content_block_one">
+        <td class="column-cell"><xsl:value-of select="title"/></td>
+    </xsl:template>
 
 
     <xsl:template match="item[type='contacts']" mode="content_block">

@@ -61,5 +61,8 @@ if (!defined('HOST')) define('HOST', 'tsi.elle.www.hsmdev.ru');
 
 /* THUMBNAILS CODES */
 define('TH_BG_IMAGE_ADMIN', 1);
+define('TH_LISTS_BG_IMAGE_ADMIN', 2);
+define('TH_TEAM_IMAGE', 3);
+define('TH_CLIENT_IMAGE', 4);
 
 ?>

@@ -10,6 +10,9 @@
     $GLOBALS['isSizes'] = array(
         0=>array('original'), // original
         1=>array(400,400,0,0),
+        2=>array(200,200,1,0),
+        3=>array(144,144,1,0),
+        4=>array(98,98,1,0),
     );
 
 

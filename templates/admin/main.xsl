@@ -2,6 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
 	<xsl:import href="layout.xsl"/> 
 	<xsl:import href="pages.xsl"/>
+	<xsl:import href="lists.xsl"/>
 
 
 </xsl:stylesheet>
