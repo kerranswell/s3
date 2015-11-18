@@ -1,50 +1,65 @@
 $(function() {
     var body_width = $('body').width();
+    var max_body_width = body_width;
+    var body_height = $('body').height();
+    var max_body_height = body_height;
 
     var patterns = {1:new Array(),2:new Array(),3:new Array()};
 
     $('.layer').height($('body').height() + 200);
 
     var w = 61;
-    var cnt = Math.floor(body_width / w) + 2;
     var layer1 = $('.layer.p1');
-    layer1.css({width: body_width + 2*w});
-    for (var i=0; i < cnt; i++)
+    buildLayer1();
+    function buildLayer1()
     {
-        var div = document.createElement("div");
-        $(div).addClass('patterns1');
-        layer1.append(div)
+        layer1.css({width: body_width + 2*w});
+        var cnt = Math.floor(body_width / w) + 2;
+        for (var i=patterns[1].length; i < cnt; i++)
+        {
+            var div = document.createElement("div");
+            $(div).addClass('patterns1');
+            layer1.append(div)
 
-        var p = new CPattern({obj:$(div),back_x:0,back_y:-111 + i*171});
-        patterns[1].push(p);
+            var p = new CPattern({obj:$(div),back_x:0,back_y:-111 + i*171});
+            patterns[1].push(p);
+        }
     }
 
     var w = 61;
-    var cnt = Math.floor(body_width / w) + 2;
     var layer2 = $('.layer.p2');
-    layer2.css({width: body_width + 2*w});
-    for (var i=0; i < cnt; i++)
+    buildLayer2();
+    function buildLayer2()
     {
-        var div = document.createElement("div");
-        $(div).addClass('patterns2');
-        layer2.append(div)
+        layer2.css({width: body_width + 2*w});
+        var cnt = Math.floor(body_width / w) + 2;
+        for (var i=patterns[2].length; i < cnt; i++)
+        {
+            var div = document.createElement("div");
+            $(div).addClass('patterns2');
+            layer2.append(div)
 
-        var p = new CPattern({obj:$(div),back_x:0,back_y:128 + i*171});
-        patterns[2].push(p);
+            var p = new CPattern({obj:$(div),back_x:0,back_y:128 + i*171});
+            patterns[2].push(p);
+        }
     }
 
-    var w = 120;
-    var cnt = Math.floor(body_width / (w / 2)) + 2;
+    var w3 = 120;
     var layer3 = $('.layer.p3');
-    layer3.css({width: body_width + 2*w});
-    for (var i=0; i < cnt; i++)
+    buildLayer3();
+    function buildLayer3()
     {
-        var div = document.createElement("div");
-        $(div).addClass('patterns3');
-        layer3.append(div)
+        layer3.css({width: body_width + 2*w3});
+        var cnt = Math.floor(body_width / (w3 / 2)) + 2;
+        for (var i=patterns[3].length; i < cnt; i++)
+        {
+            var div = document.createElement("div");
+            $(div).addClass('patterns3');
+            layer3.append(div)
 
-        var p = new CPattern({obj:$(div),back_x:0,back_y:60 + i*171});
-        patterns[3].push(p);
+            var p = new CPattern({obj:$(div),back_x:0,back_y:60 + i*171});
+            patterns[3].push(p);
+        }
     }
 
     var scale = 3;
@@ -91,6 +106,28 @@ $(function() {
         }
 
         return false;
+    });
+
+    $( window ).resize(function() {
+
+        var new_w = $('body').width();
+        if (new_w > max_body_width)
+        {
+            max_body_width = body_width = new_w;
+            buildLayer1();
+            buildLayer2();
+            buildLayer3();
+        }
+
+
+        var new_h = $('body').height();
+        if (new_h > max_body_height)
+        {
+            max_body_height = body_height = new_h;
+            $('.layer').height(new_h + 200);
+        }
+
+
     });
 
 });
