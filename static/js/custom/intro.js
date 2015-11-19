@@ -66,8 +66,8 @@ $(function() {
     var px_shift = 68;
     var number_steps = Math.ceil(px_shift / 3);
     var lim = px_shift / scale;
-    var l2 = new CLayer({obj:layer2,x2:0,y2:-px_shift})
-    var l3 = new CLayer({obj:layer3,x2:59,y2:-34})
+    l2 = new CLayer({obj:layer2,x2:0,y2:-px_shift})
+    l3 = new CLayer({obj:layer3,x2:59,y2:-34})
 
 //    var patterns1 = $('.patterns1');
 //    var patterns2 = $('.patterns2');
@@ -131,6 +131,8 @@ $(function() {
     });
 
 });
+
+var l1, l2, l3;
 
 function CLayer(args)
 {

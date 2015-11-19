@@ -60,18 +60,31 @@ tr.act a{color: #ffffff;}
 	font-weight: bold;
 	src: local('PT Sans Bold'), url('../fonts/PTS75F_W.eot?#iefix') format('embedded-opentype'), url('../fonts/PTS75F_W.woff') format('woff'),url('../fonts/PTS75F_W.ttf') format('truetype'), url('../fonts/PTS75F_W.svg#PTSans-Bold') format('svg');}
 
+
+/*
 @font-face {
     font-family: FuturaDemiC;
     src: url(../fonts/futurademic.otf);
 }
 
+*/
 @font-face {
     font-family: FuturaBookC;
     src: url(../fonts/futurabookc.otf);
 }
 
 @font-face {
+    font-family: 'FuturaBookC IE';
+    src: url(../fonts/FuturaBookC.eot);
+}
+
+@font-face {
     font-family: FuturaLightC;
+    src: url(../fonts/futuralightc.otf);
+}
+
+@font-face {
+    font-family: 'FuturaLightC IE';
     src: url(../fonts/futuralightc.otf);
 }
 
@@ -189,7 +202,7 @@ a:hover {
     top: 100px;
     width: 300px;
     padding: 0px 20px 0px 33px;
-    font-family: 'FuturaBookC';
+    font-family: 'FuturaBookC', 'FuturaBookC IE';
     z-index: 6;
 }
 
@@ -227,7 +240,7 @@ a:hover {
 .h-page h2 {
     text-transform: uppercase;
     font-size: 30px;
-    font-family: 'FuturaBookC';
+    font-family: 'FuturaBookC', 'FuturaBookC IE';
     margin-top: 29px;
     letter-spacing: 1px;
 }
@@ -308,7 +321,7 @@ a:hover {
     display: block;
     background-color: #ffffff;
     z-index: 500;
-    font-family: 'FuturaBookC';
+    font-family: 'FuturaBookC', 'FuturaBookC IE';
 }
 
 .header {
@@ -478,7 +491,7 @@ ul.social_menu li a {
 .toptitle h1 {
     line-height: 103px;
     font-size: 17px;
-    font-family: 'FuturaBookC';
+    font-family: 'FuturaBookC', 'FuturaBookC IE';
 }
 
 .toptitle.light {
@@ -490,7 +503,7 @@ ul.social_menu li a {
 }
 
 .quote {
-    font-family: 'FuturaLightC';
+    font-family: 'FuturaLightC', 'FuturaLightC IE';
     font-size: 27px;
     /*padding-left: 65px;*/
     /*padding-right: 60px;*/
@@ -759,7 +772,7 @@ body.dark .contacts .email a {
     background-color: #FF8644;
     text-transform: uppercase;
     display: inline-block;
-    font-family: 'FuturaBookC';
+    font-family: 'FuturaBookC', 'FuturaBookC IE';
     cursor: pointer;
     min-width: 45px;
     height: 27px;
