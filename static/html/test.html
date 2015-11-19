@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css" media="all" />
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/jquery-mousewheel-master/jquery.mousewheel.min.js"></script>
+    <script src="/static/js/jquery.hyphen.ru.js"></script>
+<script type="text/javascript">
+$(function() {
+    $('#all').hyphenate(true);
+    $('#nodashes').hyphenate(false);
+    $( window).on('mousewheel', function(event) {
+        var w = $('.text').width();
+        $('.text').css({width: w + event.deltaY});
+    });
+});
+</script>
+<style type="text/css">
+.text {
+    width: 480px;
+    border: 1px solid black;
+    padding: 5px;
+    margin: auto;
+    font-size: 20px;
+    clear: both;
+}
+</style>
+</head>
+
+<body>
+<div id="all" class="text">
+Мы предоставляем максимально качественные услуги малому и среднему бизнесу. Это подразумевает глубокую проработку всех взаимосвязей в IT- инфраструктуре с учетом специфики бизнеса клиента. Мы не разделяем компьютеры и серверы, телефонию и периферию, программное обеспечение или каждодневные задачи, для нас это составляющие единой инфраструктуры. Я так думаю даже когда стою у дверей. В загадочном и могучем царстве, а так же об стол. И да я не знаю.
+</div>
+<div id="nodashes" class="text">
+    Мы предоставляем максимально качественные услуги малому и среднему бизнесу. Это подразумевает глубокую проработку всех взаимосвязей в IT- инфраструктуре с учетом специфики бизнеса клиента. Мы не разделяем компьютеры и серверы, телефонию и периферию, программное обеспечение или каждодневные задачи, для нас это составляющие единой инфраструктуры. Я так думаю даже когда стою у дверей. В загадочном и могучем царстве, а так же об стол. И да я не знаю.
+</div>
+</body>
+</html>
