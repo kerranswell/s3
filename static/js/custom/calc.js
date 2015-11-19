@@ -6,8 +6,22 @@ $(function() {
         else calc.reset(false);
     });
 
-    $('.button1.calc-data').click(function (){
-        $(this).data('value', 1);
+    $('input[type="text"].num').keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl+A, Command+A
+            (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
+             // Allow: home, end, left, right, down, up
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    }).on('blur', function () {
+        if ($(this).val().trim() == '') $(this).val('0');
     });
 
 });
@@ -28,14 +42,43 @@ function CCalc()
     $('.calc-next-step').click(function () {
         self.nextPage();
     });
+
+    $('.button1.calc-data').click(function (){
+        var group = $(this).data('group');
+        if (group != '') $('.button1.calc-data[data-group="' + group + '"]').data('value', 0);
+
+        $(this).data('value', 1);
+    });
+
+    $('.calc-data.input-checkbox').click(function(){
+        var group = $(this).data('group');
+        if (group != '')
+        {
+            if (!$(this).hasClass('checked'))
+            {
+                $('.calc-data.input-checkbox[data-group="' + group + '"]').removeClass('checked');
+                $(this).addClass('checked');
+            }
+        } else {
+            if ($(this).hasClass('checked'))
+            {
+                $(this).removeClass('checked');
+            } else {
+                $(this).addClass('checked');
+            }
+        }
+
+
+    });
 }
 
 CCalc.prototype.nextPage = function ()
 {
-    if (!this.checkPage()) return;
+    var next_page = this.checkPage();
+    if (!next_page) return;
 
     var prev = this.pages[this.index];
-    this.index++;
+    this.index = next_page;
     var next = this.pages[this.index];
 
     if (next.obj.data('finish') == 1)
@@ -93,12 +136,32 @@ CCalc.prototype.resetControls = function ()
 CCalc.prototype.checkPage = function ()
 {
     var page = this.pages[this.index];
+    var data = {};
     var self = this;
-    page.obj.find('.calc-data').each(function () {
-        self.data[$(this).data('name')] = self.getInputValue($(this));
+
+    $('.calc-page[data-id="' + page.id + '"] .calc-data').each(function () {
+        data[$(this).data('name')] = self.getInputValue($(this));
     });
 
-    return true;
+    switch (page.id)
+    {
+        case 1 :
+            if (data['count_servers'] == 0 && data['count_computers'] == 0)
+            {
+                page.obj.find('input[data-name="count_servers"]').focus();
+                return false;
+            }
+            break;
+        case 2 :
+            if (data['it-director'] == true) return 4;
+            break;
+
+        case 3 :
+            if (data['business-no'] == true) return 4;
+            break;
+    }
+
+    return this.index + 1;
 }
 
 CCalc.prototype.calculate = function ()
@@ -107,6 +170,29 @@ CCalc.prototype.calculate = function ()
     $('.calc-container .calc-data').each(function () {
         self.data[$(this).data('name')] = self.getInputValue($(this));
     });
+
+    this.data.count_servers = parseInt(this.data.count_servers);
+    this.data.count_computers = parseInt(this.data.count_computers);
+
+    var total = 0;
+    var count = this.data.count_servers + this.data.count_computers;
+    total = count * 1800;
+
+    if (this.data['it-director'] == true) total = count * 3600;
+    else if (this.data['sysadmin'] == true)
+    {
+        if (this.data['business-yes'] == 1) total = count * 1500;
+        else if (this.data['inn'] != '' && this.data['contract_number'] != ''/*in-base*/) total = count * 1600;
+    }
+
+    total = parseInt(total);
+    if (!(total > 0)) { $('#calc_cost').html('Ошибка'); return false; }
+
+    var s = '';
+    var stotal = total + '';
+    for (var i=stotal.length-1; i >= 0; i--) s = (((stotal.length - i) % 3 && i > 0) ? '' : ' ') + stotal[i] + s;
+
+    $('#calc_cost').html(s + ' &#8381;');
 
     return true;
 }

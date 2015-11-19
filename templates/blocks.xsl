@@ -57,8 +57,8 @@
             </div>
             <div class="row">
                 <table class="input-line"><tbody>
-                    <tr><td class="input-line-left">серверов</td><td class="input-line-center"><input type="text" data-name="count_servers" value="2" class="calc-data num" data-default="2" /></td><td class="input-line-right"></td></tr>
-                    <tr><td class="input-line-left">рабочих компьютеров</td><td class="input-line-center"><input type="text" data-name="count_computers" class="calc-data num" value="12" data-default="12" /></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">серверов</td><td class="input-line-center"><input type="text" maxlength="2" data-name="count_servers" value="2" class="calc-data num" data-default="2" /></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">рабочих компьютеров</td><td class="input-line-center"><input type="text" maxlength="3" data-name="count_computers" class="calc-data num" value="12" data-default="12" /></td><td class="input-line-right"></td></tr>
                 </tbody></table>
             </div>
             <div class="row"><div class="button1 calc-next-step">Продолжить</div></div>
@@ -72,8 +72,8 @@
             </div>
             <div class="inputs">
                 <table class="input-line"><tbody>
-                    <tr><td class="input-line-left">IT-директор</td><td class="input-line-center"><div class="calc-data input-checkbox checked" data-name="it-director" data-default="checked"></div></td><td class="input-line-right"></td></tr>
-                    <tr><td class="input-line-left">системный администратор</td><td class="input-line-center"><div class="calc-data input-checkbox" data-name="sysadmin" data-default=""></div></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">IT-директор</td><td class="input-line-center"><div class="calc-data input-checkbox checked" data-name="it-director" data-group="services" data-default="checked"></div></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">системный администратор</td><td class="input-line-center"><div class="calc-data input-checkbox" data-name="sysadmin" data-group="services" data-default=""></div></td><td class="input-line-right"></td></tr>
                 </tbody></table>
             </div>
             <div class="row"><div class="button1 calc-next-step">Продолжить</div></div>
@@ -86,7 +86,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="button1 calc-data calc-next-step" data-name="business-yes" data-value="0">Да</div><div class="button1 calc-data calc-next-step" data-name="business-no" data-value="0">Нет</div>
+                <div class="button1 calc-data calc-next-step" data-group="business" data-name="business-yes" data-value="0">Да</div><div class="button1 calc-data calc-next-step" data-group="business" data-name="business-no" data-value="0">Нет</div>
             </div>
         </div>
 
@@ -99,7 +99,7 @@
             <div class="row">
                 <table class="input-line"><tbody>
                     <tr><td class="input-line-left">ИНН</td><td class="input-line-center"><input type="text" class="calc-data focused" data-name="inn" value="" data-default="" /></td><td class="input-line-right"></td></tr>
-                    <tr><td class="input-line-left">номер договора</td><td class="input-line-center"><input type="text" class="calc-data" data-name="contract_number" value="" data-default="" /></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">или номер договора</td><td class="input-line-center"><input type="text" class="calc-data" data-name="contract_number" value="" data-default="" /></td><td class="input-line-right"></td></tr>
                 </tbody></table>
             </div>
             <div class="row"><div class="button1 calc-next-step">Рассчитать</div></div>

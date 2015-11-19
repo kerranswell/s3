@@ -41,15 +41,6 @@ $(function() {
         return false;
     });
 
-    $('.input-checkbox').click(function () {
-        if ($(this).hasClass('checked'))
-        {
-            $(this).removeClass('checked');
-        } else {
-            $(this).addClass('checked');
-        }
-    });
-
     $('.left_menu li a').click(function () {return false;});
 
 });
