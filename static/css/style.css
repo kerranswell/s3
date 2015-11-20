@@ -848,12 +848,15 @@ body.intro {
 
 .layer.p1 {
     margin-left: -61px;
+    opacity: 0;
 }
 .layer.p2 {
     margin-left: -59px;
+    opacity: 0;
 }
 .layer.p3 {
     margin-left: -58px;
+    opacity: 0;
 }
 
 .patterns1 {

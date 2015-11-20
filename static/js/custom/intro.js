@@ -1,73 +1,70 @@
+var scene;
 $(function() {
-    var body_width = $('body').width();
-    var max_body_width = body_width;
-    var body_height = $('body').height();
-    var max_body_height = body_height;
+    scene = new CScene();
 
-    var patterns = {1:new Array(),2:new Array(),3:new Array()};
+    scene.body_width = $('body').width();
+    scene.max_body_width = scene.body_width;
+    scene.body_height = $('body').height();
+    scene.max_body_height = scene.body_height;
+
+    scene.patterns = {1:new Array(),2:new Array(),3:new Array()};
 
     $('.layer').height($('body').height() + 200);
 
     var w = 61;
-    var layer1 = $('.layer.p1');
+    scene.layer1 = $('.layer.p1');
     buildLayer1();
     function buildLayer1()
     {
-        layer1.css({width: body_width + 2*w});
-        var cnt = Math.floor(body_width / w) + 2;
-        for (var i=patterns[1].length; i < cnt; i++)
+        scene.layer1.css({width: scene.body_width + 2*w});
+        var cnt = Math.floor(scene.body_width / w) + 2;
+        for (var i=scene.patterns[1].length; i < cnt; i++)
         {
             var div = document.createElement("div");
             $(div).addClass('patterns1');
-            layer1.append(div)
+            scene.layer1.append(div)
 
             var p = new CPattern({obj:$(div),back_x:0,back_y:-111 + i*171});
-            patterns[1].push(p);
+            scene.patterns[1].push(p);
         }
     }
 
     var w = 61;
-    var layer2 = $('.layer.p2');
+    scene.layer2 = $('.layer.p2');
     buildLayer2();
     function buildLayer2()
     {
-        layer2.css({width: body_width + 2*w});
-        var cnt = Math.floor(body_width / w) + 2;
-        for (var i=patterns[2].length; i < cnt; i++)
+        scene.layer2.css({width: scene.body_width + 2*w});
+        var cnt = Math.floor(scene.body_width / w) + 2;
+        for (var i=scene.patterns[2].length; i < cnt; i++)
         {
             var div = document.createElement("div");
             $(div).addClass('patterns2');
-            layer2.append(div)
+            scene.layer2.append(div)
 
             var p = new CPattern({obj:$(div),back_x:0,back_y:128 + i*171});
-            patterns[2].push(p);
+            scene.patterns[2].push(p);
         }
     }
 
     var w3 = 120;
-    var layer3 = $('.layer.p3');
+    scene.layer3 = $('.layer.p3');
     buildLayer3();
     function buildLayer3()
     {
-        layer3.css({width: body_width + 2*w3});
-        var cnt = Math.floor(body_width / (w3 / 2)) + 2;
-        for (var i=patterns[3].length; i < cnt; i++)
+        scene.layer3.css({width: scene.body_width + 2*w3});
+        var cnt = Math.floor(scene.body_width / (w3 / 2)) + 2;
+        for (var i=scene.patterns[3].length; i < cnt; i++)
         {
             var div = document.createElement("div");
             $(div).addClass('patterns3');
-            layer3.append(div)
+            scene.layer3.append(div)
 
             var p = new CPattern({obj:$(div),back_x:0,back_y:60 + i*171});
-            patterns[3].push(p);
+            scene.patterns[3].push(p);
         }
     }
 
-    var scale = 3;
-    var px_shift = 68;
-    var number_steps = Math.ceil(px_shift / 3);
-    var lim = px_shift / scale;
-    l2 = new CLayer({obj:layer2,x2:0,y2:-px_shift})
-    l3 = new CLayer({obj:layer3,x2:59,y2:-34})
 
 //    var patterns1 = $('.patterns1');
 //    var patterns2 = $('.patterns2');
@@ -75,10 +72,20 @@ $(function() {
 
     var ind = 0;
     var x; var y;
+
+    scene.init();
+//    scene.animate(true);
+
     $( window).on('mousewheel', function(event) {
-//        console.log(event.deltaX, event.deltaY, event.deltaFactor);
         if (event.deltaY != 0 && event.deltaX == 0)
         {
+            if (scene.busy == false)
+            {
+                scene.direction = event.deltaY;
+//                scene.animate_parts = true;
+                scene.animate(false);
+            }
+/*
             if (ind + event.deltaY >= 0 && ind + event.deltaY <= number_steps)
             {
                 ind += event.deltaY;
@@ -97,12 +104,9 @@ $(function() {
                     y = event.deltaY * (Math.abs(l3.y2 - l3.y1) / number_steps);
                     l3.move(x, y);
                 }
-/*
-            } else if (ind + event.deltaY > lim) {
-                l2.moveTo(l2.x2, l2.y2);
-                l3.moveTo(l3.x2, l3.y2);
-*/
             }
+*/
+
         }
 
         return false;
@@ -111,9 +115,9 @@ $(function() {
     $( window ).resize(function() {
 
         var new_w = $('body').width();
-        if (new_w > max_body_width)
+        if (new_w > scene.max_body_width)
         {
-            max_body_width = body_width = new_w;
+            scene.max_body_width = scene.body_width = new_w;
             buildLayer1();
             buildLayer2();
             buildLayer3();
@@ -121,9 +125,9 @@ $(function() {
 
 
         var new_h = $('body').height();
-        if (new_h > max_body_height)
+        if (new_h > scene.max_body_height)
         {
-            max_body_height = body_height = new_h;
+            scene.max_body_height = scene.body_height = new_h;
             $('.layer').height(new_h + 200);
         }
 
@@ -131,6 +135,184 @@ $(function() {
     });
 
 });
+
+function CScene()
+{
+    this.scale = 3;
+    this.px_shift = 68;
+    this.number_steps = Math.ceil(this.px_shift / 3);
+    this.lim = this.px_shift / this.scale;
+
+    this.time = 400;
+//    this.easing = 'easeOutCubic';
+    this.easing = 'easeOutSine';
+    this.step = 1;
+    this.prev_step = 0;
+    this.direction = 1;
+    this.step_count = 5;
+    this.busy = false;
+    this.part_count = 1;
+    this.part_count_steps = 0;
+    this.animate_parts = false;
+    this.steps = {
+        5: {part_count: 2}
+    };
+}
+
+CScene.prototype.init = function ()
+{
+    scene.l2 = new CLayer({obj:scene.layer2,x2:0,y2:-scene.px_shift})
+    scene.l3 = new CLayer({obj:scene.layer3,x2:59,y2:-34})
+
+    this.objects = new Array();
+
+    this.objects.push({obj:this.layer1,
+        steps: {
+            1: {css:{opacity: 0}},
+            2: {css:{opacity: 1}}
+        }
+    });
+
+    this.objects.push({obj:this.layer2,
+        steps: {
+            2: {css:{opacity: 0}},
+            3: {css:{opacity: 1}},
+            4: {css:{opacity: 1, marginTop: this.l2.y}},
+            5: {css:{opacity: 1, marginTop: this.l2.y2}}
+        }
+    });
+
+    this.objects.push({obj:this.layer3,
+        steps: {
+            3: {css:{opacity: 0}},
+            4: {css:{opacity: 1, marginLeft: this.l3.x, marginTop: this.l3.y}},
+            5: {css:{marginLeft: this.l3.x2, marginTop: this.l3.y2}}
+        }
+    });
+
+    for (var i in this.objects)
+    {
+        var o = this.objects[i];
+        o.parts_steps = {};
+        var ps_ind = 1;
+        var time_sum = 0;
+        for (var j=1; j <= this.step_count; j++)
+        {
+//            j = parseInt(j);
+            var cnt = this.steps[j] && this.steps[j].part_count ? this.steps[j].part_count : this.part_count;
+            var step_time = (o.steps[j] && o.steps[j].time) ? o.steps[j].time : this.time;
+            var v = {};
+
+            for (var k = 0; k <= cnt; k++)
+            {
+                if (!o.parts_steps[ps_ind]) o.parts_steps[ps_ind] = {};
+
+                if (o.steps[j])
+                {
+                    o.parts_steps[ps_ind] = JSON.parse(JSON.stringify(o.steps[j]));
+
+                    if (o.steps[j+1])
+                    {
+                        var css1 = o.steps[j].css;
+                        var css2 = o.steps[j+1].css;
+
+                        o.parts_steps[ps_ind].css = {};
+                        for (var c in css1)
+                        {
+                            if (!v[c]) v[c] = css1[c];
+                            var offset = ((css2[c] ? css2[c] : css1[c]) - css1[c])/cnt;
+                            o.parts_steps[ps_ind].css[c] = v[c];
+                            v[c] += offset;
+                        }
+
+                    }
+                }
+
+                var t =  Math.round(step_time / cnt);
+                o.parts_steps[ps_ind].time = t;
+                if (k == 0 && o.steps[j-1] && o.steps[j-1].time && time_sum > 0)
+                {
+                    var t_time = (o.steps[j-1] && o.steps[j-1].time) ? o.steps[j-1].time : this.time;
+                    o.parts_steps[ps_ind].time = t_time - time_sum;
+                }
+
+                if (k > 0) time_sum += t;
+
+                ps_ind++;
+            }
+
+            o.parts_steps[ps_ind-1].delete = 1;
+
+            if (o.steps[j] && o.steps[j+1])
+            {
+                var css1 = o.steps[j].css;
+                var css2 = o.steps[j+1].css;
+                for (var c in css1)
+                {
+                    if (o.parts_steps[ps_ind-1].css[c] && css2[c] && o.parts_steps[ps_ind-1].css[c] != css2[c]) o.parts_steps[ps_ind-1].css[c] = css2[c];
+                }
+            }
+
+        }
+
+        if (o.parts_steps[ps_ind-1]) o.parts_steps[ps_ind-1].delete = 1;
+    }
+
+//    for (var i in this.objects) for (var j in this.objects[i].parts_steps) if (this.objects[i].parts_steps[j].delete) delete this.objects[i].parts_steps[j];
+    for (var i in this.objects)
+    {
+        var o = this.objects[i];
+        o.psteps = {};
+        var ind = 0;
+        for (var j in o.parts_steps)
+            if (!o.parts_steps[j].delete) o.psteps[ind++] = o.parts_steps[j];
+
+        this.part_count_steps = ind;
+    }
+
+
+}
+
+CScene.prototype.animate = function (auto)
+{
+    var self = this;
+    var cnt = this.animate_parts ? this.part_count_steps : this.step_count;
+    if (self.step + self.direction > cnt) return;
+    if (self.step + self.direction < 1) return;
+    this.busy = true;
+    var max_time = this.animateStep();
+
+    setTimeout(function () {
+        self.busy = false;
+        if (self.step > 0 && self.step < cnt-1 && auto) self.animate(auto);
+    }, max_time);
+}
+
+CScene.prototype.animateStep = function ()
+{
+    var self = this;
+    var max_time = 0;
+
+    self.prev_step = self.step;
+    self.step += self.direction;
+
+    for (var j in this.objects)
+    {
+        var o = this.objects[j];
+        var steps = !this.animate_parts ? o.steps : o.psteps;
+        if (!steps[this.step]) continue;
+
+        if (max_time < steps[this.step].time) max_time = steps[this.step].time;
+
+        if (steps[this.prev_step] && steps[this.prev_step].css) o.obj.css(steps[this.prev_step].css);
+        if (steps[this.step].css)
+        o.obj.animate(steps[this.step].css, steps[this.step].time ? steps[this.step].time : this.time, steps[this.step].easing ? steps[this.step].easing : this.easing);
+    }
+
+    if (max_time == 0) max_time = this.time;
+
+    return max_time;
+}
 
 var l1, l2, l3;
 
