@@ -22,14 +22,15 @@ $(function() {
         {
             var div = document.createElement("div");
             $(div).addClass('patterns1');
-            scene.layer1.append(div)
+            if (i%2) scene.layer1.append(div);
+            else scene.layer1.prepend(div);
 
-            var p = new CPattern({obj:$(div),back_x:0,back_y:-111 + i*171});
+            var p = new CPattern({obj:$(div),back_x:0,back_y:-111 + (i%2 ? 1 : -1) * Math.ceil(i/2)*171});
             scene.patterns[1].push(p);
         }
     }
 
-    var w = 61;
+    var w = 60;
     scene.layer2 = $('.layer.p2');
     buildLayer2();
     function buildLayer2()
@@ -40,9 +41,10 @@ $(function() {
         {
             var div = document.createElement("div");
             $(div).addClass('patterns2');
-            scene.layer2.append(div)
+            if (i%2) scene.layer2.append(div);
+            else scene.layer2.prepend(div);
 
-            var p = new CPattern({obj:$(div),back_x:0,back_y:128 + i*171});
+            var p = new CPattern({obj:$(div),back_x:0,back_y:129 + (i%2 ? 1 : -1) * Math.ceil(i/2)*171});
             scene.patterns[2].push(p);
         }
     }
@@ -58,9 +60,10 @@ $(function() {
         {
             var div = document.createElement("div");
             $(div).addClass('patterns3');
-            scene.layer3.append(div)
+            if (i%2) scene.layer3.append(div);
+            else scene.layer3.prepend(div);
 
-            var p = new CPattern({obj:$(div),back_x:0,back_y:60 + i*171});
+            var p = new CPattern({obj:$(div),back_x:0,back_y:61 + (i%2 ? 1 : -1) * Math.ceil(i/2)*171});
             scene.patterns[3].push(p);
         }
     }
@@ -115,6 +118,14 @@ $(function() {
     $( window ).resize(function() {
 
         var new_w = $('body').width();
+        var new_h = $('body').height();
+
+        var layers = $('.layer, .layer2');
+        var left = Math.round((new_w - scene.body_width)/2);
+        var top = Math.round((new_h - scene.body_height)/2);
+        layers.css({left: left,top: top});
+        console.log(left);
+
         if (new_w > scene.max_body_width)
         {
             scene.max_body_width = scene.body_width = new_w;
@@ -124,13 +135,11 @@ $(function() {
         }
 
 
-        var new_h = $('body').height();
         if (new_h > scene.max_body_height)
         {
             scene.max_body_height = scene.body_height = new_h;
             $('.layer').height(new_h + 200);
         }
-
 
     });
 
@@ -138,18 +147,20 @@ $(function() {
 
 function CScene()
 {
+    this.layers_width = 0;
+    this.layers_height = 0;
     this.scale = 3;
     this.px_shift = 68;
     this.number_steps = Math.ceil(this.px_shift / 3);
     this.lim = this.px_shift / this.scale;
 
-    this.time = 400;
+    this.time = 600;
 //    this.easing = 'easeOutCubic';
     this.easing = 'easeOutSine';
     this.step = 1;
     this.prev_step = 0;
     this.direction = 1;
-    this.step_count = 5;
+    this.step_count = 6;
     this.busy = false;
     this.part_count = 1;
     this.part_count_steps = 0;
@@ -162,14 +173,16 @@ function CScene()
 CScene.prototype.init = function ()
 {
     scene.l2 = new CLayer({obj:scene.layer2,x2:0,y2:-scene.px_shift})
-    scene.l3 = new CLayer({obj:scene.layer3,x2:59,y2:-34})
+    scene.l3 = new CLayer({obj:scene.layer3,x2:60,y2:-35})
 
     this.objects = new Array();
 
     this.objects.push({obj:this.layer1,
         steps: {
             1: {css:{opacity: 0}},
-            2: {css:{opacity: 1}}
+            2: {css:{opacity: 1}},
+            5: {css:{opacity: 1}},
+            6: {css:{opacity: 0}}
         }
     });
 
@@ -177,8 +190,9 @@ CScene.prototype.init = function ()
         steps: {
             2: {css:{opacity: 0}},
             3: {css:{opacity: 1}},
-            4: {css:{opacity: 1, marginTop: this.l2.y}},
-            5: {css:{opacity: 1, marginTop: this.l2.y2}}
+            4: {css:{marginTop: this.l2.y}},
+            5: {css:{opacity: 1, marginTop: this.l2.y2}},
+            6: {css:{opacity: 0}}
         }
     });
 
@@ -186,7 +200,14 @@ CScene.prototype.init = function ()
         steps: {
             3: {css:{opacity: 0}},
             4: {css:{opacity: 1, marginLeft: this.l3.x, marginTop: this.l3.y}},
-            5: {css:{marginLeft: this.l3.x2, marginTop: this.l3.y2}}
+            5: {css:{opacity: 1, marginLeft: this.l3.x2, marginTop: this.l3.y2}},
+            6: {css:{opacity: 0}}
+        }
+    });
+
+    this.objects.push({obj:$('.layer2 .logo'),
+        steps: {
+            5: {css_trig_backward_out:{display: 'none'}, css_trig_forward_out:{display: 'block'}},
         }
     });
 
@@ -283,9 +304,22 @@ CScene.prototype.animate = function (auto)
     var max_time = this.animateStep();
 
     setTimeout(function () {
+        self.triggersIn();
         self.busy = false;
         if (self.step > 0 && self.step < cnt-1 && auto) self.animate(auto);
     }, max_time);
+}
+
+CScene.prototype.triggersIn = function ()
+{
+    for (var j in this.objects)
+    {
+        var o = this.objects[j];
+        var steps = !this.animate_parts ? o.steps : o.psteps;
+        if (!steps[this.step]) continue;
+        if (steps[this.step].css_trig_forward_in && self.direction > 0) o.obj.css(steps[this.step].css_trig_forward_in);
+        if (steps[this.step].css_trig_backward_in && self.direction < 0) o.obj.css(steps[this.step].css_trig_backward_in);
+    }
 }
 
 CScene.prototype.animateStep = function ()
@@ -300,6 +334,15 @@ CScene.prototype.animateStep = function ()
     {
         var o = this.objects[j];
         var steps = !this.animate_parts ? o.steps : o.psteps;
+
+        if (steps[this.prev_step])
+        {
+            if (steps[this.prev_step].css_trig_forward_out && self.direction > 0)
+                o.obj.css(steps[this.prev_step].css_trig_forward_out);
+            if (steps[this.prev_step].css_trig_backward_out && self.direction < 0)
+                o.obj.css(steps[this.prev_step].css_trig_backward_out);
+        }
+
         if (!steps[this.step]) continue;
 
         if (max_time < steps[this.step].time) max_time = steps[this.step].time;
@@ -307,6 +350,7 @@ CScene.prototype.animateStep = function ()
         if (steps[this.prev_step] && steps[this.prev_step].css) o.obj.css(steps[this.prev_step].css);
         if (steps[this.step].css)
         o.obj.animate(steps[this.step].css, steps[this.step].time ? steps[this.step].time : this.time, steps[this.step].easing ? steps[this.step].easing : this.easing);
+
     }
 
     if (max_time == 0) max_time = this.time;
