@@ -839,6 +839,15 @@ body.intro {
     background-color: #fff;
 }
 
+div.intro {
+    position: relative;
+    margin: -67px auto 0;
+    width: 120px;
+    height: 135px;
+    /*border: 1px solid black;*/
+    top: 50%;
+}
+
 .layer {
     position: absolute;
     margin-top: -100px;
@@ -847,15 +856,15 @@ body.intro {
 }
 
 .layer.p1 {
-    margin-left: -61px;
+    margin-left: -64px;
     opacity: 0;
 }
 .layer.p2 {
-    margin-left: -59px;
+    margin-left: -64px;
     opacity: 0;
 }
 .layer.p3 {
-    margin-left: -58px;
+    margin-left: -64px;
     opacity: 0;
 }
 
@@ -864,20 +873,102 @@ body.intro {
     display: block;
     width: 61px;
     height: 100%;
-    background: url(../i/intro_pattern1.png) left top repeat-y;
+    background: url(../i/intro_pattern1a.png) right top repeat-y;
+    margin-left:-1px;
 }
 .patterns2 {
     float: left;
     display: block;
-    width: 61px;
+    width: 60px;
     height: 100%;
-    background: url(../i/intro_pattern2.png) left top repeat-y;
+    background: url(../i/intro_pattern2a.png) left top repeat-y;
 }
 .patterns3 {
     float: left;
     display: block;
     width: 120px;
     height: 100%;
-    background: url(../i/intro_pattern3.png) left top repeat-y;
-    margin-left: -59px;
+    background: url(../i/intro_pattern3a.png) left top repeat-y;
+    margin-left: -60px;
+}
+
+.layer2 {
+    position: absolute;
+    margin-top: 0px;
+    /*border: 1px solid blue;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
+}
+
+.layer2 .logo {
+    left: -62px;
+    top: -48px;
+    width: 120px;
+    height: 138px;
+    position: absolute;
+    display: none;
+}
+
+
+.layer2 .logo .logo_pattern1 {
+    position: absolute;
+    display: block;
+    width: 61px;
+    height: 103px;
+    background: url(../i/intro_pattern1a.png) right top no-repeat;
+    margin-left: -1px;
+}
+.layer2 .logo .logo_pattern2 {
+    top: 1px;
+    left: -60px;
+    position: absolute;
+    display: block;
+    width: 61px;
+    height: 103px;
+    background: url(../i/intro_pattern2a.png) right top no-repeat;
+}
+.layer2 .logo .logo_pattern3 {
+    left: -60px;
+    top: -34px;
+    position: absolute;
+    display: block;
+    width: 120px;
+    height: 71px;
+    background: url(../i/intro_pattern3a.png) right top no-repeat;
+}
+
+.layer2 .logo .logo_pattern4 {
+    width: 76px;
+    height: 88px;
+    position: absolute;
+    background: url(../i/logo_add.png) left top no-repeat;
+    left: -38px;
+    top: -9px;
+    opacity: 0;
+}
+
+.intro .layer2 .title1 {
+    text-transform: uppercase;
+    font-family: 'PT Sans';
+    width: 273px;
+    font-size: 36px;
+    position: absolute;
+    top: -69px;
+    left: 15px;
+    line-height: 45px;
+    letter-spacing: 1.4px;
+    opacity: 0;
+}
+
+.intro .layer2 .title2 {
+    text-transform: uppercase;
+    font-family: 'PT Sans';
+    position: absolute;
+    width: 500px;
+    top: 91px;
+    left: -120px;
+    font-size: 26px;
+    letter-spacing: 4px;
+    color: #848182;
+    opacity: 0;
 }
