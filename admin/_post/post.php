@@ -15,7 +15,7 @@
 
         switch ($_POST['opcode'])
         {
-            case 'content' :
+            case 'content' : case 'block_picture' :
                 $dsp->content->ajax();
                 break;
         }

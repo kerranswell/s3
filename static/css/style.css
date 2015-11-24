@@ -839,6 +839,15 @@ body.intro {
     background-color: #fff;
 }
 
+div.intro {
+    position: relative;
+    margin: -67px auto 0;
+    width: 120px;
+    height: 135px;
+    /*border: 1px solid black;*/
+    top: 50%;
+}
+
 .layer {
     position: absolute;
     margin-top: -100px;
@@ -847,15 +856,15 @@ body.intro {
 }
 
 .layer.p1 {
-    margin-left: -61px;
+    margin-left: -64px;
     opacity: 0;
 }
 .layer.p2 {
-    margin-left: -61px;
+    margin-left: -64px;
     opacity: 0;
 }
 .layer.p3 {
-    margin-left: -61px;
+    margin-left: -64px;
     opacity: 0;
 }
 
@@ -886,16 +895,17 @@ body.intro {
 .layer2 {
     position: absolute;
     margin-top: 0px;
-    width: 100%;
-    height: 100%;
+    /*border: 1px solid blue;*/
+    /*width: 100%;*/
+    /*height: 100%;*/
 }
 
 .layer2 .logo {
-    left: 479px;
-    top: 356px;
+    left: -62px;
+    top: -48px;
     width: 120px;
     height: 138px;
-    position: relative;
+    position: absolute;
     display: none;
 }
 
@@ -934,5 +944,31 @@ body.intro {
     background: url(../i/logo_add.png) left top no-repeat;
     left: -38px;
     top: -9px;
-    display: none;
+    opacity: 0;
+}
+
+.intro .layer2 .title1 {
+    text-transform: uppercase;
+    font-family: 'PT Sans';
+    width: 273px;
+    font-size: 36px;
+    position: absolute;
+    top: -69px;
+    left: 15px;
+    line-height: 45px;
+    letter-spacing: 1.4px;
+    opacity: 0;
+}
+
+.intro .layer2 .title2 {
+    text-transform: uppercase;
+    font-family: 'PT Sans';
+    position: absolute;
+    width: 500px;
+    top: 91px;
+    left: -120px;
+    font-size: 26px;
+    letter-spacing: 4px;
+    color: #848182;
+    opacity: 0;
 }

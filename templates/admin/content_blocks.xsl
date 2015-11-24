@@ -4,7 +4,7 @@
     <xsl:template match="block[@name='content_blocks']">
         <input type="button" id="toolbar_add" value="Добавить блок" />
         <select id="toolbar_block">
-            <xsl:for-each select="item"><option value="{name}"><xsl:value-of select="title"/></option></xsl:for-each>
+            <xsl:for-each select="item[modules/item = /root/common/op]"><option value="{name}"><xsl:value-of select="title"/></option></xsl:for-each>
         </select>
     </xsl:template>
 
@@ -116,5 +116,31 @@
         </td>
     </xsl:template>
 
+    <xsl:template match="item[type='picture']" mode="content_block">
+        <td class="column-cell">
+            <xsl:choose>
+                <xsl:when test="cells/path != ''">
+                    <img src="{cells/path}" />
+                    <input type="hidden" class="block-value" value="{cells/idx}" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:variable name="id">
+                        <xsl:choose>
+                            <xsl:when test="/root/common/_get/id &gt; 0">u<xsl:value-of select="position()"/></xsl:when>
+                            <xsl:otherwise>0</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <xsl:variable name="id2">
+                        <xsl:choose>
+                            <xsl:when test="/root/common/_get/id &gt; 0"><xsl:value-of select="position()"/></xsl:when>
+                            <xsl:otherwise>0</xsl:otherwise>
+                        </xsl:choose>
+                    </xsl:variable>
+                    <input type="file" class="pic_uploader" name="block_picture[u{$id2}]" data-id="{$id2}" value="" />
+                    <input type="hidden" class="block-value" value="{$id}" />
+                </xsl:otherwise>
+            </xsl:choose>
+        </td>
+    </xsl:template>
 
 </xsl:stylesheet>

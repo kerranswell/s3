@@ -7,7 +7,7 @@ class pages extends record {
         2 => array('title' => 'Слайдер, темный', 'value' => 2, 'params' => array('body_class' => 'dark', 'xslt' => 'slider')),
         3 => array('title' => 'Слайдер, карта', 'value' => 3, 'params' => array('body_class' => 'light', 'xslt' => 'slider')),
         4 => array('title' => 'Слайдер, калькулятор, темный', 'value' => 4, 'params' => array('body_class' => 'dark', 'xslt' => 'slider')),
-//        5 => array('title' => 'Слайдер, калькулятор, светлый', 'value' => 5, 'params' => array('body_class' => 'light', 'xslt' => 'slider')),
+        5 => array('title' => 'Блог', 'value' => 5, 'params' => array('body_class' => 'light', 'xslt' => 'blog')),
     );
     private $structure = 0;
     private $backs = array();
@@ -26,6 +26,11 @@ class pages extends record {
     {
         if (!$this->structure)
         {
+/*            $slider_ids = array();
+            foreach ($this->templates as $tid => $tpl) if ($tpl['params']['xslt'] == 'slider') $slider_ids[] = $tid;
+            if (count($slider_ids) > 0) $slider_ids = " and p.template in (".implode(",", $slider_ids).")";
+            else $slider_ids = "";*/
+
             $sql = "select p.*, IF(p.bg_image_inherit > 0, p.bg_image_inherit, p.bg_image) as image_id from `pages` p where p.`status` = 1 order by p.pos asc";
             $rows = $this->dsp->db->Select($sql);
 
@@ -122,6 +127,7 @@ class pages extends record {
         }
         $this->setActiveItems($page_id);
         $this->addValueToXml(array('pages' => $this->structure['id'], 'backs' => $this->backs));
+//        $this->dsp->_Builder->addArray(array('templates' => $this->templates), '', array(), $this->getBuilderBlock(), false);
 
         $this->dsp->common->addValueToXml(array('item_id' => $page_id, 'body_class' => $this->templates[$page['template']]['params']['body_class']));
 

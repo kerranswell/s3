@@ -2,10 +2,10 @@ $(function() {
     if ($('.datetimepick').length > 0) {
         $('.datetimepick').datetimepicker({
             showOn: 'both',
-            buttonImage: './admin/images/calendar.png',
+            buttonImage: '/admin/static/img/calendar.png',
             buttonImageOnly: true,
             dateFormat: 'dd.mm.yy',
-            timeFormat: ' hh:ii'
+            timeFormat: ' hh:mm'
         });
 
         $('#ui-datepicker-div').hide();
@@ -66,7 +66,14 @@ $(function() {
             url: '/admin/',
             data: { 'opcode': 'content', 'act' : 'getBlockHtml', block_name : block_name},
             success: function(result){
-                $('.content_main').append(result);
+                var $res = $(result);
+                $('.content_main').append($res);
+                if (block_name == 'picture')
+                {
+                    var pic_id = $('.content_main').find('.pic_uploader[data-id!="0"]').length + 1;
+                    $res.find('.pic_uploader').attr('data-id', pic_id).attr('name', 'block_picture[u'+pic_id+']');
+                    $res.find('.block-value').val('u' + pic_id);
+                }
             }
         });
     });
@@ -93,7 +100,26 @@ $(function() {
     $('.block-del').live('click', function () {
         if (confirm('Удалить блок?'))
         {
-            $(this).closest('.content-block').remove();
+            var block = $(this).closest('.content-block');
+/*
+            if (block.data('type') == 'picture')
+            {
+                var idx = block.find('.block-value').val();
+                if (block.find('.pic_uploader').length == 0)
+                {
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'text',
+                        url: '/admin/',
+                        data: { 'opcode': 'content', 'act' : 'delete_image', id: idx},
+                        success: function(result){
+                        }
+                    });
+                }
+            }
+*/
+
+            block.remove();
         }
     });
 
@@ -114,6 +140,7 @@ $(function() {
                     {
                         case 'column' : v = $(this).html(); break;
                         case 'quote' : case 'contacts' : v = $(this).val(); break;
+                        default: v = $(this).val();
                     }
                     block.cells[j++] = v;
                 });
@@ -140,6 +167,22 @@ $(function() {
             }
         });
     }
+
+    var options = {
+        dataType:  'json'
+    };
+
+    $('.pic_uploader').live('change', function() {
+        var obj = this;
+        options.success = function (data, statusText, xhr, $form)  {
+            $(obj).parent().find('.block-value').val(data.val);
+            $(obj).parent().find('img').attr('src', data.picture_url).removeClass('hidden');
+        }
+
+//        var opcode = $('.edit_item_form').find('input[name="opcode"]').val();
+//        ajaxSubmit(options);
+    });
+
 });
 
 function strip_tags(OriginalString)
