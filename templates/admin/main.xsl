@@ -3,6 +3,7 @@
 	<xsl:import href="layout.xsl"/> 
 	<xsl:import href="pages.xsl"/>
 	<xsl:import href="lists.xsl"/>
+	<xsl:import href="news.xsl"/>
 
 
 </xsl:stylesheet>

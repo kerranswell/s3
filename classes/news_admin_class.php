@@ -1,8 +1,8 @@
 <?php
 
-class pages_admin extends record {
+class news_admin extends record {
 
-    public $__tablename__  = 'pages';
+    public $__tablename__  = 'news';
     public $pid = 0;
     public $act = 'list';
     public $service_id = 0;
@@ -25,29 +25,17 @@ class pages_admin extends record {
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Translit'),
         'text' => array('type' => 'text', 'params' => array(
-            'edit' => array('showtype' => 'editor'),
-            'list' => array('showtype' => 'none'),
-        ), 'title' => 'Текст'),
-        'pos' => array('type' => 'int', 'params' => array(
             'edit' => array('showtype' => 'none'),
             'list' => array('showtype' => 'none'),
-        ), 'title' => 'Позиция'),
-        'bg_image' => array('type' => 'int', 'params' => array(
-            'edit' => array('showtype' => 'image'),
-            'list' => array('showtype' => 'none'),
-        ), 'title' => 'Фон'),
-        'bg_image_inherit' => array('type' => 'int', 'params' => array(
-            'edit' => array('showtype' => 'select', 'xml_options' => '/root/pages_admin_class/inherit_image_pages'),
-            'list' => array('showtype' => 'none'),
-        ), 'title' => 'Использовать фон из'),
+        ), 'title' => 'Текст'),
         'status' => array('type' => 'int', 'params' => array(
             'edit' => array('showtype' => 'checkbox'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Статус'),
-        'template' => array('type' => 'int', 'params' => array(
-            'edit' => array('showtype' => 'select', 'xml_options' => '/root/pages_class/templates'),
-            'list' => array('showtype' => 'none'),
-        ), 'title' => 'Шаблон'),
+        'date' => array('type' => 'date', 'params' => array(
+            'edit' => array('showtype' => 'date'),
+            'list' => array('showtype' => 'label'),
+        ), 'title' => 'Дата'),
         'xml' => array('type' => 'text', 'params' => array(
             'edit' => array('showtype' => 'xml'),
             'list' => array('showtype' => 'none'),
@@ -57,14 +45,6 @@ class pages_admin extends record {
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Url'),
     );
-
-    public function makeInheritPages($id)
-    {
-        $sql = "select `title`, `bg_image` as 'value' from `pages` where `bg_image` > 0 and `id` != ? order by `pid` asc, `pos` asc";
-        $rows = $this->dsp->db->Select($sql, $id);
-        $rows = array_merge(array(array('value' => 0, 'title' => '---')), $rows);
-        $this->dsp->_Builder->addArray(array('inherit_image_pages' => $rows), '', array(), $this->getBuilderBlock(), false);
-    }
 
     protected function init()
     {
@@ -79,7 +59,7 @@ class pages_admin extends record {
             $this->table_structure['title']['params']['list']['showtype'] = 'label';
         }
 
-        $this->service_id = $this->dsp->settings['name'][$this->__tablename__];
+        $this->service_id = $this->dsp->services->services['name'][$this->__tablename__]['id'];
 
         $this->act = empty($_REQUEST['act']) ? 'list' : $_REQUEST['act'];
     }
@@ -117,8 +97,8 @@ class pages_admin extends record {
     {
         $pid = $this->pid;
 
-        $sql = "select `id`, `pid`, `title`, `pos`, `status` from `pages` p
-                where p.`pid` = ? order by `pos` asc".'';
+        $sql = "select `id`, `pid`, `title`, `status`, `date` from `".$this->__tablename__."` p
+                where p.`pid` = ? order by `date` desc".'';
 
         $rows = $this->dsp->db->Select($sql, $pid);
 
@@ -144,7 +124,8 @@ class pages_admin extends record {
         {
             switch ($d['type'])
             {
-                case 'int' : $ar[$f] = 0;
+                case 'int' : $ar[$f] = 0; break;
+                case 'date' : $ar[$f] = date('d.m.Y H:i'); break;
                 default : $ar[$f] = '';
             }
         }
@@ -158,7 +139,7 @@ class pages_admin extends record {
 
         if ($pid > 0)
         {
-            $sql = "select `pid`, `translit` from pages where `id` = ?";
+            $sql = "select `pid`, `translit` from news where `id` = ?";
             $row = $this->dsp->db->SelectRow($sql, $pid);
             if ($row['translit'] != '') $url[] = $row['translit'];
 
@@ -176,29 +157,18 @@ class pages_admin extends record {
         $id = $_REQUEST['id'];
         if ($id > 0)
         {
-            $item = $this->GetItem($id, 'bg_image');
+            $item = $this->GetItem($id, 'xml');
         }
-//echo '<pre>'; print_r($_POST); echo '</pre>'; exit;
+
         $save = $_POST['record'];
         $save['id'] = $id;
+        $save['date'] = strtotime($save['date']);
         $pid = $this->pid;
-//        if (trim($save['translit']) == '') $save['translit'] = translit($save['title']);
+
         $url = $this->makeUrl($pid, $save['translit']);
         $save['url'] = implode("/", $url);
 
-        # delete background image
-        if ((isset($_POST['bg_image_delete']) || !empty($_FILES['record']['tmp_name']['bg_image'])) && $item['bg_image'] > 0)
-        {
-//            $this->dsp->i->clearTHByURL($this->dsp->i->resize($item['bg_image'], TH_BG_IMAGE_ADMIN));
-            $this->dsp->i->clearByIDX($item['bg_image']);
-            $save['bg_image'] = 0;
-        }
-
-        if (!empty($_FILES['record']['tmp_name']['bg_image']))
-        {
-            $f = $this->dsp->i->getFileFromArray($_FILES['record'], 'bg_image');
-            list($save['bg_image'],) = $this->dsp->i->putToPlace($f);
-        }
+        if ($id > 0) $save['xml'] = $this->dsp->content->xml_beforeUpdate($save['xml'], $item['xml'], $this->service_id, $id);
 
         $this->errors = $this->checkUpdate($save);
 
@@ -209,28 +179,23 @@ class pages_admin extends record {
 
         if ($id > 0)
         {
-            if (!isset($save['bg_image'])) $save['bg_image'] = $item['bg_image'];
             $sql = "update `".$this->__tablename__."` set
                 `title` = ?,
                 `translit` = ?,
                 `text` = ?,
                 `status` = ?,
-                `bg_image` = ?,
-                `bg_image_inherit` = ?,
-                `template` = ?,
                 `xml` = ?,
-                `url` = ?
+                `url` = ?,
+                `date` = ?
                 where `id` = ?
             ".'';
-            $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $save['bg_image'], $save['bg_image_inherit'], $save['template'], $save['xml'], $save['url'], $id);
-            Redirect('/admin/?op=pages&act=edit&id='.$id);
+            $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $save['xml'], $save['url'], $save['date'], $id);
+            Redirect('/admin/?op=news&act=edit&id='.$id);
         } else {
-            $pos = $this->dsp->db->SelectValue("select `pos` from `pages` where `pid` = ? order by `pos` desc limit 1".'', $pid);
-            if (!$pos) $pos = 0; else $pos++;
-            $sql = "insert into `pages` (`id`, `pid`, `title`, `translit`, `text`, `status`, `pos`, `bg_image`, `bg_image_inherit`, `template`, `xml`, `url`) values (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)".'';
-            $this->dsp->db->Execute($sql, $pid, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $pos, $save['bg_image'], $save['bg_image_inherit'], $save['template'], $save['xml'], $save['url']);
+            $sql = "insert into `".$this->__tablename__."` (`id`, `pid`, `title`, `translit`, `text`, `status`, `xml`, `url`, `date`) values (0, ?, ?, ?, ?, ?, ?, ?, ?)".'';
+            $this->dsp->db->Execute($sql, $pid, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $save['xml'], $save['url'], $save['date']);
 
-            Redirect('/admin/?op=pages&act=edit&id='.$this->dsp->db->LastInsertId());
+            Redirect('/admin/?op=news&act=edit&id='.$this->dsp->db->LastInsertId());
         }
     }
 
@@ -238,11 +203,18 @@ class pages_admin extends record {
     {
         $errors = array();
         if (trim($item['title']) == '') $errors['title'] = 'Необходимо заполнить это поле';
-        $sql = "select count(*) from `".$this->__tablename__."` where `translit` = ? and `id` != ?".'';
-        $v = $this->dsp->db->SelectValue($sql, $item['translit'], $item['id']);
+        $sql = "select count(*) from `".$this->__tablename__."` where `url` = ? and `id` != ?".'';
+        $v = $this->dsp->db->SelectValue($sql, $item['url'], $item['id']);
         if ($v > 0) $errors['translit'] = 'Такой url уже существует';
 
         return $errors;
+    }
+
+    public function deleteItem($id)
+    {
+        $item = $this->GetItem($id, 'xml');
+        $this->dsp->content->deleteAllImages($item['xml']);
+        $this->dsp->db->Execute("delete from `".$this->__tablename__."` where `id` = ?", $id);
     }
 
 }

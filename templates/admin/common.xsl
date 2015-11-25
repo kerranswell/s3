@@ -23,6 +23,10 @@
         <input type="text" value="{.}" name="record[{./@name}]" />
     </xsl:template>
 
+    <xsl:template match="field[@showtype='date']" mode="input">
+        <input type="text" value="{.}" class="datetimepick" name="record[{./@name}]" />
+    </xsl:template>
+
     <xsl:template match="field[@showtype='image']" mode="input">
         <input type="file" value="" name="record[{./@name}]" />
         <xsl:if test=". != 0"><br /><input type="checkbox" name="{./@name}_delete" value="1" /> Удалить<br /><img src="{.}" /></xsl:if>
@@ -49,14 +53,21 @@
     </xsl:template>
 
     <xsl:template match="field[@showtype='xml']" mode="input">
-        <div id="ckeditor_temp" style="display:none"></div>
-        <div class="content_toolbar">
-            <xsl:apply-templates select="/node()/block[@name='content_blocks']"/>
-        </div>
-        <div class="content_main">
-            <xsl:apply-templates select="item" mode="blocks_admin" />
-        </div>
-        <textarea id="blocks_input" name="record[{./@name}]"><xsl:value-of select="."/></textarea>
+        <xsl:choose>
+            <xsl:when test="/root/common/_get/id &gt; 0">
+                <div id="ckeditor_temp" style="display:none"></div>
+                <div class="content_toolbar">
+                    <xsl:apply-templates select="/node()/block[@name='content_blocks']"/>
+                </div>
+                <div class="content_main">
+                    <xsl:apply-templates select="item" mode="blocks_admin" />
+                </div>
+                <textarea id="blocks_input" name="record[{./@name}]"><xsl:value-of select="."/></textarea>
+            </xsl:when>
+            <xsl:otherwise>
+                Заполнение контента будет доступно после создания страницы
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="field[@showtype='none']" mode="table_row" />

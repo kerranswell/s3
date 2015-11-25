@@ -76,8 +76,8 @@
                     <div class="main">
                         <div class="left_bar">
                             <ul class="left_menu">
-                                <li><a href="#">Новости</a></li>
-                                <li><a href="#">Блог директора</a></li>
+                                <li><a href="/news/" target="_blank">Новости</a></li>
+                                <li><a href="/blog/" target="_blank">Блог директора</a></li>
                                 <li><a href="#">Вход</a></li>
                             </ul>
 <!--

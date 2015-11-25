@@ -78,12 +78,12 @@
         }
 
         //add image to db layer
-        function addImageToDB( $name, $orig_name, $s /* = getimagesize()*/, $file_size, $th = 0 ){
+        function addImageToDB( $name, $orig_name, $s /* = getimagesize()*/, $file_size, $th = 0 ,$service_id = 0, $item_id = 0){
             list( $width, $height, $type ) = $s;
             //$full_key можно использовть для выборки по одному полю, если это критично по времени (для документориентированных субд)
             $full_key = md5( $name . $type . $width . $height . (int)$th );
-            $sql = 'insert into `images` (`name`,`type`,`width`,`height`,`ts`,`th`,`weight`,`full_key`,`orig_name`) values ( ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?)--';
-            $r = $this->dsp->db->Execute( $sql, $name, $type, $width, $height, $th, $file_size, $full_key, $orig_name );
+            $sql = 'insert into `images` (`name`,`type`,`width`,`height`,`ts`,`th`,`weight`,`full_key`,`orig_name`, `service_id`, `item_id`) values ( ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?, ?, ?, ?, ?)--';
+            $r = $this->dsp->db->Execute( $sql, $name, $type, $width, $height, $th, $file_size, $full_key, $orig_name, $service_id, $item_id );
 
             if($this->dsp->db->last_errno) { 
                 return 'db error';
@@ -192,7 +192,7 @@
         }
 
         //только для загруженных по http файлов
-        function putToPlace( $file /* = $_FILES['userfile'] */ ){
+        function putToPlace( $file, $service_id = 0, $item_id = 0 ){
             $file_size = $file['size'];//weight
             $orig_name = $file['name'];
             $image_size = $this->checkImage( $file );//array
@@ -209,7 +209,7 @@
                 $this->_returnError('move uploaded file error ['.$file['tmp_name'].' to '.$upload_file.']');
                 return false;
             }else{
-                $idx = $this->addImageToDB( $name, $orig_name, $image_size /* = getimagesize()*/, $file_size, $th = 0 );
+                $idx = $this->addImageToDB( $name, $orig_name, $image_size /* = getimagesize()*/, $file_size, $th = 0, $service_id, $item_id);
             }
 
             if( is_file( $file['tmp_name'] ) ) unlink( $file['tmp_name'] );
@@ -248,6 +248,37 @@
             //$path = $this->th_dir . $size_code . '/' . $this->subfolder( $image['name'] ) . '/' . $image['name'] . '-' . $this->hashme($image['name']) . '.' . $ext;
             $path = (!empty($size_code) ? ($size_code. '/') :  "0/") . $this->subfolder( $image['name'] ) . '/' . $image['name'] . '-' . $this->hashme($image['name']) . '.' . $ext;
             return $path;
+        }
+
+        function getImagesArray( $ids ){
+
+            if (count($ids) > 0) $ids = implode(",", $ids);
+            else return array();
+            $images = $this->dsp->db->Select( 'select * from images where idx in ('.$ids.')');
+            $result = array();
+            foreach ($images as $image)
+            {
+                $result[$image['idx']] = $image;
+            }
+
+            return $result;
+        }
+
+        function resizeFromArray( $images, $size_code = 0 ){
+
+            if (!is_array($images) || count($images) == 0) return array();
+
+            $result = array();
+            foreach ($images as $image)
+            {
+                if (empty($image)) continue;
+
+                $ext = $this->image_type_to_extension( (int)$image['type'] );
+                $path = (!empty($size_code) ? ($size_code. '/') :  "0/") . $this->subfolder( $image['name'] ) . '/' . $image['name'] . '-' . $this->hashme($image['name']) . '.' . $ext;
+                $result[$image['idx']] = $path;
+            }
+
+            return $result;
         }
 
         public function getOriginal( $idx )

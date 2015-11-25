@@ -22,12 +22,10 @@
 				<link rel="stylesheet" type="text/css" href="/admin/static/jquery-ui/themes/base/jquery-ui.css" />
 
 				<script src="/static/js/jquery.js"/>
-				<script src="/admin/static/js/jquery-ui.js"/>
-				<!--<script src="/admin/static/js/jquery.base64.js"/>-->
-				<!--<script src="/admin/static/js/bootstrap.js"/>-->
-				<!--<script src="/admin/static/js/jquery.toggle.buttons.js"/>-->
-				<!--<script src="/admin/static/js/custom/verification.js"/>-->
-                <script xmlns="" type="text/javascript" src="/admin/static/ckeditor/ckeditor.js"></script>
+				<script src="/static/js/jquery-ui/jquery-ui.min.js"/>
+				<script src="/static/js/jquery-ui/jquery-ui-timepicker-addon.js"/>
+				<script src="/static/js/jquery.form.min.js"/>
+                <script type="text/javascript" src="/admin/static/ckeditor/ckeditor.js"></script>
 				<script src="/admin/static/js/custom/admin.js"/>
 
 				<xsl:apply-templates select="/node()/head"/>
