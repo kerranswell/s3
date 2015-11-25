@@ -74,7 +74,10 @@ if ( array_search('page', $nodes) ) {
 
 
 if (!empty($nodes[0])) {
-    if (is_file(ROOT_DIR . $nodes[0] . "/rewrite.php")) {
+    if ($nodes[0] == 'news' || $nodes[0] == 'blog') {
+        require(ROOT_DIR . "news.php");
+    }
+    else if (is_file(ROOT_DIR . $nodes[0] . "/rewrite.php")) {
         $path = ROOT_DIR . $nodes[0] . "/rewrite.php";
         array_shift($nodes);
         require($path);

@@ -55,8 +55,8 @@ class content {
 
     public function xml_beforeUpdate($xml, $xml_old, $service_id, $item_id)
     {
-        $xml = json_decode($xml, ARRAY_A);
-        $xml_old = json_decode($xml_old, ARRAY_A);
+        $xml = json_decode($xml, true);
+        $xml_old = json_decode($xml_old, true);
 
         $old_ids = array();
         foreach ($xml_old as $xi)
@@ -98,7 +98,7 @@ class content {
 
     public function deleteAllImages($xml)
     {
-        $xml = json_decode($xml, ARRAY_A);
+        $xml = json_decode($xml, true);
         foreach ($xml as &$xi)
         {
             if ($xi['type'] == 'picture')
@@ -116,7 +116,7 @@ class content {
     {
         if (!is_array($xml))
         {
-            $xml = json_decode($xml, ARRAY_A);
+            $xml = json_decode($xml, true);
         }
 
         $idx = array();
@@ -149,6 +149,26 @@ class content {
         return $xml;
     }
 
+    public function getPictureIdsFromArray($rows)
+    {
+        $idx = array();
+        foreach ($rows as $row)
+        {
+            $xml = $row['xml'];
+            if (!is_array($xml)) $xml = json_decode($xml, true);
+            foreach ($xml as &$xi)
+            {
+                if ($xi['type'] == 'picture')
+                {
+                    $id = reset($xi['cells']);
+                    if (is_numeric($id)) $idx[] = $id;
+                }
+            }
+        }
+
+        return $idx;
+    }
+
     private function getBlockHtml()
     {
         $block_name = $_REQUEST['block_name'];
@@ -165,37 +185,67 @@ class content {
         exit;
     }
 
-    private function uploadPicture()
+    public function preparePages(&$rows, $codes = array(0))
     {
-        $f = $_POST['block_picture'];
-        $inf = getimagesize($f['tmp_name'], $ind);
-        $size = filesize($f['tmp_name']);
-        if (!$size) {
-            return array('error' => 'Размер фото должен быть не более 5мб');
-        }
+        if (!in_array(0, $codes)) $codes[] = 0;
+        $idxs = $this->getPictureIdsFromArray($rows);
+        $images = $this->dsp->i->getImagesArray($idxs);
 
-        if ($size > 1024*1024*5) {
-            return array('error' => 'Размер фото должен быть не более 5мб');
-        }
-
-        $p = $this->dsp->i->putToPlace($f);
-        if (!$p) return array('error' => $this->dsp->session->GetParam('admin_error'));
-
-        $res = array('url' => sprintf('%s/th.php?url=%s', SITE, $this->dsp->i->resize($p[0], TH_BLOCK_PICTURE_PREVIEW)), 'val' => $p[0]);
-        if (is_array($res))
+        $resized = array();
+        foreach ($codes as $c)
         {
-            if (!empty($res['error']))
+            $resized[$c] = $this->dsp->i->resizeFromArray($images, $c);
+        }
+
+        foreach ($rows as &$row)
+        {
+            $row['xml'] = $this->prepareXml($row['xml']);
+            foreach ($row['xml'] as &$xi)
             {
-                $result['error'] = $res['error'];
-            } else {
-                $result['picture_url'] = $res['url'];
-                $result['val'] = $res['val'];
-                $result['success'] = true;
+                if ($xi['type'] == 'picture')
+                {
+                    foreach ($codes as $c)
+                    {
+                        $idx = reset($xi['cells']);
+                        if (isset($resized[$c][$idx]))
+                        {
+                            $path = $resized[$c][$idx];
+                            $data = $this->dsp->i->imageValidatePath($path);
+                            if (!isset($GLOBALS['isSizes'][$c]) || $data[4] <= $GLOBALS['isSizes'][$c][0]) $path = $resized[0][$idx];
+                            $xi['cells'][$c] = array('idx' => $idx, 'path' => $this->dsp->i->default_path.$path);
+                        }
+                        else $xi['cells'][$c] = 0;
+                    }
+                }
             }
         }
-        header('Content-Type: application/json');
+    }
 
-        echo json_encode($result);
+    public function prepareXml($xml)
+    {
+        if (!is_array($xml)) $xml = json_decode($xml, true);
+        foreach ($xml as &$b)
+        {
+            if ($b['type'] == 'picture') continue;
+            if (isset($b['cells']) && is_array($b['cells'])) {
+                foreach ($b['cells'] as &$c) {
+                    if (in_array($b['type'], array('quote')))
+                    {
+                        $c = strip_tags($c);
+                        $c = str_replace("\n", '<br />', $c);
+                    }
+                    $c = $this->dsp->transforms->stripInvalidXml($c);
+                    $this->dsp->transforms->replaceEntityBack( $c );
+                    $this->dsp->transforms->replaceEntity2Simbols( $c );
+                    $this->dsp->transforms->removeCKShit( $c );
+                    $c = '<![CDATA['.$c.']]>';
+                }
+            }
+        }
+
+        if (!is_array($xml)) $xml = array();
+
+        return $xml;
     }
 
 }

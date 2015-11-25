@@ -79,28 +79,13 @@ class pages extends record {
 
         $page['body_class'] = $this->templates[$page['template']]['params']['body_class'];
 
-        $page['xml'] = json_decode($page['xml'], true);
-        foreach ($page['xml'] as &$b)
-        {
-//            if (!isset($b['type'])) continue;
-            if (isset($b['cells']) && is_array($b['cells'])) {
-                foreach ($b['cells'] as &$c) {
-                    if (in_array($b['type'], array('quote')))
-                    {
-                        $c = strip_tags($c);
-                        $c = str_replace("\n", '<br />', $c);
-                    }
-                    $c = $this->dsp->transforms->stripInvalidXml($c);
-                    $this->dsp->transforms->replaceEntityBack( $c );
-                    $this->dsp->transforms->replaceEntity2Simbols( $c );
-                    $this->dsp->transforms->removeCKShit( $c );
-//                    print_r($c); exit;
-                    $c = '<![CDATA['.$c.']]>';
-                }
-            }
-        }
+        $page['xml'] = $this->dsp->content->prepareXml($page['xml']);
+    }
 
-        if (!is_array($page['xml'])) $page['xml'] = array();
+    public function load()
+    {
+        $this->getStructure();
+        $this->addValueToXml(array('pages' => $this->structure['id'], 'backs' => $this->backs));
     }
 
     public function show()

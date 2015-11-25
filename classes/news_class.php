@@ -3,6 +3,8 @@
 class news extends record {
 
     private $structure = 0;
+    private $per_page = 10;
+    private $pid = 0;
 
     private function getStructure()
     {
@@ -28,57 +30,71 @@ class news extends record {
 
     public function preparePage(&$page)
     {
-        $page['xml'] = json_decode($page['xml'], true);
-        foreach ($page['xml'] as &$b)
-        {
-            if (isset($b['cells']) && is_array($b['cells'])) {
-                foreach ($b['cells'] as &$c) {
-                    if (in_array($b['type'], array('quote')))
-                    {
-                        $c = strip_tags($c);
-                        $c = str_replace("\n", '<br />', $c);
-                    }
-                    $c = $this->dsp->transforms->stripInvalidXml($c);
-                    $this->dsp->transforms->replaceEntityBack( $c );
-                    $this->dsp->transforms->replaceEntity2Simbols( $c );
-                    $this->dsp->transforms->removeCKShit( $c );
-                    $c = '<![CDATA['.$c.']]>';
-                }
-            }
-        }
-
-        if (!is_array($page['xml'])) $page['xml'] = array();
+        $page['xml'] = $this->dsp->content->prepareXml($page['xml']);
     }
 
     public function show()
     {
-        global $nodes;
-        $this->getStructure();
+        global $nodes, $page;
 
-        $url = implode("/",$nodes);
-        if ($url == "") $url = "/";
+        $this->getParts();
 
-        $page_id = $this->getPageIdFromStructureByUrl($url);
+        foreach ($this->parts as &$p)
+        {
+            if ($p['translit'] == $nodes[0])
+            {
+                $this->pid = $p['id'];
+                $p['active'] = 1;
+            }
+        }
+        if (!$this->pid) $this->page404();
+        $this->addValueToXml(array('parts' => $this->parts));
 
-        if (!$page_id)
+
+        $sql = "select * from ".$this->__tablename__." n where n.`status` = 1 and n.`pid` = ? order by n.`date` desc limit ".($page-1)*$this->per_page.", ".$this->per_page;
+        $rows = $this->dsp->db->Select($sql, $this->pid);
+        $this->dsp->content->preparePages($rows, array(TH_BLOG_PICTURE));
+
+        $this->addValueToXml(array('items' => $rows));
+
+//        $this->getStructure();
+
+/*        $url = implode("/",$nodes);
+        if ($url == "") $url = "/";*/
+
+//        $page_id = $this->getPageIdFromStructureByUrl($url);
+
+        if (isset($nodes[1]) && $nodes[1] != '')
         {
             $this->page404();
         }
 
-        $page = $this->structure['id'][$page_id];
-/*        if (isset($this->structure['pid'][$page_id]) && count($this->structure['pid'][$page_id]) == 1)
-        {
-            $p = reset($this->structure['pid'][$page_id]);
-            $nodes[] = $p['translit'];
-            Redirect("/".implode("/", $nodes)."/");
-        }*/
-        $this->setActiveItems($page_id);
+//        $page = $this->structure['id'][$page_id];
         $this->addValueToXml(array('items' => $this->structure['id']));
 
-        $template = 'blog';
+        $this->paginator();
+
+        $template = 'news';
 
         $this->dsp->_Builder->Transform( $template . '.xsl');
 
+    }
+
+    public function getParts()
+    {
+        $sql = "select * from ".$this->__tablename__." where `pid` = 0 and status = 1";
+        $rows = $this->dsp->db->Select($sql);
+        foreach ($rows as $row)
+            $this->parts[$row['id']] = $row;
+    }
+
+    public function paginator()
+    {
+        global $page;
+        $sql = "select count(*) from ".$this->__tablename__." where status = 1 and pid = ".$this->pid;
+        $total = $this->dsp->db->SelectValue($sql);
+
+        $this->addValueToXml(array('paginator' => array('total' => $total)));
     }
 
     private function setActiveItems($id)

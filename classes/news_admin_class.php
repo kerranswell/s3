@@ -21,7 +21,7 @@ class news_admin extends record {
             'list' => array('showtype' => 'link_children'),
         ), 'title' => 'Заголовок'),
         'translit' => array('type' => 'string', 'params' => array(
-            'edit' => array('showtype' => 'string'),
+            'edit' => array('showtype' => 'none'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Translit'),
         'text' => array('type' => 'text', 'params' => array(
@@ -165,8 +165,8 @@ class news_admin extends record {
         $save['date'] = strtotime($save['date']);
         $pid = $this->pid;
 
-        $url = $this->makeUrl($pid, $save['translit']);
-        $save['url'] = implode("/", $url);
+//        $url = $this->makeUrl($pid, $save['translit']);
+//        $save['url'] = implode("/", $url);
 
         if ($id > 0) $save['xml'] = $this->dsp->content->xml_beforeUpdate($save['xml'], $item['xml'], $this->service_id, $id);
 
@@ -181,19 +181,17 @@ class news_admin extends record {
         {
             $sql = "update `".$this->__tablename__."` set
                 `title` = ?,
-                `translit` = ?,
                 `text` = ?,
                 `status` = ?,
                 `xml` = ?,
-                `url` = ?,
                 `date` = ?
                 where `id` = ?
             ".'';
-            $this->dsp->db->Execute($sql, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $save['xml'], $save['url'], $save['date'], $id);
+            $this->dsp->db->Execute($sql, $save['title'], $save['text'], !empty($save['status']) ? 1 : 0, $save['xml'], $save['date'], $id);
             Redirect('/admin/?op=news&act=edit&id='.$id);
         } else {
-            $sql = "insert into `".$this->__tablename__."` (`id`, `pid`, `title`, `translit`, `text`, `status`, `xml`, `url`, `date`) values (0, ?, ?, ?, ?, ?, ?, ?, ?)".'';
-            $this->dsp->db->Execute($sql, $pid, $save['title'], $save['translit'], $save['text'], !empty($save['status']) ? 1 : 0, $save['xml'], $save['url'], $save['date']);
+            $sql = "insert into `".$this->__tablename__."` (`id`, `pid`, `title`, `text`, `status`, `xml`, `date`) values (0, ?, ?, ?, ?, ?, ?)".'';
+            $this->dsp->db->Execute($sql, $pid, $save['title'], $save['text'], !empty($save['status']) ? 1 : 0, $save['xml'], $save['date']);
 
             Redirect('/admin/?op=news&act=edit&id='.$this->dsp->db->LastInsertId());
         }
@@ -203,9 +201,6 @@ class news_admin extends record {
     {
         $errors = array();
         if (trim($item['title']) == '') $errors['title'] = 'Необходимо заполнить это поле';
-        $sql = "select count(*) from `".$this->__tablename__."` where `url` = ? and `id` != ?".'';
-        $v = $this->dsp->db->SelectValue($sql, $item['url'], $item['id']);
-        if ($v > 0) $errors['translit'] = 'Такой url уже существует';
 
         return $errors;
     }

@@ -36,12 +36,10 @@ $(function() {
         return false;
     });
 
-    $('.left_menu li a, .main_menu li a').live('click', function () {
+    $('.main_menu li a').live('click', function () {
         pager.pageJump($(this).closest('li').data('id'));
         return false;
     });
-
-    $('.left_menu li a').click(function () {return false;});
 
 });
 

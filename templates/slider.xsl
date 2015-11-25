@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.1">
 
-    <xsl:import href="blocks.xsl"/>
+    <xsl:import href="common.xsl"/>
 
     <!--<xsl:output method="html" indent="no" doctype-system="about:legacy-compat" encoding="utf-8"/>-->
 
@@ -14,17 +14,10 @@
         <xsl:variable name="item_id" select="/root/common_class/item_id"/>
         <html>
             <head>
-                <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-                <link rel="stylesheet" href="/static/css/style.css" type="text/css" media="all" />
-                <script src="/static/js/jquery.js"></script>
-                <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
-                <script src="/static/js/jquery-mousewheel-master/jquery.mousewheel.min.js"></script>
-                <!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>-->
-                <script src="/static/js/custom/main.js"></script>
-                <script src="/static/js/custom/calc.js"></script>
+                <xsl:call-template name="header"/>
             </head>
 
-            <body class="{/root/common_class/body_class}">
+            <body class="{/root/common_class/body_class} slider">
 
                 <xsl:for-each select="/root/pages_class/backs/item">
                     <div class="back fadeOut image" data-id="{idx}" data-width="{width}" data-height="{height}">
@@ -38,40 +31,8 @@
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5164.100512652813!2d37.63129646557121!3d55.70975591705963!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54b380fdd3fbf%3A0xb564fc21f4fd9644!2sDanilovskaya+nab.%2C+8%D1%8112%2C+Moskva%2C+115114!5e0!3m2!1sen!2sru!4v1447462332900" width="800" height="600" frameborder="0" style="border:0" allowfullscreen="true"></iframe>
                 </div>
 
-                <div class="header_strip">
-                    <div class="header">
-                        <div class="logo"><a class="logo-title" href="/">Центр<br />IT-Поддержки<br />Бизнеса</a></div>
-                        <div class="right_block">
-                            <ul class="main_menu">
-                                <xsl:for-each select="/root/pages_class/pages/item[pid = 0]">
-                                    <xsl:variable name="id" select="id"/>
-                                    <xsl:variable name="this_url">
-                                        <xsl:choose>
-                                            <xsl:when test="count(/root/pages_class/pages/item[pid = $id]) &gt; 0"><xsl:value-of select="/root/pages_class/pages/item[pid = $id]/url"/></xsl:when>
-                                            <xsl:otherwise><xsl:value-of select="url"/></xsl:otherwise>
-                                        </xsl:choose>
-                                    </xsl:variable>
-                                    <xsl:variable name="calc_class"><xsl:if test="id = 19">calc</xsl:if></xsl:variable>
-                                    <xsl:choose>
-                                        <xsl:when test="is_active = 1">
-                                            <li class="active {$calc_class}" data-id="{id}" data-url="/{$this_url}/"><xsl:value-of select="title"/></li>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <li class="{$calc_class}" data-id="{id}" data-url="/{$this_url}/"><a href="/{$this_url}/"><xsl:value-of select="title"/></a></li>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
+                <xsl:call-template name="topmenu"/>
 
-                                </xsl:for-each>
-                            </ul>
-                            <div class="phone_number"><xsl:value-of select="/root/pages_class/pages/item[translit='contacts']/xml/item[name='contacts']/cells/item[@_key=1]" disable-output-escaping="yes"/></div>
-                            <ul class="social_menu">
-                                <li><a href="http://vk.com" target="_blank" class="btn-vk"></a></li>
-                                <li><a href="http://facebook.com" target="_blank" class="btn-fb"></a></li>
-                                <li><a href="http://linkedin.com" target="_blank" class="btn-in"></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
                 <div id="wrapper">
                     <div class="main">
                         <div class="left_bar">
@@ -160,11 +121,6 @@ $(function() {
                             </xsl:for-each>
                         </div>
                     </div>
-<!--
-                    <div class="footer">
-                        <div class="page_button button_down"><a href="#"></a></div>
-                    </div>
--->
                 </div>
             </body>
 

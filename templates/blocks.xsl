@@ -150,4 +150,10 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template match="item[name='picture']" mode="xml_block">
+        <div class="picture">
+            <img src="{cells/item[@_key=6]/path}" />
+        </div>
+    </xsl:template>
+
 </xsl:stylesheet>
