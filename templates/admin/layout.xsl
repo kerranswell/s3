@@ -28,7 +28,7 @@
                 <script type="text/javascript" src="/admin/static/ckeditor/ckeditor.js"></script>
 				<script src="/admin/static/js/custom/admin.js"/>
 
-				<xsl:apply-templates select="/node()/head"/>
+				<!--<xsl:apply-templates select="/node()/head"/>-->
 			</head>
 			<body>
 

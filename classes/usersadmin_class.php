@@ -5,6 +5,12 @@ class usersadmin extends Record {
     private static $ptrn_login = "/^[a-zA-Z0-9_-]+$/i";
     private static $ptrn_pass  = "/^[a-zA-Z0-9_-]+$/i";
 
+    public $user_roles = array(
+        USER_ROLE_USER => 'Клиент',
+        USER_ROLE_EDITOR => 'Редактор',
+        USER_ROLE_SUPER => 'Админ'
+    );
+
     function beforeAdd($item) {
         if (!empty($item['pass'])) {
             $this->dsp->authadmin->SetTempParam('pass_value', $item['pass'] . $item['salt']);

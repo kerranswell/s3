@@ -4,6 +4,11 @@ $id = $_REQUEST['id'];
 $item = $dsp->news_admin->blankItem();
 if ($id > 0) {
     $item = $dsp->news->GetItem($id);
+    $sql = "select t.`id`, t.`title` from tags2items ti
+            left join `tags` t on (t.id = ti.tags_id)
+            where ti.item_id = ? and ti.service_id = ?";
+    $item['tags'] = $dsp->db->Select($sql, $id, $dsp->news_admin->service_id);
+
     $item['date'] = date('d.m.Y H:i', $item['date']);
 }
 
@@ -16,7 +21,7 @@ $dsp->content->makeBlock();
 $dsp->content->makeXml($item['xml']);
 
 $b_item = $dsp->_Builder->addNode($dsp->_Builder->createNode('item', array()), $b);
-
+$dsp->common->addValueToXml(array('service_id' => $dsp->news_admin->service_id));
 foreach ($params as $f => $p)
 //foreach ($item as $f => $v)
 {

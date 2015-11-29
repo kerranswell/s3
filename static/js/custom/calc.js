@@ -6,11 +6,11 @@ $(function() {
         else calc.reset(false);
     });
 
-    $('input[type="text"].num').keydown(function (e) {
+    $('input[type="text"].num, input[data-name="inn"]').keydown(function (e) {
         // Allow: backspace, delete, tab, escape, enter and .
         if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
              // Allow: Ctrl+A, Command+A
-            (e.keyCode == 65 && ( e.ctrlKey === true || e.metaKey === true ) ) ||
+            ((e.keyCode == 65 || e.keyCode == 86) && ( e.ctrlKey === true || e.metaKey === true ) ) ||
              // Allow: home, end, left, right, down, up
             (e.keyCode >= 35 && e.keyCode <= 40)) {
                  // let it happen, don't do anything
@@ -20,8 +20,17 @@ $(function() {
         if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
             e.preventDefault();
         }
-    }).on('blur', function () {
+    })
+    $('input[type="text"].num').on('blur', function () {
         if ($(this).val().trim() == '') $(this).val('0');
+    });
+
+    $('input[data-name="contract_number"]').on('keyup', function () {
+        var self = $(this);
+        var s = self.val();
+        var r = new RegExp("N[0-9]{2}\-[0-9]{2}\/[0-9]{4}","ig");
+        s = s.match(r);
+
     });
 
 });
@@ -74,12 +83,29 @@ function CCalc()
 
 CCalc.prototype.nextPage = function ()
 {
+    if ($('body').hasClass('wait')) return;
     var next_page = this.checkPage();
+    if (next_page <= 0) return;
+
+    var prev = this.pages[this.index];
+    this.index = next_page;
+    var next = this.pages[next_page];
+
+    if (next.obj.data('finish') == 1)
+    {
+        this.calculate();
+    }
+
+    this.switchPage(prev, next, 1);
+}
+
+CCalc.prototype.nextPage2 = function (next_page)
+{
     if (!next_page) return;
 
     var prev = this.pages[this.index];
     this.index = next_page;
-    var next = this.pages[this.index];
+    var next = this.pages[next_page];
 
     if (next.obj.data('finish') == 1)
     {
@@ -146,18 +172,45 @@ CCalc.prototype.checkPage = function ()
     switch (page.id)
     {
         case 1 :
-            if (data['count_servers'] == 0 && data['count_computers'] == 0)
+            if (data['count_servers'] == 0)
             {
                 page.obj.find('input[data-name="count_servers"]').focus();
                 return false;
             }
+            if (data['count_computers'] == 0)
+            {
+                page.obj.find('input[data-name="count_computers"]').focus();
+                return false;
+            }
             break;
         case 2 :
-            if (data['it-director'] == true) return 4;
+//            if (data['it-director'] == true) return 4;
             break;
 
         case 3 :
-            if (data['business-no'] == true) return 4;
+//            if (data['business-no'] == true) return 4;
+            break;
+
+        case 4 :
+            $('body, .button1').addClass('wait');
+            $.ajax({
+                type: 'POST',
+                dataType: 'JSON',
+                url: '/ajx/calc.php',
+                data: { 'act' : 'checkContract', inn: data['inn'], num: data['contract_number']},
+                success: function(result){
+                    if (result.success == 1)
+                    {
+                        self.data.inbase = 1;
+                    }
+                },
+                complete : function () {
+                    $('body, .button1').removeClass('wait');
+                    self.nextPage2(4);
+                }
+            });
+
+            return -1;
             break;
     }
 
@@ -178,14 +231,42 @@ CCalc.prototype.calculate = function ()
     var count = this.data.count_servers + this.data.count_computers;
     total = count * 1800;
 
+/*
     if (this.data['it-director'] == true) total = count * 3600;
     else if (this.data['sysadmin'] == true)
     {
         if (this.data['business-yes'] == 1) total = count * 1500;
-        else if (this.data['inn'] != '' && this.data['contract_number'] != ''/*in-base*/) total = count * 1600;
+        else if (this.data['inn'] != '' && this.data['contract_number'] != ''*/
+/*in-base*//*
+) total = count * 1600;
+    }
+*/
+
+    var j16 = 3600;
+    var j15 = 1800;
+    var j12 = 0.7;
+    var j13 = 0.8;
+
+    if (this.data['it-director'] == true)
+    {
+        if (this.data['business-yes'] == 1)
+        {
+            total = j16 * count * j12;
+        } else {
+            if (this.data.inbase) total = j16 * count * j13;
+            else total = j16 * count;
+        }
+    } else if (this.data['sysadmin'] == true) {
+        if (this.data['business-yes'] == 1)
+        {
+            total = j15 * count * j12;
+        } else {
+            if (this.data.inbase) total = j15 * count * j13;
+            else total = j15 * count;
+        }
     }
 
-    total = parseInt(total);
+    total = parseInt(Math.round(total));
     if (!(total > 0)) { $('#calc_cost').html('Ошибка'); return false; }
 
     var s = '';

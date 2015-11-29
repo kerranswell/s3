@@ -183,6 +183,50 @@ $(function() {
 //        ajaxSubmit(options);
     });
 
+    $('.table2items').bind('keyup', function () {
+        var inp = $(this).attr('value');
+        if(inp.length < 3) { $('.table2items_list').html( '').hide(); return; }
+        var self = $(this);
+        if(self.data('checking') == 1) return;
+        if( inp ){
+            self.data('checking', 1);
+            jQuery.ajax({
+                dataType: 'text',
+                url: '/admin/',
+                data: { 'opcode': 'table2items', act:'getList', s : inp, table: self.data('table')},
+                type: 'POST',
+                success: function(response){
+                    if( response ) $('.table2items_list').html( response).show();
+                    else $('.table2items_list').html( '').hide();
+                    self.data('checking', 0);
+                },
+                error:  function(xhr, str){
+                    $('.table2items_list').html( '').hide();
+                    self.data('checking', 0);
+                }
+            });
+        }
+    });
+
+    $('.table2items_list .item').live('click', function () {
+        var c = $(this).closest('.table2items_cont');
+        var table = c.find('input.table2items').data('table');
+        var title = $(this).html();
+        var id = $(this).data('id');
+        var s = '<div class="table2items_item">' + title + '<input type="hidden" name="table2items[' + table + '][]" value="' + id + '" /><a href="#" class="table2items_del">[X]</a></div>';
+        c.find('.table2items_items').append(s);
+        $(this).parent().html('').hide();
+        c.find('input.table2items').val('');
+
+
+        return false;
+    });
+
+    $('.table2items_del').live('click', function () {
+        $(this).parent().remove();
+        return false;
+    })
+
 });
 
 function strip_tags(OriginalString)
@@ -190,3 +234,4 @@ function strip_tags(OriginalString)
     var StrippedString = OriginalString.replace(/(<([^>]+)>)/ig,"");
     return StrippedString;
 }
+

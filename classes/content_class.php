@@ -86,6 +86,16 @@ class content {
                     $xi['cells'][0] = $idx;
                 }
             }
+
+/*            if ($xi['type'] == 'column')
+            {
+                if (is_array($xi['cells']))
+                foreach ($xi['cells'] as &$c)
+                {
+                    $c = str_replace("<div>
+	 </div>", "", $c);
+                }
+            }*/
         }
 
         foreach ($old_ids as $id => $t)

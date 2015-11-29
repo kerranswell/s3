@@ -29,7 +29,14 @@
         $dsp->_Builder->Transform('admin' . DS . 'login.xsl');
         exit();
     }
-    
+
+    if ($dsp->authadmin->user['role'] == USER_ROLE_USER)
+    {
+//        require ("users.php");
+        Redirect("/personal/");
+        exit;
+    }
+
     $template = 'main';
 
     // Navigation Block

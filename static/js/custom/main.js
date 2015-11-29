@@ -1,11 +1,66 @@
 $(function() {
 
+    $('.column p, .column div').hyphenate(false);
+
     backs = {};
     $('.back').each(function () {
         backs[$(this).data('id')] = new CBack($(this));
     });
 
     $win = new CWin();
+
+    if ($win.body.hasClass('intro'))
+    {
+        var menu_time = 500;
+        var burger = $('.burger');
+        var header_menu = $('#header_menu');
+        var header_burger = $('#header_burger');
+        var menu_status = 'burger';
+        burger.on('mouseenter', function () {
+            if ($win.body.hasClass('intro')) burgerOff();
+        });
+
+        header_menu.on('mouseenter', function () {
+            if (!$win.body.hasClass('intro') ) return false;
+            if (burger.data('inprocess') == 1 && menu_status == 'burger') header_menu.data('show_after', 1);
+        });
+
+        header_menu.on('mouseleave', function () {
+            if (!$win.body.hasClass('intro') ) return false;
+            if (burger.data('inprocess') == 1 && menu_status == 'menu') header_menu.data('hide_after', 1);
+            burgerOn();
+        });
+
+        function burgerOff()
+        {
+            if (burger.data('inprocess') == 1) return false;
+
+            menu_status = 'menu';
+            burger.data('inprocess', 1);
+            header_burger.switchClass('visible', 'transparent', menu_time, 'easeOutSine', function () {
+                burger.data('inprocess', 0); header_burger.hide();
+                if (header_menu.data('hide_after') == 1) {
+                    burgerOn(); header_menu.data('hide_after', 0);
+                }
+            });
+            header_menu.show().switchClass('transparent', 'visible', menu_time, 'easeOutSine');
+        }
+
+        function burgerOn()
+        {
+            if (burger.data('inprocess') == 1) return false;
+
+            menu_status = 'burger';
+            burger.data('inprocess', 1);
+            header_burger.show().switchClass('transparent', 'visible', menu_time, 'easeOutSine');
+            header_menu.switchClass('visible', 'transparent', menu_time, 'easeOutSine', function () {
+                burger.data('inprocess', 0); header_menu.hide();
+                if (header_menu.data('show_after') == 1) {
+                    burgerOff(); header_menu.data('show_after', 0);
+                }
+            });
+        }
+    }
 
     $( window ).resize(function() {
 //        $win.setContentTop();
@@ -14,11 +69,42 @@ $(function() {
 
     $( window).on('mousewheel', function(event) {
 //        console.log(event.deltaX, event.deltaY, event.deltaFactor);
-        if (event.deltaY != 0 && event.deltaX == 0) pager.pageSlide(-1*event.deltaY, 0);
+        if (!$win.body.hasClass('intro'))
+        {
+            if (event.deltaY != 0 && event.deltaX == 0) pager.pageSlide(-1*event.deltaY, 0);
+        }
 
         return false;
     });
 
+    $(window).bind('keyup', function(e) {
+
+        if ($win.body.hasClass('intro')) return false;
+
+        var code = e.keyCode || e.which;
+
+        switch (code)
+        {
+            case 38 :
+            pager.pageSlide(-1, 0);
+            break;
+            case 40 :
+            pager.pageSlide(1, 0);
+            break;
+            case 37 :
+                if (pager.pages.childs[pager.pages.child_index].childs.length > 1)
+                {
+                    pager.pageSlide(-1, pager.pages.childs[pager.pages.child_index].id);
+                }
+            break;
+            case 39 :
+                if (pager.pages.childs[pager.pages.child_index].childs.length > 1)
+                {
+                    pager.pageSlide(1, pager.pages.childs[pager.pages.child_index].id);
+                }
+            break;
+        }
+    });
 //    $win.setContentTop();
 
     $('.button_right a').click(function () {
@@ -119,6 +205,24 @@ CWin.prototype.switchBodyClass = function (class1, class2) {
     this.body.switchClass(class1, class2);
 }
 
+function disableIntro()
+{
+    if (!$win) return false;
+    if ($win.body.hasClass('intro'))
+    {
+        if ($('#header_menu').hasClass('hidden')) $('#header_menu').css('opacity', 0).show().animate({opacity:1});
+        $win.body.removeClass('intro');
+        $('div.intro_c').css('opacity', 1).animate({opacity: 0}, function () {$('div.intro').hide();});
+        $('#header_burger').hide();
+        $('.slider_contents').css('opacity', 0).show().animate({opacity:1});
+        pager.switchFast = true;
+
+        return true;
+    }
+
+    return false;
+}
+
 var $win;
 
 /* CPAGER() */
@@ -128,6 +232,7 @@ function CPager(p) {
     this.page_ids = {};
     this.page_ids[0] = this.pages;
     this.busy = false;
+    this.switchFast = false;
 
     this.init_pages(this.pages);
 };
@@ -206,6 +311,11 @@ CPager.prototype.pageJump = function(page_id)
     this.pageSwitch(k, page, prev_page, next_page);
 }
 
+CPager.prototype.afterSwitch = function ()
+{
+    if (this.switchFast) this.switchFast = false;
+}
+
 CPager.prototype.pageSlide = function(k, page_id)
 {
     if (this.page_ids[page_id] === undefined) return;
@@ -225,16 +335,36 @@ CPager.prototype.pageSlide = function(k, page_id)
         if (index < 0) index = page.childs.length-1;
     }
     var next_page = page.childs[index];
+    if (next_page.url == 'intro')
+    {
+        if (k > 0)
+        {
+            index++;
+            if (index > page.childs.length-1) index = 0;
+        } else {
+            index--;
+            if (index < 0) index = page.childs.length-1;
+        }
+        next_page = page.childs[index];
+    }
 
     this.pageSwitch(k, page, prev_page, next_page);
+}
+
+CPager.prototype.getAnimTime = function ()
+{
+//    return this.switchFast ? 10 : 400;
+    return 400;
 }
 
 CPager.prototype.pageSwitch = function(k, page, prev_child, next_child)
 {
     if (this.busy) return;
+    disableIntro();
 
     this.busy = true;
 
+    var self = this;
     var prev_index = page.child_index;
     var cur_page = prev_child.obj;
 //    var cur_leftbar = prev_child.leftbar;
@@ -248,7 +378,7 @@ CPager.prototype.pageSwitch = function(k, page, prev_child, next_child)
     if (page.type == 'h') o.marginLeft = (k > 0 ? "-=" : "+=") + $win.content_width;
     if (page.type == 'v') o.marginTop = (k > 0 ? "-=" : "+=") + $win.content_height;
     o.opacity = 0;
-    cur_page.animate(o, function () {$(this).hide()});
+    cur_page.animate(o, self.getAnimTime(), function () {$(this).hide()});
 
     o = {};
     if (page.type == 'h') o.marginLeft = k * $win.content_width;
@@ -260,13 +390,14 @@ CPager.prototype.pageSwitch = function(k, page, prev_child, next_child)
     if (page.type == 'h') o.marginLeft = (k > 0 ? "-=" : "+=") + $win.content_width;
     if (page.type == 'v') o.marginTop = (k > 0 ? "-=" : "+=") + $win.content_height;
     o.opacity = 1;
-    var self = this;
-    next_page.animate(o, function () {
+
+    next_page.animate(o, self.getAnimTime(), function () {
         self.deactivateLI(prev_child.getActiveChildProperty('id'), 'left_menu');
         self.activateLI(next_child.getActiveChildProperty('id'), 'left_menu');
         self.deactivateLI(prev_child.id, 'main_menu');
         self.activateLI(next_child.id, 'main_menu');
         self.busy = false;
+        self.afterSwitch();
     });
 
     page.checkButtonLeft();
@@ -517,7 +648,7 @@ CBack.prototype.showAnimated = function ()
 {
     this.active = true;
     var self = this;
-    this.obj.switchClass('fadeOut', 'fadeIn', {complete: function () {
+    this.obj.switchClass('fadeOut', 'fadeIn', {duration: pager.getAnimTime(), complete: function () {
         if (self.id == 'map') self.obj.css('z-index', 1);
     }});
 }
@@ -526,7 +657,7 @@ CBack.prototype.hideAnimated = function ()
 {
     this.active = false;
     if (this.id == 'map') this.obj.css('z-index', -100);
-    this.obj.switchClass('fadeIn', 'fadeOut');
+    this.obj.switchClass('fadeIn', 'fadeOut', {duration: pager.getAnimTime()});
 }
 
 CBack.prototype.moveBackground = function (posx, posy)

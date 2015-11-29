@@ -5,7 +5,11 @@ require_once(dirname(__FILE__) . "/core/core.php");
 //require_once(CLASS_DIR . "/record_admin_class.php");
 $dsp->_Builder->addArray(array('timestamp' => time()));
 
-if ($_REQUEST['p_'] == '') $_REQUEST['p_'] = 'about/mission/';
+if ($_REQUEST['p_'] == '')
+{
+    $_REQUEST['p_'] = 'intro/';
+    $_REQUEST['root'] = 1;
+}
 
 if (empty($_REQUEST['p_']) && $_SERVER['QUERY_STRING'] == 'er=1')
 {

@@ -8,6 +8,7 @@ class pages extends record {
         3 => array('title' => 'Слайдер, карта', 'value' => 3, 'params' => array('body_class' => 'light', 'xslt' => 'slider')),
         4 => array('title' => 'Слайдер, калькулятор, темный', 'value' => 4, 'params' => array('body_class' => 'dark', 'xslt' => 'slider')),
         5 => array('title' => 'Блог', 'value' => 5, 'params' => array('body_class' => 'light', 'xslt' => 'blog')),
+        6 => array('title' => 'Интро', 'value' => 6, 'params' => array('body_class' => 'light', 'xslt' => 'slider')),
     );
     private $structure = 0;
     private $backs = array();
@@ -102,8 +103,8 @@ class pages extends record {
         {
             $this->page404();
         }
-
         $page = $this->structure['id'][$page_id];
+
         if (isset($this->structure['pid'][$page_id]) && count($this->structure['pid'][$page_id]) == 1)
         {
             $p = reset($this->structure['pid'][$page_id]);
@@ -112,9 +113,8 @@ class pages extends record {
         }
         $this->setActiveItems($page_id);
         $this->addValueToXml(array('pages' => $this->structure['id'], 'backs' => $this->backs));
-//        $this->dsp->_Builder->addArray(array('templates' => $this->templates), '', array(), $this->getBuilderBlock(), false);
 
-        $this->dsp->common->addValueToXml(array('item_id' => $page_id, 'body_class' => $this->templates[$page['template']]['params']['body_class']));
+        $this->dsp->common->addValueToXml(array('item_id' => $page_id, 'body_class' => $this->templates[$page['template']]['params']['body_class'], 'root' => isset($_REQUEST['root']) && $_REQUEST['root'] ? 1 : 0));
 
         $template = $this->templates[$page['template']]['params']['xslt'];
 

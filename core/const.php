@@ -5,6 +5,8 @@ if (!empty($_SERVER['HTTP_HOST'])) {
 	define("HOST", $_SERVER['HTTP_HOST']);
 }
 
+define('DB_DEBUG', 1);
+
 define("HTTP_REL_PATH", '');
 define("SITE", 'http://' . HOST . HTTP_REL_PATH);
 define("AJAX_PATH", HOST . "/ajax/");
@@ -15,6 +17,11 @@ if (empty($_SERVER['DOCUMENT_ROOT'])) {
 } else {
     $DOCUMENT_ROOT = $_SERVER['DOCUMENT_ROOT'];
 }
+
+define('USER_ROLE_SUPER', 2);
+define('USER_ROLE_EDITOR', 1);
+define('USER_ROLE_USER', 0);
+
 
 // SERVER consts
 define("SERVER_PROTOCOL", "http://");

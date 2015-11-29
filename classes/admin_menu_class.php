@@ -11,6 +11,9 @@ class admin_menu extends Record {
         $menu[] = array('title' => 'Страницы', 'op' => 'pages', 'link' => '/admin/?op=pages&pid=0');
         $menu[] = array('title' => 'Клиенты', 'op' => 'lists', 'link' => '/admin/?op=lists&pid=5');
         $menu[] = array('title' => 'Компании', 'op' => 'lists', 'link' => '/admin/?op=lists&pid=6');
+        $menu[] = array('title' => 'Пользователи', 'op' => 'usersadmin', 'link' => '/admin/?op=usersadmin');
+        $menu[] = array('title' => 'Документы', 'op' => '', 'link' => '/personal/');
+        $menu[] = array('title' => 'Выход', 'op' => '', 'link' => '/admin/logout');
 
         return $menu;
     }

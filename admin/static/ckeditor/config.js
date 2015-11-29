@@ -12,12 +12,12 @@ CKEDITOR.editorConfig = function( config )
 
     config.toolbar =
     [
-        ['Source','-','NewPage'],
-        ['Cut','Copy','Paste','PasteText','Undo','Redo'],
-        ['Find','Replace','-','SelectAll','-','SpellChecker', 'Scayt'],
-        [ 'Bold','Italic','Underline','Strike','Subscript','Superscript','-','RemoveFormat' ],
-        [ 'NumberedList','BulletedList','-','Outdent','Indent','-','Blockquote' ],
-        [ 'Table', 'Image', 'Link','Unlink','Anchor' ],
+        ['Source'],
+        ['Cut','Copy','PasteText','Undo','Redo'],
+        ['Find','Replace','-','SelectAll'],
+        [ 'Bold','Italic','Underline','Strike','-','RemoveFormat' ],
+        [ 'NumberedList','BulletedList'],
+        [ 'Table', 'Link','Unlink','Anchor' ],
         [ 'SpecialChar'],
         [ 'Maximize', 'ShowBlocks','-','About' ]
     ];

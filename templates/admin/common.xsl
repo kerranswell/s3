@@ -23,6 +23,22 @@
         <input type="text" value="{.}" name="record[{./@name}]" />
     </xsl:template>
 
+    <xsl:template match="field[@showtype='password']" mode="input">
+        <input type="password" value="" name="record[{./@name}]" />
+    </xsl:template>
+
+    <xsl:template match="field[@showtype='table2items']" mode="input">
+        <div class="table2items_cont">
+            <input type="text" value="" autocomplete="off" class="{./@showtype}" name="new_table2items[{./@name}]" data-checking="0" data-table="{./@table}" />
+            <div class="table2items_items">
+                <xsl:for-each select="item">
+                    <div class="{../@showtype}_item"><xsl:value-of select="title"/><input type="hidden" name="{../@showtype}[{../@table}][]" value="{id}" /><a href="#" class="{../@showtype}_del">[X]</a></div>
+                </xsl:for-each>
+            </div>
+            <div class="{./@showtype}_list" data-table="{./@table}"></div>
+        </div>
+    </xsl:template>
+
     <xsl:template match="field[@showtype='date']" mode="input">
         <input type="text" value="{.}" class="datetimepick" name="record[{./@name}]" />
     </xsl:template>
@@ -98,7 +114,7 @@
                 <xsl:if test="field[@name='status'] = 0">unactive</xsl:if>
             </xsl:attribute>
 
-            <td><div class="drag"></div></td>
+            <xsl:if test="count(../../fields/field[. = 'pos']) &gt; 0"><td><div class="drag"></div></td></xsl:if>
             <xsl:apply-templates select="field" mode="list_field" />
             <td><a href="/admin/?op={/root/common/op}&amp;act=edit&amp;id={field[@name='id']}"><img src="/admin/static/img/edit.png" /></a></td>
             <td><a class="delete" href="/admin/?op={/root/common/op}&amp;act=delete&amp;id={field[@name='id']}"><img src="/admin/static/img/del.png" /></a></td>

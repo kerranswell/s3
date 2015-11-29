@@ -15,7 +15,7 @@ $dsp->content->makeXml($item['xml']);
 $dsp->pages_admin->makeInheritPages($id);
 
 $b_item = $dsp->_Builder->addNode($dsp->_Builder->createNode('item', array()), $b);
-
+$dsp->common->addValueToXml(array('service_id' => $dsp->pages_admin->service_id));
 foreach ($params as $f => $p)
 //foreach ($item as $f => $v)
 {

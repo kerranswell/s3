@@ -6,6 +6,11 @@ class news extends record {
     private $per_page = 10;
     private $pid = 0;
 
+    protected function init()
+    {
+        $this->service_id = $this->dsp->services->services['name'][$this->__tablename__]['id'];
+    }
+
     private function getStructure()
     {
         if (!$this->structure)
@@ -50,29 +55,55 @@ class news extends record {
         if (!$this->pid) $this->page404();
         $this->addValueToXml(array('parts' => $this->parts));
 
-
-        $sql = "select * from ".$this->__tablename__." n where n.`status` = 1 and n.`pid` = ? order by n.`date` desc limit ".($page-1)*$this->per_page.", ".$this->per_page;
-        $rows = $this->dsp->db->Select($sql, $this->pid);
-        $this->dsp->content->preparePages($rows, array(TH_BLOG_PICTURE));
-
-        $this->addValueToXml(array('items' => $rows));
-
-//        $this->getStructure();
-
-/*        $url = implode("/",$nodes);
-        if ($url == "") $url = "/";*/
-
-//        $page_id = $this->getPageIdFromStructureByUrl($url);
-
+        $tag = 0;
+        if (isset($nodes[1]) && $nodes[1] == 'tag' && isset($nodes[2]) && is_numeric($nodes[2]))
+        {
+            $sql = "select n.* from ".$this->__tablename__." n
+                    left join tags2items ti on (ti.item_id = n.id and ti.service_id = ?)
+                where n.`status` = 1 and ti.tags_id = ? and n.`pid` = ? group by n.id  order by n.`date` desc limit ".($page-1)*$this->per_page.", ".$this->per_page;
+                $rows = $this->dsp->db->Select($sql, $this->service_id, $nodes[2], $this->pid);
+            $tag = $nodes[2];
+            $this->dsp->common->addValueToXml(array('tag' => $tag));
+        } else
         if (isset($nodes[1]) && $nodes[1] != '')
         {
             $this->page404();
+        } else {
+            $sql = "select n.* from ".$this->__tablename__." n
+                where n.`status` = 1 and n.`pid` = ? order by n.`date` desc limit ".($page-1)*$this->per_page.", ".$this->per_page;
+            $rows = $this->dsp->db->Select($sql, $this->pid);
         }
 
-//        $page = $this->structure['id'][$page_id];
-        $this->addValueToXml(array('items' => $this->structure['id']));
+        $this->dsp->content->preparePages($rows, array(TH_BLOG_PICTURE));
+        $n_ids = array();
+        foreach ($rows as &$row)
+        {
+            $row['date'] = dateFormatted($row['date']);
+            $n_ids[] = $row['id'];
+        }
 
-        $this->paginator();
+        if (count($n_ids) > 0)
+        {
+            $sql = "select t.title, t.id, ti.item_id from tags2items ti
+                    left join tags t on (t.id = ti.tags_id)
+                    where ti.item_id in (".implode(",", $n_ids).") and ti.service_id = ?
+                    ";
+            $tags = $this->dsp->db->Select($sql, $this->service_id);
+            foreach ($rows as &$row)
+            {
+                if (!isset($row['tags'])) $row['tags'] = array();
+                foreach ($tags as $t)
+                {
+                    if ($row['id'] == $t['item_id']) $row['tags'][] = $t;
+                }
+            }
+        }
+
+        $this->addValueToXml(array('items' => $rows));
+
+        $this->dsp->common->addValueToXml(array('news_pid' => $this->pid));
+
+        $this->paginator($tag);
 
         $template = 'news';
 
@@ -88,13 +119,31 @@ class news extends record {
             $this->parts[$row['id']] = $row;
     }
 
-    public function paginator()
+    public function paginator($tag = 0)
     {
         global $page;
-        $sql = "select count(*) from ".$this->__tablename__." where status = 1 and pid = ".$this->pid;
-        $total = $this->dsp->db->SelectValue($sql);
+        if ($tag > 0)
+        {
+            $sql = "select count(*) from ".$this->__tablename__." n
+                    left join tags2items ti on (ti.item_id = n.id and ti.service_id = ?)
+                    where n.status = 1 and ti.tags_id = ? and n.pid = ?";
+            $total = $this->dsp->db->SelectValue($sql, $this->service_id, $tag, $this->pid);
+        } else {
+            $sql = "select count(*) from ".$this->__tablename__." where status = 1 and pid = ".$this->pid;
+            $total = $this->dsp->db->SelectValue($sql);
+        }
 
-        $this->addValueToXml(array('paginator' => array('total' => $total)));
+        $pages = array();
+        $total_pages = ceil($total / $this->per_page);
+        for ($i=1; $i <= $total_pages; $i++)
+        {
+            $p = array();
+            $p['num'] = $i;
+            $p['active'] = ($i == $page) ? true : false;
+            $pages[] = $p;
+        }
+
+        $this->addValueToXml(array('paginator' => array('total' => $total, 'page' => $page, 'pages' => $pages, 'total_pages' => $total_pages, 'pre_url' => '/'.$this->parts[$this->pid]['url'].'/'.($tag > 0 ? 'tag/'.$tag.'/' : ''))));
     }
 
     private function setActiveItems($id)

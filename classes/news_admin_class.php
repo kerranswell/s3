@@ -36,6 +36,10 @@ class news_admin extends record {
             'edit' => array('showtype' => 'date'),
             'list' => array('showtype' => 'label'),
         ), 'title' => 'Дата'),
+        'tags' => array('type' => 'table2items', 'params' => array(
+            'edit' => array('showtype' => 'table2items', 'table' => 'tags'),
+            'list' => array('showtype' => 'none'),
+        ), 'title' => 'Теги'),
         'xml' => array('type' => 'text', 'params' => array(
             'edit' => array('showtype' => 'xml'),
             'list' => array('showtype' => 'none'),
@@ -44,6 +48,10 @@ class news_admin extends record {
             'edit' => array('showtype' => 'none'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Url'),
+        'pos' => array('type' => 'int', 'params' => array(
+            'edit' => array('showtype' => 'none'),
+            'list' => array('showtype' => 'none'),
+        ), 'title' => 'pos'),
     );
 
     protected function init()
@@ -175,6 +183,55 @@ class news_admin extends record {
         if (count($this->errors) > 0)
         {
             return;
+        }
+
+        if (isset($_POST['table2items']) && is_array($_POST['table2items']))
+        {
+            foreach ($_POST['table2items'] as $table => $items)
+            {
+                if ($id > 0)
+                {
+                    $sql = "delete from ".$table."2items where `item_id` = ? and `service_id` = ?";
+                    $this->dsp->db->Execute($sql, $id, $this->service_id);
+                }
+
+                $values = array();
+                foreach ($items as $item_id)
+                {
+                    $values[] = "(".$item_id.", ".$id.", ".$this->service_id.")";
+                }
+
+                if (count($values) > 0)
+                {
+                    $sql = "insert into ".$table."2items (".$table."_id, item_id, service_id) values ".implode(",", $values);
+                    $this->dsp->db->Execute($sql);
+                }
+            }
+        }
+
+        if (isset($_POST['new_table2items']['tags']))
+        {
+            $new_tags = trim($_POST['new_table2items']['tags']);
+            if (trim($new_tags) != '')
+            {
+                $new_tags = explode(" ", $new_tags);
+                foreach ($new_tags as $nt)
+                {
+                    $s = trim($nt);
+                    if ($s != '')
+                    {
+                        $sql = "select count(id) from `tags` where `title` = ?";
+                        $cnt = $this->dsp->db->SelectValue($sql, $s);
+                        if ($cnt == 0)
+                        {
+                            $this->dsp->db->Execute("insert into `tags` (`id`, `title`) values (0, ?)", $s);
+                            $tag_id = $this->dsp->db->LastInsertId();
+                            $sql = "insert into tags2items (tags_id, item_id, service_id) values (?,?,?)";
+                            $this->dsp->db->Execute($sql, $tag_id, $id, $this->service_id);
+                        }
+                    }
+                }
+            }
         }
 
         if ($id > 0)

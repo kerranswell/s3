@@ -232,3 +232,40 @@ ul.path li {
 textarea.quote {
     width: 95%;
 }
+
+.table2items_list {
+    position: absolute;
+    background-color: #bdbdbd;
+    padding: 5px;
+    width: 300px;
+    display: none;
+}
+
+.table2items_item {
+    float: left;
+    margin-right: 5px;
+}
+
+.table2items_list .item {
+    width: 100%;
+    margin-bottom: 3px;
+    color: black;
+    cursor: pointer;
+}
+
+.login fieldset {
+    border: none;
+}
+
+.login input[type="text"], .login input[type="password"] {
+    width: 200px;
+}
+
+.control-group {
+    margin-bottom: 10px;
+}
+
+button {
+    padding: 5px;
+    width: 100px;
+}

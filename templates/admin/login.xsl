@@ -3,12 +3,12 @@
 	<xsl:import href="layout.xsl"/> 
 	
 	<xsl:template match="block[@name='login']">
-		<div class="center">
-			<form action="" method="post" class="form-horizontal">
-				
+		<div class="center login">
+			<form action="{@act}" method="post" class="form-horizontal">
+
 				<fieldset>
 					<input type="hidden" name="opcode" value="login"/>
-					
+                    <xsl:apply-templates select="/root/head/notify" />
 					<legend>Вход в систему</legend>
 					
 					<div class="control-group">
@@ -32,6 +32,14 @@
 			</form>
 		</div>
 	</xsl:template>
+
+    <xsl:template match="notify">
+        <div class="control-group">
+            <div class="error">
+                <xsl:value-of select="."/>
+            </div>
+        </div>
+    </xsl:template>
 
 	<xsl:template match="block[@name='logout']">
 		<center>

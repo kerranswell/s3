@@ -1,180 +1,205 @@
 var scene;
 $(function() {
-    var top_margin = -134;
-    scene = new CScene();
 
-    scene.body_width = $('body').width();
-    scene.max_body_width = scene.body_width;
-    scene.body_height = $('body').height();
-    scene.start_body_height = scene.body_height;
-    scene.max_body_height = scene.body_height;
-
-    scene.patterns = {1:new Array(),2:new Array(),3:new Array()};
-
-
-    var layers = $('.layer');
-    layers.height(scene.body_height + 400);
-    scene.layers_top = -Math.round((scene.body_height)/2);
-    layers.css('top', scene.layers_top + 'px');
-
-    var w = 60;
-    scene.layer1 = $('.layer.p1');
-    var left_cnt = buildLayer1();
-    function buildLayer1()
+    if ($('body').hasClass('intro'))
     {
-        scene.layer1.css({width: scene.body_width + 4*w});
-        var cnt = Math.floor(scene.body_width / w) + 4;
-        var cnt_left = 0;
-        for (var i=scene.patterns[1].length; i < cnt; i++)
+
+        var top_margin = -134;
+        scene = new CScene();
+
+        scene.body_width = $('body').width();
+        scene.max_body_width = scene.body_width;
+        scene.body_height = $('body').height();
+        scene.start_body_height = scene.body_height;
+        scene.max_body_height = scene.body_height;
+
+        scene.patterns = {1:new Array(),2:new Array(),3:new Array()};
+
+
+        var layers = $('.layer');
+        layers.height(scene.body_height + 400);
+        scene.layers_top = -Math.round((scene.body_height)/2);
+        layers.css('top', scene.layers_top + 'px');
+
+        var w = 60;
+        scene.layer1 = $('.layer.p1');
+        var left_cnt = buildLayer1();
+        function buildLayer1()
         {
-            var div = document.createElement("div");
-            $(div).addClass('patterns1');
-            if (i%2 != 0) scene.layer1.append(div);
-            else scene.layer1.prepend(div);
-            if (i%2 == 0) cnt_left++;
-
-            var p = new CPattern({obj:$(div),back_x:0,back_y:-111+top_margin -scene.layers_top + (i%2 ? 1 : -1) * Math.ceil(i/2)*171});
-            scene.patterns[1].push(p);
-        }
-        return cnt_left;
-    }
-
-    scene.layer2 = $('.layer.p2');
-    buildLayer2();
-    function buildLayer2()
-    {
-        scene.layer2.css({width: scene.body_width + 4*w});
-        var cnt = Math.floor(scene.body_width / w) + 4;
-        var cnt_left = 0;
-        for (var i=scene.patterns[2].length; i < cnt; i++)
-        {
-            var div = document.createElement("div");
-            $(div).addClass('patterns2');
-            if (i%2 != 0) scene.layer2.append(div);
-            else scene.layer2.prepend(div);
-            if (!i%2) cnt_left++;
-
-            var p = new CPattern({obj:$(div),back_x:0,back_y:129+top_margin -scene.layers_top+ (i%2 ? 1 : -1) * Math.ceil(i/2)*171});
-            scene.patterns[2].push(p);
-        }
-
-        return cnt_left * w;
-    }
-
-    var w3 = 120;
-    scene.layer3 = $('.layer.p3');
-    buildLayer3();
-    function buildLayer3()
-    {
-        scene.layer3.css({width: scene.body_width + 4*w3});
-        var cnt = Math.floor(scene.body_width / (w3 / 2)) + 4;
-        var cnt_left = 0;
-        for (var i=scene.patterns[3].length; i < cnt; i++)
-        {
-            var div = document.createElement("div");
-            $(div).addClass('patterns3');
-            if (i%2 != 0) scene.layer3.append(div);
-            else scene.layer3.prepend(div);
-
-            if (!i%2) cnt_left++;
-
-            var p = new CPattern({obj:$(div),back_x:0,back_y:61+top_margin -scene.layers_top + (i%2 ? 1 : -1) * Math.ceil(i/2)*171});
-            scene.patterns[3].push(p);
-        }
-
-        return cnt_left * w3;
-    }
-
-    scene.layers_left += -left_cnt*60;
-    $('.layer').css('left', scene.layers_left + 'px');
-
-
-//    var patterns1 = $('.patterns1');
-//    var patterns2 = $('.patterns2');
-//    var patterns3 = $('.patterns3');
-
-    var ind = 0;
-    var x; var y;
-
-    scene.init();
-//    scene.animate(true);
-
-    $( window).on('mousewheel', function(event) {
-        if (event.deltaY != 0 && event.deltaX == 0)
-        {
-            if (scene.busy == false)
+            scene.layer1.css({width: scene.body_width + 4*w});
+            var cnt = Math.floor(scene.body_width / w) + 4;
+            var cnt_left = 0;
+            for (var i=scene.patterns[1].length; i < cnt; i++)
             {
-                scene.direction = event.deltaY;
-//                scene.animate_parts = true;
-                scene.animate(false);
+                var div = document.createElement("div");
+                $(div).addClass('patterns1');
+                if (i%2 != 0) scene.layer1.append(div);
+                else scene.layer1.prepend(div);
+                if (i%2 == 0) cnt_left++;
+
+                var p = new CPattern({obj:$(div),back_x:0,back_y:-111+top_margin -scene.layers_top + (i%2 ? 1 : -1) * Math.ceil(i/2)*171});
+                scene.patterns[1].push(p);
             }
-/*
-            if (ind + event.deltaY >= 0 && ind + event.deltaY <= number_steps)
-            {
-                ind += event.deltaY;
-                var yshift = event.deltaY * scale;
+            return cnt_left;
+        }
 
-                if (ind == number_steps)
+        scene.layer2 = $('.layer.p2');
+        buildLayer2();
+        function buildLayer2()
+        {
+            scene.layer2.css({width: scene.body_width + 4*w});
+            var cnt = Math.floor(scene.body_width / w) + 4;
+            var cnt_left = 0;
+            for (var i=scene.patterns[2].length; i < cnt; i++)
+            {
+                var div = document.createElement("div");
+                $(div).addClass('patterns2');
+                if (i%2 != 0) scene.layer2.append(div);
+                else scene.layer2.prepend(div);
+                if (!i%2) cnt_left++;
+
+                var p = new CPattern({obj:$(div),back_x:0,back_y:129+top_margin -scene.layers_top+ (i%2 ? 1 : -1) * Math.ceil(i/2)*171});
+                scene.patterns[2].push(p);
+            }
+
+            return cnt_left * w;
+        }
+
+        var w3 = 120;
+        scene.layer3 = $('.layer.p3');
+        buildLayer3();
+        function buildLayer3()
+        {
+            scene.layer3.css({width: scene.body_width + 4*w3});
+            var cnt = Math.floor(scene.body_width / (w3 / 2)) + 4;
+            var cnt_left = 0;
+            for (var i=scene.patterns[3].length; i < cnt; i++)
+            {
+                var div = document.createElement("div");
+                $(div).addClass('patterns3');
+                if (i%2 != 0) scene.layer3.append(div);
+                else scene.layer3.prepend(div);
+
+                if (!i%2) cnt_left++;
+
+                var p = new CPattern({obj:$(div),back_x:0,back_y:61+top_margin -scene.layers_top + (i%2 ? 1 : -1) * Math.ceil(i/2)*171});
+                scene.patterns[3].push(p);
+            }
+
+            return cnt_left * w3;
+        }
+
+        scene.layers_left += -left_cnt*60;
+        $('.layer').css('left', scene.layers_left + 'px');
+
+
+    //    var patterns1 = $('.patterns1');
+    //    var patterns2 = $('.patterns2');
+    //    var patterns3 = $('.patterns3');
+
+        var ind = 0;
+        var x; var y;
+
+        scene.init();
+    //    scene.animate(true);
+
+        $(window).bind('keyup', function(e) {
+            if (scene.busy == true) return;
+
+            if (!$('body').hasClass('intro')) return false;
+            var code = e.keyCode || e.which;
+
+            switch (code)
+            {
+                case 38 :
+                    scene.direction = -1;
+                    scene.animate(false);
+                    break;
+                case 40 :
+                    scene.direction = 1;
+                    scene.animate(false);
+                    break;
+            }
+        });
+
+        $( window).on('mousewheel', function(event) {
+            if (!$('body').hasClass('intro')) return false;
+            if (event.deltaY != 0 && event.deltaX == 0)
+            {
+                if (scene.busy == false)
                 {
-                    l2.moveTo(l2.x2, l2.y2);
-                    l3.moveTo(l3.x2, l3.y2);
-                } else {
-                    x = 0;
-                    y = yshift;
-                    l2.move(x, yshift);
-
-                    x = event.deltaY * (Math.abs(l3.x2 - l3.x1) / number_steps);
-                    y = event.deltaY * (Math.abs(l3.y2 - l3.y1) / number_steps);
-                    l3.move(x, y);
+                    scene.direction = - (event.deltaY > 0 ? 1 : -1);
+    //                scene.animate_parts = true;
+                    scene.animate(false);
                 }
+    /*
+                if (ind + event.deltaY >= 0 && ind + event.deltaY <= number_steps)
+                {
+                    ind += event.deltaY;
+                    var yshift = event.deltaY * scale;
+
+                    if (ind == number_steps)
+                    {
+                        l2.moveTo(l2.x2, l2.y2);
+                        l3.moveTo(l3.x2, l3.y2);
+                    } else {
+                        x = 0;
+                        y = yshift;
+                        l2.move(x, yshift);
+
+                        x = event.deltaY * (Math.abs(l3.x2 - l3.x1) / number_steps);
+                        y = event.deltaY * (Math.abs(l3.y2 - l3.y1) / number_steps);
+                        l3.move(x, y);
+                    }
+                }
+    */
+
             }
-*/
 
-        }
+            return false;
+        });
 
-        return false;
-    });
+        $( window ).resize(function() {
+            if (!$('body').hasClass('intro')) return false;
 
-    $( window ).resize(function() {
+            var new_w = $('body').width();
+            var new_h = $('body').height();
+    /*
+            var left = Math.round((new_w - scene.body_width)/2);
+            var top = Math.round((new_h - scene.body_height)/2);
+            layers.css({left: left,top: top});
+            console.log(left);
+    */
 
-        var new_w = $('body').width();
-        var new_h = $('body').height();
-/*
-        var left = Math.round((new_w - scene.body_width)/2);
-        var top = Math.round((new_h - scene.body_height)/2);
-        layers.css({left: left,top: top});
-        console.log(left);
-*/
+            if (new_w > scene.max_body_width)
+            {
+                scene.max_body_width = scene.body_width = new_w;
+                var added = buildLayer1();
+                buildLayer2();
+                buildLayer3();
 
-        if (new_w > scene.max_body_width)
-        {
-            scene.max_body_width = scene.body_width = new_w;
-            var added = buildLayer1();
-            buildLayer2();
-            buildLayer3();
-
-            scene.layers_left += -added*60;
-            $('.layer').css('left', scene.layers_left + 'px');
-        }
+                scene.layers_left += -added*60;
+                $('.layer').css('left', scene.layers_left + 'px');
+            }
 
 
-        if (new_h > scene.max_body_height)
-        {
-            scene.max_body_height = new_h;
-            var newtop = -Math.round((scene.body_height)/2);
-            var shift = scene.layers_top - newtop;
-            scene.layers_top = newtop;
-            layers.css('top', scene.layers_top+'px');
-            $('.patterns1, .patterns2, .patterns3').css('background-position-y', '+=' + shift + 'px');
+            if (new_h > scene.max_body_height)
+            {
+                scene.max_body_height = new_h;
+                var newtop = -Math.round((scene.body_height)/2);
+                var shift = scene.layers_top - newtop;
+                scene.layers_top = newtop;
+                layers.css('top', scene.layers_top+'px');
+                $('.patterns1, .patterns2, .patterns3').css('background-position-y', '+=' + shift + 'px');
 
-//            layers.css('top', -Math.round((new_h + 200)/2)+'px');
-            scene.body_height = new_h;
-            layers.height(new_h + 400);
-        }
+    //            layers.css('top', -Math.round((new_h + 200)/2)+'px');
+                scene.body_height = new_h;
+                layers.height(new_h + 400);
+            }
 
 
-    });
-
+        });
+    }
 });
 
 function CScene()
@@ -239,7 +264,7 @@ CScene.prototype.init = function ()
 
     this.objects.push({obj:$('.layer2 .logo'),
         steps: {
-            5: {css_trig_backward_out:{display: 'none'}, css_trig_forward_out:{display: 'block'}},
+            5: {css_trig_backward_out:{display: 'none'}, css_trig_forward_out:{display: 'block'}}
         }
     });
 
@@ -254,6 +279,13 @@ CScene.prototype.init = function ()
         steps: {
             7: {css:{opacity:0}},
             8: {css:{opacity:1}}
+        }
+    });
+
+    this.objects.push({obj:$('.layer0'),
+        steps: {
+            1: {css:{opacity:1}},
+            2: {css:{opacity:0}}
         }
     });
 
@@ -344,7 +376,13 @@ CScene.prototype.animate = function (auto)
 {
     var self = this;
     var cnt = this.animate_parts ? this.part_count_steps : this.step_count;
-    if (self.step + self.direction > cnt) return;
+    if (self.step + self.direction > cnt) {
+        if (pager && this.busy == false)
+        {
+            pager.pageJump($('.main_menu li:first').data('id'));
+        }
+        return;
+    }
     if (self.step + self.direction < 1) return;
     this.busy = true;
     var max_time = this.animateStep();

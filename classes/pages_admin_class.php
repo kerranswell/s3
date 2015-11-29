@@ -56,6 +56,10 @@ class pages_admin extends record {
             'edit' => array('showtype' => 'none'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Url'),
+        'pos' => array('type' => 'int', 'params' => array(
+            'edit' => array('showtype' => 'none'),
+            'list' => array('showtype' => 'none'),
+        ), 'title' => 'pos'),
     );
 
     public function makeInheritPages($id)
@@ -185,6 +189,8 @@ class pages_admin extends record {
 //        if (trim($save['translit']) == '') $save['translit'] = translit($save['title']);
         $url = $this->makeUrl($pid, $save['translit']);
         $save['url'] = implode("/", $url);
+
+        if ($id > 0) $save['xml'] = $this->dsp->content->xml_beforeUpdate($save['xml'], $item['xml'], $this->service_id, $id);
 
         # delete background image
         if ((isset($_POST['bg_image_delete']) || !empty($_FILES['record']['tmp_name']['bg_image'])) && $item['bg_image'] > 0)
