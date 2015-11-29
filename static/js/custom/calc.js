@@ -61,7 +61,7 @@ function CCalc()
 
     $('.calc-data.input-checkbox').click(function(){
         var group = $(this).data('group');
-        if (group != '')
+        if (group != '' && group != undefined)
         {
             if (!$(this).hasClass('checked'))
             {

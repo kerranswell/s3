@@ -168,6 +168,7 @@ a:hover {
     width: 100%;
     height: 100%;
     position: absolute;
+    z-index: 1;
 }
 
 .map-over-bottom {
@@ -212,7 +213,7 @@ body.news .main {
     left: auto;
     top: 100px;
     width: 300px;
-    padding: 0px 20px 0px 33px;
+    padding: 0px 20px 0px 28px;
     font-family: 'FuturaBookC', 'FuturaBookC IE';
     z-index: 6;
 }
@@ -242,6 +243,11 @@ body.news .main {
     display: none;
     z-index: 5;
     text-align: center;
+    min-height: 423px;
+}
+
+.h-page.h-page-contacts {
+    min-height: 0px;
 }
 
 .h-page[data-id="0"] {
@@ -269,20 +275,28 @@ body.news .main {
 
 .dots ul li {
     display: inline-block;
-    width: 7px;
-    height: 7px;
-    background-image: url(../i/dots.png);
+    width: 15px;
+    height: 15px;
+    margin-right: 7px;
+    cursor: pointer;
+}
+
+.dots ul li span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-image: url(../i/dots2.png);
     background-repeat: no-repeat;
-    background-position-x: -7px;
+    background-position-x: -15px;
     background-position-y: top;
-    margin-right: 15px;
 }
 
 .dots ul li.last {
     margin-right: 0px;
 }
 
-.dots ul li.active {
+.dots ul li.active {     cursor: default; }
+.dots ul li.active span {
     background-position-x: left;
 }
 
@@ -361,7 +375,7 @@ body.news .main {
 .logo-title {
     width: 86px;
     height: 100%;
-    background-image: url(../i/logo.png);
+    background-image: url(../i/logo_with_title.png);
     background-repeat: no-repeat;
     display: block;
     margin-left: 28px;
@@ -654,15 +668,21 @@ ul.social_menu li a {
     margin-bottom: 18px;
 }
 
-.block table ul {
+.block ul {
     list-style-type: none;
     margin-left: -6px;
 }
 
-.block table ul li {
+.block ul li {
     background-image: url(../i/bullet.png);
     background-position: left 6px;
     padding-left: 6px;
+    margin-top: 6px;
+}
+
+.fullscreen .block ul li
+{
+    background-image: url(../i/bullet_white.png);
 }
 
 .contacts-icons {
@@ -702,6 +722,12 @@ ul.social_menu li a {
 
 .contacts-icons .email {
     background-position-x: -45px;
+}
+
+.contacts .feedback_link {
+    font-family: FuturaBookC;
+    font-size: 18px;
+    margin-top: 43px;
 }
 
 body.light .contacts .email a {
@@ -805,7 +831,7 @@ body.dark .contacts .email a {
     width:50%
 }
 .input-line-center {
-    padding: 0 8px;
+    padding: 0 8px 0 5px;
 }
 .input-line-right {
     text-align: left;
@@ -817,6 +843,8 @@ body.dark .contacts .email a {
 }
 
 .row {margin-top: 20px;}
+.fullscreen .row {text-align: center;}
+.fullscreen input[type="text"] {width: 158px; margin-right: 10px;}
 
 .button1 {
     color: black;
@@ -903,6 +931,11 @@ div.intro {
     top: 50%;
 }
 
+div.intro_full {
+    width: 100%;
+    height: 100%;
+}
+
 div.intro_c {
     position: absolute;
     left: 50%;
@@ -986,6 +1019,17 @@ div.intro_c {
     background: url(../i/intro_keys.png) left top no-repeat;
 }
 
+.intro_arrow {
+    margin-left: -18px;
+    width: 74px;
+    height: 31px;
+    background: url(../i/intro_arrow.png) left top no-repeat;
+    position: absolute;
+    left: 50%;
+    bottom: 30px;
+    cursor: pointer;
+}
+
 .layer2 {
     position: absolute;
     margin-top: 0px;
@@ -1060,7 +1104,7 @@ div.intro_c {
     font-size: 36px;
     position: absolute;
     top: -60px;
-    left: 15px;
+    left: 18px;
     background: url(../i/logo_title1.png) left top no-repeat;
     line-height: 45px;
     letter-spacing: 1.4px;
@@ -1076,7 +1120,7 @@ div.intro_c {
     height: 21px;
     background: url(../i/logo_title2.png) left top no-repeat;
     top: 91px;
-    left: -120px;
+    left: -126px;
     font-size: 26px;
     letter-spacing: 4px;
     color: #848182;
@@ -1161,6 +1205,10 @@ div.picture {
     display: none;
 }
 
+.shown {
+    display: block;
+}
+
 .transparent {
     opacity:0;
 }
@@ -1184,4 +1232,74 @@ input[type="text"].left {
 
 .wait {
     cursor: wait;
+}
+
+.fullscreen_text {
+    display: none;
+}
+
+.fullscreen {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+    color: #fff;
+    z-index: 1000;
+}
+
+.fullscreen_transparent {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    opacity: 0.95;
+    display: none;
+    left: 0px;
+    top: 0px;
+    z-index: 900;
+}
+
+.fullscreen .fscontent {
+    width: 960px;
+    margin: 60px auto 60px auto;
+}
+
+.fullscreen .close {
+    width: 27px;
+    height: 26px;
+    background: url(../i/close.png) left top no-repeat;
+    float: right;
+    cursor: pointer;
+}
+
+.fullscreen .title {
+    font-family: FuturaBookC;
+    font-size: 30px;
+    text-transform: uppercase;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+}
+
+.fullscreen .title span {
+    margin-left: 27px;
+}
+
+.fullscreen .text {
+    font-size: 14px;
+    font-family: 'PT Sans';
+}
+
+.how {
+    font-family: FuturaBookC;
+    font-size: 20px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+}
+
+.msg2 {
+    font-size: 18px;
 }

@@ -140,7 +140,7 @@
     <xsl:template match="list" mode="list">
         <table border="0" class="tree_node_list" index_start="0" table="{/root/common/op}" sortable="1">
             <tr class="table_header">
-                <th></th>
+                <xsl:if test="count(../fields/field[. = 'pos']) &gt; 0"><th></th></xsl:if>
                 <xsl:apply-templates select="../fields/field" mode="list_header" />
                 <th></th>
                 <th></th>

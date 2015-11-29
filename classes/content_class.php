@@ -12,6 +12,7 @@ class content {
         $this->block_types[] = array('name' => 'team', 'type' => 'abstract_block', 'title' => 'Команда', 'params' => array(), 'modules' => array('pages'));
         $this->block_types[] = array('name' => 'companies', 'type' => 'abstract_block', 'title' => 'Компании', 'params' => array(), 'modules' => array('pages'));
         $this->block_types[] = array('name' => 'picture', 'type' => 'picture', 'title' => 'Картинка', 'params' => array('count' => 1), 'modules' => array('news'));
+        $this->block_types[] = array('name' => 'fullscreen_text', 'type' => 'column', 'title' => 'Описание в полном экране', 'params' => array('count' => 2), 'modules' => array('pages'));
     }
 
     public function makeBlock() {
@@ -244,11 +245,8 @@ class content {
                         $c = strip_tags($c);
                         $c = str_replace("\n", '<br />', $c);
                     }
-                    $c = $this->dsp->transforms->stripInvalidXml($c);
-                    $this->dsp->transforms->replaceEntityBack( $c );
-                    $this->dsp->transforms->replaceEntity2Simbols( $c );
-                    $this->dsp->transforms->removeCKShit( $c );
-                    $c = '<![CDATA['.$c.']]>';
+
+                    $c = $this->prepareCDATA($c);
                 }
             }
         }
@@ -256,6 +254,16 @@ class content {
         if (!is_array($xml)) $xml = array();
 
         return $xml;
+    }
+
+    public function prepareCDATA($c)
+    {
+        $c = $this->dsp->transforms->stripInvalidXml($c);
+        $this->dsp->transforms->replaceEntityBack( $c );
+        $this->dsp->transforms->replaceEntity2Simbols( $c );
+        $this->dsp->transforms->removeCKShit( $c );
+        $c = '<![CDATA['.$c.']]>';
+        return $c;
     }
 
 }

@@ -3,7 +3,17 @@ ob_start();
 //$_core_mode_ = 'wrapper';
 require_once(dirname(__FILE__) . "/core/core.php");
 //require_once(CLASS_DIR . "/record_admin_class.php");
-$dsp->_Builder->addArray(array('timestamp' => time()));
+$num = time();
+if (file_exists(ROOT_DIR."admin/version.txt"))
+{
+    $f = file_get_contents(ROOT_DIR."admin/version.txt");
+
+    if (preg_match("|([0-9]+)|", $f, $matches))
+    {
+        $num = (int)$matches[1];
+    }
+}
+$dsp->_Builder->addArray(array('timestamp' => time(), 'version' => $num));
 
 if ($_REQUEST['p_'] == '')
 {

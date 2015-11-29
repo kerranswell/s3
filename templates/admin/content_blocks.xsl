@@ -10,7 +10,8 @@
 
     <xsl:template match="item" mode="blocks_admin">
         <xsl:variable name="block_name" select="name"/>
-        <div class="content-block" data-name="{name}" data-type="{type}">
+        <div data-name="{name}" data-type="{type}">
+            <xsl:attribute name="class">content-block<xsl:if test="name = 'fullscreen_text'"> fullscreen_text</xsl:if></xsl:attribute>
             <table><tbody><tr>
                 <xsl:choose>
                     <xsl:when test="/node()/block[@name='content_blocks']/item[name=$block_name]/params/count &gt; 0">

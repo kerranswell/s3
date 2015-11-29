@@ -269,3 +269,7 @@ button {
     padding: 5px;
     width: 100px;
 }
+
+.fullscreen_text table {
+    background-color: #bdbdbd;
+}

@@ -25,7 +25,7 @@ class pages_admin extends record {
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Translit'),
         'text' => array('type' => 'text', 'params' => array(
-            'edit' => array('showtype' => 'editor'),
+            'edit' => array('showtype' => 'none'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Текст'),
         'pos' => array('type' => 'int', 'params' => array(
@@ -73,7 +73,14 @@ class pages_admin extends record {
     protected function init()
     {
         $this->pid = empty($_REQUEST['pid']) ? 0 : (int)$_REQUEST['pid'];
-        if (empty($_SESSION[$this->__tablename__]['pid'])) $_SESSION[$this->__tablename__]['pid'] = $this->pid;
+        if (empty($_SESSION[$this->__tablename__]['pid'])) {
+            if (!$this->pid && isset($_REQUEST['id']) && $_REQUEST['id'] > 0)
+            {
+                $item = $this->GetItem($_REQUEST['id'], 'pid');
+                $this->pid = $item['pid'];
+            }
+            $_SESSION[$this->__tablename__]['pid'] = $this->pid;
+        }
 
         if (isset($_REQUEST['pid'])) $_SESSION[$this->__tablename__]['pid'] = $this->pid;
         else $this->pid = $_SESSION[$this->__tablename__]['pid'];
@@ -100,7 +107,7 @@ class pages_admin extends record {
             $rows[] = $row;
             $rows = array_merge($this->getPath($row['pid']), $rows);
         } else {
-            $rows = array_merge(array(array('id' => 0, 'pid' => -1, 'title' => 'Корень')), $rows);
+//            $rows = array_merge(array(array('id' => 0, 'pid' => -1, 'title' => 'Корень')), $rows);
         }
 
         return $rows;

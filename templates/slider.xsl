@@ -29,7 +29,7 @@
                             <ul class="left_menu">
                                 <li><a href="/news/">Новости</a></li>
                                 <li><a href="/blog/">Блог директора</a></li>
-                                <li><a href="#">Вход</a></li>
+                                <li><a href="/personal/" target="_blank">Вход</a></li>
                             </ul>
 <!--
                             <xsl:for-each select="/root/pages_class/pages/item[pid = 0]"><xsl:variable name="id" select="id"/>
@@ -99,7 +99,8 @@ $(function() {
                                                     </xsl:for-each>
                                                 </xsl:when>
                                                 <xsl:otherwise>
-                                                    <div class="h-page page" data-id="0">
+                                                    <div data-id="0">
+                                                        <xsl:attribute name="class">h-page page<xsl:if test="count(xml/item[type='contacts']) &gt; 0"> h-page-contacts</xsl:if></xsl:attribute>
                                                         <xsl:apply-templates select="xml/item" mode="xml_block"/>
                                                     </div>
                                                 </xsl:otherwise>
@@ -110,6 +111,7 @@ $(function() {
                                                         <xsl:for-each select="/root/pages_class/pages/item[pid = $id]">
                                                             <li data-id="{id}">
                                                                 <xsl:attribute name="class"><xsl:if test="position() = last()">last</xsl:if></xsl:attribute>
+                                                                <span></span>
                                                             </li>
                                                         </xsl:for-each>
                                                     </ul>
@@ -130,40 +132,69 @@ $(function() {
     <div class="back fadeOut map" data-id="map">
         <div class="map-over-top"></div>
         <div class="map-over-bottom"></div>
-        <!--<div id="map"></div>-->
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5164.100512652813!2d37.63129646557121!3d55.70975591705963!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46b54b380fdd3fbf%3A0xb564fc21f4fd9644!2sDanilovskaya+nab.%2C+8%D1%8112%2C+Moskva%2C+115114!5e0!3m2!1sen!2sru!4v1447462332900" width="800" height="600" frameborder="0" style="border:0" allowfullscreen="true"></iframe>
+        <div id="map"></div>
+        <!--<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2246.3908890243083!2d37.819605315377274!3d55.73433700088419!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x414aca6357b8d00f%3A0x87d560c5057317f!2sZhemchugovoy+alleya%2C+5%D0%BA2%2C+Moskva%2C+111402!5e0!3m2!1sen!2sru!4v1448824196777" width="800" height="600" frameborder="0" style="border:0" allowfullscreen="true"></iframe>-->
     </div>
 </div>
                 <xsl:call-template name="intro"/>
+                <div class="fullscreen" id="how">
+                    <div class="fscontent">
+                        <div class="title"><span>Как это работает?</span><div class="close"></div></div>
+                        <div class="clr"></div>
+                        <div class="text"></div>
+                    </div>
+                </div>
+                <div class="fullscreen_transparent"></div>
+                <div id="feedback_content" class="hidden">
+                    <div class="row">
+                        <table class="input-line"><tbody>
+                            <tr><td class="input-line-left">Как к Вам обращаться?</td><td class="input-line-center"><input type="text" data-name="name" value="" /></td><td class="input-line-right"></td></tr>
+                            <tr><td class="input-line-left">Название Вашей компании</td><td class="input-line-center"><input type="text" data-name="company" value="" /></td><td class="input-line-right"></td></tr>
+                            <tr><td class="input-line-left">Электронная почта</td><td class="input-line-center"><input type="text" data-name="email" value=""/></td><td class="input-line-right"></td></tr>
+                            <tr><td class="input-line-left">Телефон</td><td class="input-line-center"><input type="text" data-name="phone" value="" /></td><td class="input-line-right"></td></tr>
+                        </tbody></table>
+                    </div>
+                    <div class="row"><div class="button1 feedback-send">Отправить</div></div>
+                    <div class="row msg hidden">Проверьте правильность электронного адреса</div>
+                </div>
+                <div id="feedback_success" class="hidden">
+                    <div class="row msg2">Спасибо, мы с Вами свяжемся.</div>
+                </div>
+                <div id="feedback_error" class="hidden">
+                    <div class="row msg2">Ошибка, пожалуйста, попробуйте еще раз позже.</div>
+                </div>
             </body>
-
+            <xsl:call-template name="footer_codes"/>
         </html>
     </xsl:template>
 
     <xsl:template name="intro">
         <div>
-            <xsl:attribute name="class">intro_c<xsl:if test="/root/common_class/root != 1"> hidden</xsl:if></xsl:attribute>
-            <div class="intro">
+            <xsl:attribute name="class">intro_full<xsl:if test="/root/common_class/root != 1"> hidden</xsl:if></xsl:attribute>
+            <div class="intro_c">
+                <div class="intro">
 
-                <div class="layer p1"></div>
-                <div class="layer p2"></div>
-                <div class="layer p3"></div>
-                <div class="layer2">
-                    <div class="logo">
-                        <div class="logo_pattern1"></div>
-                        <div class="logo_pattern2"></div>
-                        <div class="logo_pattern3"></div>
-                        <div class="logo_pattern4"></div>
+                    <div class="layer p1"></div>
+                    <div class="layer p2"></div>
+                    <div class="layer p3"></div>
+                    <div class="layer2">
+                        <div class="logo">
+                            <div class="logo_pattern1"></div>
+                            <div class="logo_pattern2"></div>
+                            <div class="logo_pattern3"></div>
+                            <div class="logo_pattern4"></div>
+                        </div>
+                        <div class="title1"></div>
+                        <div class="title2"></div>
                     </div>
-                    <div class="title1"></div>
-                    <div class="title2"></div>
-                </div>
-                <div class="layer0">
-                    <div class="intro_mouse"></div>
-                    <div class="intro_desc">Для просмотра используйте колесико мыши или клавиши со стрелками</div>
-                    <div class="intro_keys"></div>
+                    <div class="layer0">
+                        <div class="intro_mouse"></div>
+                        <div class="intro_desc">Для просмотра используйте колесико мыши или клавиши со стрелками</div>
+                        <div class="intro_keys"></div>
+                    </div>
                 </div>
             </div>
+            <div class="intro_arrow"></div>
         </div>
     </xsl:template>
 

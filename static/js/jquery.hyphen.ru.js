@@ -6,6 +6,9 @@ $.fn.hyphenate = function(dashes) {
 	var RusP = "во|без|до|из|ко|на|по|от|перед|при|через|не|за|над|для|об|под|про|но|да|или|то|что|как|ни|уж|[абвикосуя]";
 	var RusP2 = "бы|ли|же";
 
+    var EngN = "[bcdfghgklmnpqrstvwxz]";
+	var Def = "-";
+
     var nbsp = "\xA0";
 
 	var Space = " ";
@@ -22,11 +25,16 @@ $.fn.hyphenate = function(dashes) {
 	var re7a = new RegExp("("+Space2+")("+RusP+")("+Space+")","ig");
 	var re8 = new RegExp("("+Space+")("+RusP2+")("+Space+")","ig");
 
+	var re9 = new RegExp("("+EngN+")("+Def+")("+RusA+")","ig");
+
 	this.each(function(){
 		var text=$(this).html();
         text = text.replace(re7, "$1$2"+nbsp);
         text = text.replace(re7a, "$1$2"+nbsp);
         text = text.replace(re8, nbsp+"$2$3");
+
+        text = text.replace(re9, "<nobr>$1$2$3</nobr>");
+
         if (dashes)
         {
             text = text.replace(re1, "$1"+Hyphen+"$2");

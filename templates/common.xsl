@@ -5,15 +5,15 @@
 
     <xsl:template name="header">
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <link rel="stylesheet" href="/static/css/style.css?ts={/root/timestamp}" type="text/css" media="all" />
+        <link rel="stylesheet" href="/static/css/style.css?v={/root/version}" type="text/css" media="all" />
         <script src="/static/js/jquery.js"></script>
         <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
         <script src="/static/js/jquery-mousewheel-master/jquery.mousewheel.min.js"></script>
-        <script src="/static/js/jquery.hyphen.ru.js"></script>
+        <script src="/static/js/jquery.hyphen.ru.js?v={/root/version}"></script>
         <!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>-->
-        <script src="/static/js/custom/intro.js?ts={/root/timestamp}"></script>
-        <script src="/static/js/custom/main.js?ts={/root/timestamp}"></script>
-        <script src="/static/js/custom/calc.js"></script>
+        <script src="/static/js/custom/intro.js?v={/root/version}"></script>
+        <script src="/static/js/custom/main.js?v={/root/version}"></script>
+        <script src="/static/js/custom/calc.js?v={/root/version}"></script>
     </xsl:template>
 
 
@@ -27,7 +27,7 @@
         <div id="header_menu">
             <xsl:attribute name="class">header_strip<xsl:if test="/root/common_class/root = 1"> transparent hidden</xsl:if></xsl:attribute>
             <div class="header">
-                <div class="logo"><a class="logo-title" href="/">Центр<br />IT-Поддержки<br />Бизнеса</a></div>
+                <div class="logo"><a class="logo-title" href="/"></a></div>
                 <div class="right_block">
                     <ul class="main_menu">
                         <xsl:for-each select="/root/pages_class/pages/item[pid = 0 and translit != 'intro']">
@@ -59,6 +59,12 @@
                 </div>
             </div>
         </div>
+    </xsl:template>
+
+    <xsl:template name="footer_codes">
+        <script async="async" defer="defer"
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjXTwuj2uf0fI8TGTQYKLFmk2qol2NV-w&amp;callback=initMap">
+        </script>
     </xsl:template>
 
 </xsl:stylesheet>

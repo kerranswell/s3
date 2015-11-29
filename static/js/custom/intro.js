@@ -103,6 +103,12 @@ $(function() {
         scene.init();
     //    scene.animate(true);
 
+        $('.intro_arrow').click(function () {
+            if (scene.busy == true) return;
+            scene.direction = 1;
+            scene.animate(false);
+        });
+
         $(window).bind('keyup', function(e) {
             if (scene.busy == true) return;
 
@@ -164,6 +170,13 @@ $(function() {
 
             var new_w = $('body').width();
             var new_h = $('body').height();
+/*
+            if (new_h < 540)
+            {
+                new_h = 540;
+                $('body').height(new_h);
+            }
+*/
     /*
             var left = Math.round((new_w - scene.body_width)/2);
             var top = Math.round((new_h - scene.body_height)/2);
@@ -289,6 +302,20 @@ CScene.prototype.init = function ()
         }
     });
 
+    this.objects.push({obj:$('.intro_arrow'),
+        steps: {
+            1: {css:{opacity:1}},
+            2: {css:{opacity:0}, css_trig_backward_out:{display: 'block'}, css_trig_forward_in:{display: 'none'}}
+        }
+    });
+
+    this.objects.push({obj:$('#header_burger'),
+        steps: {
+            1: {css:{opacity:1}},
+            2: {css:{opacity:0}, css_trig_backward_out:{display: 'block'}, css_trig_forward_in:{display: 'none'}}
+        }
+    });
+
     for (var i in this.objects)
     {
         var o = this.objects[i];
@@ -396,6 +423,7 @@ CScene.prototype.animate = function (auto)
 
 CScene.prototype.triggersIn = function ()
 {
+    var self = this;
     for (var j in this.objects)
     {
         var o = this.objects[j];

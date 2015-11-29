@@ -693,6 +693,7 @@ class transforms{
 
     function removeCKShit(&$s)
     {
+        $s = preg_replace("|([\s]+)|", " ", $s);
         $s = preg_replace("|>([\s\t]*)|", ">", $s);
         $s = preg_replace("|([\s\t]*)<|", "<", $s);
     }

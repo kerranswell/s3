@@ -1,5 +1,19 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+    <xsl:template match="item[name='fullscreen_text']" mode="xml_block">
+        <div class="how"><a href="#">Как это работает?</a></div>
+        <div class="fullscreen_text">
+            <div class="block columns2">
+                <div class="column column1">
+                    <xsl:value-of select="cells/item[@_key=0]" disable-output-escaping="yes"/>
+                </div>
+                <div class="column column2">
+                    <xsl:value-of select="cells/item[@_key=1]" disable-output-escaping="yes"/>
+                </div>
+            </div>
+        </div>
+    </xsl:template>
+
     <xsl:template match="item[name='column2']" mode="xml_block">
         <div class="block columns2">
             <div class="column column1">
@@ -42,6 +56,9 @@
             </div>
             <div class="email">
                 <a href="mailto:{cells/item[@_key=2]}"><xsl:value-of select="cells/item[@_key=2]" disable-output-escaping="yes"/></a>
+            </div>
+            <div class="feedback_link">
+                <a href="#">Обратная связь</a>
             </div>
         </div>
     </xsl:template>
