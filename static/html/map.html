@@ -1,35 +1,28 @@
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN""http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-    <style type="text/css">
-        html, body { height: 100%; margin: 0; padding: 0; }
-        #map { height: 100%; }
-    </style>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="/static/css/style.css?v=6" type="text/css" media="all">
+    <!--<script src="/static/js/jquery.js"></script>-->
+    <!--<script src="/static/js/jquery-ui/jquery-ui.min.js"></script>-->
+    <!--<script src="/static/js/jquery-mousewheel-master/jquery.mousewheel.min.js"></script>-->
+    <!--<script src="/static/js/jquery.hyphen.ru.js?v=6"></script>-->
+    <!--<script src="/static/js/custom/intro.js?v=6"></script>-->
+    <!--<script src="/static/js/custom/main.js?v=6"></script>-->
+    <!--<script src="/static/js/custom/calc.js?v=6"></script>-->
 </head>
-<body>
-<div id="map"></div>
-<script type="text/javascript">
-
-    var map;
-    function initMap() {
-        var address_pos = {lat: 55.734337, lng: 37.8196053};
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: address_pos,
-            zoom: 18,
-            mapTypeId: google.maps.MapTypeId.ROADMAP,
-            disableDefaultUI: true
-        });
-
-        var marker = new google.maps.Marker({
-            position: address_pos,
-            map: map,
-            title: 'Hello World!'
-        });
-    }
-
-</script>
-<script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjXTwuj2uf0fI8TGTQYKLFmk2qol2NV-w&callback=initMap">
-</script>
+<body class="light slider" style="background-image: url(http://s3.oblivionmachine.com/images/1400/980/1400@980@5a0125b3539dd19a5d8d119aca599a93.jpg); background-size: cover; background-position: left top; background-repeat: no-repeat;" >
+<div class="slider_contents">
+<div id="wrapper">
+<div class="main">
+<div class="content">
+</div>
+</div>
+</div>
+<!--
+<div class="back fadeIn image" data-id="141" data-width="1400" data-height="980"
+     style="background-image: url(http://s3.oblivionmachine.com/images/1400/980/1400@980@5a0125b3539dd19a5d8d119aca599a93.jpg);"></div>
+</div>
+-->
 </body>
 </html>

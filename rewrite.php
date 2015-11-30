@@ -13,7 +13,7 @@ if (file_exists(ROOT_DIR."admin/version.txt"))
         $num = (int)$matches[1];
     }
 }
-$dsp->_Builder->addArray(array('timestamp' => time(), 'version' => $num));
+$dsp->_Builder->addArray(array('timestamp' => time(), 'version' => $num, 'mobile' => isset($_REQUEST['mobile']) ? 1 : 0));
 
 if ($_REQUEST['p_'] == '')
 {

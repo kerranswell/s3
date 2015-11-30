@@ -23,7 +23,6 @@ $(function() {
 
         var w = 60;
         scene.layer1 = $('.layer.p1');
-        var left_cnt = buildLayer1();
         function buildLayer1()
         {
             scene.layer1.css({width: scene.body_width + 4*w});
@@ -42,9 +41,9 @@ $(function() {
             }
             return cnt_left;
         }
+        var left_cnt = buildLayer1();
 
         scene.layer2 = $('.layer.p2');
-        buildLayer2();
         function buildLayer2()
         {
             scene.layer2.css({width: scene.body_width + 4*w});
@@ -64,10 +63,10 @@ $(function() {
 
             return cnt_left * w;
         }
+        buildLayer2();
 
         var w3 = 120;
         scene.layer3 = $('.layer.p3');
-        buildLayer3();
         function buildLayer3()
         {
             scene.layer3.css({width: scene.body_width + 4*w3});
@@ -88,6 +87,7 @@ $(function() {
 
             return cnt_left * w3;
         }
+        buildLayer3();
 
         scene.layers_left += -left_cnt*60;
         $('.layer').css('left', scene.layers_left + 'px');
@@ -106,7 +106,7 @@ $(function() {
         $('.intro_arrow').click(function () {
             if (scene.busy == true) return;
             scene.direction = 1;
-            scene.animate(false);
+            scene.animate(true);
         });
 
         $(window).bind('keyup', function(e) {
@@ -225,6 +225,8 @@ function CScene()
     this.lim = this.px_shift / this.scale;
 
     this.time = 600;
+    this.time_auto = 1000;
+    this.time_control = 600;
 //    this.easing = 'easeOutCubic';
     this.easing = 'easeOutSine';
     this.step = 1;
@@ -402,6 +404,8 @@ CScene.prototype.init = function ()
 CScene.prototype.animate = function (auto)
 {
     var self = this;
+    if (auto) this.time = this.time_auto;
+    else this.time = this.time_control;
     var cnt = this.animate_parts ? this.part_count_steps : this.step_count;
     if (self.step + self.direction > cnt) {
         if (pager && this.busy == false)
@@ -417,7 +421,7 @@ CScene.prototype.animate = function (auto)
     setTimeout(function () {
         self.triggersIn();
         self.busy = false;
-        if (self.step > 0 && self.step < cnt-1 && auto) self.animate(auto);
+        if (self.step > 0 && self.step <= cnt && auto) self.animate(auto);
     }, max_time);
 }
 

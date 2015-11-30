@@ -319,6 +319,9 @@ function disableIntro()
         $('.slider_contents').css('opacity', 0).show().animate({opacity:1});
         pager.switchFast = true;
 
+        google.maps.event.trigger(map, 'resize');
+        map.setCenter(address_pos);
+
         return true;
     }
 
@@ -775,8 +778,8 @@ CBack.prototype.moveBackground = function (posx, posy)
 }
 
 var map;
+var address_pos = {lat: 55.734337, lng: 37.8196053};
 function initMap() {
-    var address_pos = {lat: 55.734337, lng: 37.8196053};
     map = new google.maps.Map(document.getElementById('map'), {
         center: address_pos,
         zoom: 16,

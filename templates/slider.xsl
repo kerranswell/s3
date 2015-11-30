@@ -18,7 +18,7 @@
             </head>
 
             <body>
-                <xsl:attribute name="class"><xsl:value-of select="/root/common_class/body_class"/> slider<xsl:if test="/root/common_class/root = 1"> intro</xsl:if> </xsl:attribute>
+                <xsl:attribute name="class"><xsl:value-of select="/root/common_class/body_class"/> slider<xsl:if test="/root/common_class/root = 1"> intro</xsl:if><xsl:if test="/root/mobile = 1"> mobile</xsl:if></xsl:attribute>
                 <xsl:call-template name="topmenu"/>
 <div>
 <xsl:attribute name="class">slider_contents<xsl:if test="/root/common_class/root = 1"> hidden</xsl:if></xsl:attribute>
