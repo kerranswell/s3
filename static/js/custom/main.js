@@ -130,6 +130,7 @@ $(function() {
         function burgerOff()
         {
             if (burger.data('inprocess') == 1) return false;
+            auto_start = false;
 
             menu_status = 'menu';
             burger.data('inprocess', 1);
@@ -309,6 +310,8 @@ CWin.prototype.switchBodyClass = function (class1, class2) {
 
 function disableIntro()
 {
+    auto_start = false;
+    if (scene) scene.finished = true;
     if (!$win) return false;
     if ($win.body.hasClass('intro'))
     {

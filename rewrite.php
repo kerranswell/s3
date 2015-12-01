@@ -3,17 +3,6 @@ ob_start();
 //$_core_mode_ = 'wrapper';
 require_once(dirname(__FILE__) . "/core/core.php");
 //require_once(CLASS_DIR . "/record_admin_class.php");
-$num = time();
-if (file_exists(ROOT_DIR."admin/version.txt"))
-{
-    $f = file_get_contents(ROOT_DIR."admin/version.txt");
-
-    if (preg_match("|([0-9]+)|", $f, $matches))
-    {
-        $num = (int)$matches[1];
-    }
-}
-$dsp->_Builder->addArray(array('timestamp' => time(), 'version' => $num, 'mobile' => isset($_REQUEST['mobile']) ? 1 : 0));
 
 if ($_REQUEST['p_'] == '')
 {
@@ -56,6 +45,56 @@ if (!empty($query_string))
     $query_string = '?' . $query_string;
 
 $nodes = explode('/', trim($_REQUEST['p_'], '/'));
+
+
+/* Init stuff */
+
+$num = time();
+if (file_exists(ROOT_DIR."admin/version.txt"))
+{
+    $f = file_get_contents(ROOT_DIR."admin/version.txt");
+
+    if (preg_match("|([0-9]+)|", $f, $matches))
+    {
+        $num = (int)$matches[1];
+    }
+}
+
+$pass_intro = $_COOKIE['pass_intro'] == 1 ? 1 : 0;
+
+if (!empty($nodes[0]) && $nodes[0] == 'intro')
+{
+    setcookie(
+        'pass_intro',
+        1,
+        null,	// + 30 days
+        '/',
+        HOST,
+        false
+    );
+}
+
+/*if (!session_id()) session_start();
+print_r($_SESSION); exit;
+if (!empty($_SESSION['pass_intro']) && $_SESSION['pass_intro'] == 1) $pass_intro = 1;
+else if (!empty($nodes[0]) && $nodes[0] == 'intro')
+{
+    $pass_intro = 0;
+    $_SESSION['pass_intro'] = 1;
+}*/
+
+$dsp->_Builder->addArray(array('timestamp' => time(), 'version' => $num, 'mobile' => isset($_REQUEST['mobile']) ? 1 : 0, 'pass_intro' => $pass_intro));
+
+if (!empty($nodes[0]) && $nodes[0] == 'intro' && $pass_intro)
+{
+    Redirect("/about/mission/");
+}
+
+/* Init stuff */
+
+
+
+
 $inodes = implode("/", $nodes);
 $full_path = SITE."/".($inodes != '' ? implode("/", $nodes)."/" : "");
 $dsp->_Builder->addArray(array('path' => $full_path), 'path_origin');

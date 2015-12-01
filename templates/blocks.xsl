@@ -147,16 +147,33 @@
         </xsl:if>
     </xsl:template>
 
+<!--
+    <xsl:template match="item[name='team']" mode="xml_block">
+        <xsl:if test="count(/root/lists_class/lists/item[pid=5]) &gt; 0">
+            <div class="teamlist">
+            <xsl:for-each select="/root/lists_class/lists/item[pid=5]">
+                <div class="teammate">
+                    <div class="pic"><img src="{image_url}" /></div>
+                    <span class="title"><xsl:value-of select="title"/></span>
+                    <span class="description"><xsl:value-of select="description"/></span>
+                </div>
+            </xsl:for-each>
+            </div>
+        </xsl:if>
+    </xsl:template>
+
+-->
     <xsl:template match="item[name='companies']" mode="xml_block">
         <xsl:if test="count(/root/lists_class/lists/item[pid=6]) &gt; 0">
             <div class="clientblock">
                 <div class="clientlist">
+                <xsl:variable name="cnt" select="count(/root/lists_class/lists/item[pid=6])" />
                 <xsl:for-each select="/root/lists_class/lists/item[pid=6]">
-                    <xsl:if test="position() &lt; 10">
+                    <xsl:if test="position()">
                     <div>
-                        <xsl:attribute name="class">client <xsl:choose>
-                                <xsl:when test="position() mod (6 + floor(position() div 9)*9) = 0">marginleft</xsl:when>
-                                <xsl:when test="position() mod 9 = 0">marginright</xsl:when>
+                        <xsl:attribute name="class">client<xsl:choose>
+                                <xsl:when test="position() mod (6 + floor(position() div 9)*9) = 0 and (position() + 3 &lt;= $cnt)"> marginleft</xsl:when>
+                                <xsl:when test="position() mod 9 = 0"> marginright</xsl:when>
                             </xsl:choose></xsl:attribute>
                         <div class="pic"><a href="{url}" target="_blank"><img src="{image_url}" /></a></div>
                     </div>

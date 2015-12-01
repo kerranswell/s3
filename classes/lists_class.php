@@ -37,10 +37,7 @@ class lists extends record {
                 $this->structure['pid'][$row['pid']][$row['id']] = &$this->structure['id'][$row['id']];
             }
 
-            $this->structure['id'] = array_merge($this->structure['id'], $this->structure['pid'][6]);
-            $this->structure['id'] = array_merge($this->structure['id'], $this->structure['pid'][6]);
-            $this->structure['id'] = array_merge($this->structure['id'], $this->structure['pid'][6]);
-            $this->structure['id'] = array_merge($this->structure['id'], $this->structure['pid'][6]);
+//            $this->structure['id'] = array_merge($this->structure['id'], $this->structure['pid'][6]);
 
 //            $this->preparePics();
         }

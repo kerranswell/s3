@@ -1,4 +1,5 @@
 var scene;
+var auto_start = true;
 $(function() {
 
     if ($('body').hasClass('intro'))
@@ -108,6 +109,14 @@ $(function() {
             scene.direction = 1;
             scene.animate(true);
         });
+
+        setTimeout(function () {
+            if (auto_start)
+            {
+                scene.direction = 1;
+                scene.animate(true);
+            }
+        }, 3000);
 
         $(window).bind('keyup', function(e) {
             if (scene.busy == true) return;
@@ -240,6 +249,7 @@ function CScene()
     this.steps = {
         5: {part_count: 2}
     };
+    this.finished = false;
 }
 
 CScene.prototype.init = function ()
@@ -403,6 +413,8 @@ CScene.prototype.init = function ()
 
 CScene.prototype.animate = function (auto)
 {
+    auto_start = false;
+    if (this.finished) return;
     var self = this;
     if (auto) this.time = this.time_auto;
     else this.time = this.time_control;
@@ -410,6 +422,7 @@ CScene.prototype.animate = function (auto)
     if (self.step + self.direction > cnt) {
         if (pager && this.busy == false)
         {
+            this.finished = true;
             pager.pageJump($('.main_menu li:first').data('id'));
         }
         return;
