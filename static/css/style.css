@@ -828,6 +828,11 @@ body.dark .contacts .email a {
     padding-bottom: 13px;
 }
 
+.input-line td.textarea-desc {
+    padding-top: 3px;
+    vertical-align: top;
+}
+
 .input-line tr:last-child td {
     padding-bottom: 0px;
 }
@@ -842,6 +847,11 @@ body.dark .contacts .email a {
 .input-line-right {
     text-align: left;
     width:50%
+}
+
+.input-line-center textarea
+{
+    margin-right: 30px;
 }
 
 .inputs {
@@ -889,6 +899,13 @@ input[type='text'] {
 input[type="text"].num {
     width: 42px;
     min-width: 42px;
+}
+
+textarea {
+    border: 1px solid black;
+    border-radius: 3px;
+    width: 417px;
+    height: 170px;
 }
 
 .input-checkbox {
@@ -1308,4 +1325,25 @@ input[type="text"].left {
 
 .msg2 {
     font-size: 18px;
+}
+
+.msg3 {
+    font-size: 18px;
+    width: 500px;
+    display: inline-block;
+}
+
+.service-submit-message {
+    width: 500px;
+    display: inline-block;
+}
+
+.valign-top {
+    vertical-align: top;
+}
+
+.small-desc {
+    text-align: left;
+    font-size: 13px;
+    font-style: italic;
 }

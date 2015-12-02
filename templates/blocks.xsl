@@ -2,7 +2,7 @@
 
     <xsl:template match="item[name='fullscreen_text']" mode="xml_block">
         <div class="how"><a href="#">Как это работает?</a></div>
-        <div class="fullscreen_text">
+        <div class="fullscreen_text" data-title="Как это работает?">
             <div class="block columns2">
                 <div class="column column1">
                     <xsl:value-of select="cells/item[@_key=0]" disable-output-escaping="yes"/>
@@ -89,8 +89,8 @@
             </div>
             <div class="inputs">
                 <table class="input-line"><tbody>
-                    <tr><td class="input-line-left">IT-директор</td><td class="input-line-center"><div class="calc-data input-checkbox checked" data-name="it-director" data-default="checked"></div></td><td class="input-line-right"></td></tr>
-                    <tr><td class="input-line-left">системный администратор</td><td class="input-line-center"><div class="calc-data input-checkbox" data-name="sysadmin" data-default=""></div></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">IT-директор</td><td class="input-line-center"><div class="calc-data input-checkbox checked" data-name="it-director" data-group="service" data-default="checked"></div></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">системный администратор</td><td class="input-line-center"><div class="calc-data input-checkbox" data-name="sysadmin" data-group="service" data-default=""></div></td><td class="input-line-right"></td></tr>
                 </tbody></table>
             </div>
             <div class="row"><div class="button1 calc-next-step">Продолжить</div></div>
@@ -129,7 +129,52 @@
                 </div>
             </div>
             <div class="row"><span id="calc_cost" class="cost">1 234 567 &#8381;</span></div>
+            <div class="row">
+                <div class="button1" id="service_submit">Оформить запрос услуги</div><div class="button1" id="service_refuse">Меня не устраивает</div>
+            </div>
         </div>
+
+        <div id="service_submit_form" class="hidden" data-title="Запрос услуги">
+            <div class="block columns1 align-center">
+                <div class="column align-center service-submit-message">
+                    Спасибо за проявленный интерес! Пожалуйста, заполните анкету заказа. Это не займет у Вас много времени, но поможет нам более качественно подготовиться к презентации наших услуг.
+                </div>
+            </div>
+            <div class="row">
+                <table class="input-line"><tbody>
+                    <tr><td class="input-line-left">Название компании*</td><td class="input-line-center"><input type="text" data-name="company" value="" /></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">Контактное лицо*</td><td class="input-line-center"><input type="text" data-name="name" value="" /></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">Электронная почта*</td><td class="input-line-center"><input type="text" data-name="email" value=""/></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">Телефон*</td><td class="input-line-center"><input type="text" data-name="phone" value="" /></td><td class="input-line-right"></td></tr>
+                </tbody></table>
+            </div>
+            <div class="row">
+                <table class="input-line"><tbody>
+                    <tr><td class="input-line-left textarea-desc">Комментарии*</td><td class="input-line-center"><textarea data-name="comments"></textarea></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left"></td><td class="input-line-center small-desc">*Поля обязательны для заполнения</td><td class="input-line-right"></td></tr>
+                </tbody></table>
+            </div>
+            <div class="row"><div class="button1" id="service-feedback-send">Отправить</div></div>
+            <div class="row hidden form-error" data-error="email">Проверьте правильность электронного адреса</div>
+            <div class="hidden align-center" data-message="success">
+                <div class="row msg3">Спасибо, мы с Вами свяжемся.</div>
+            </div>
+            <div class="hidden" data-message="error">
+                <div class="row msg2">Ошибка, пожалуйста, попробуйте еще раз позже.</div>
+            </div>
+        </div>
+
+<div id="submit_test" class="hidden" data-title="Запрос услуги">
+    <div class="row msg3">
+Благодарим за оказанное нам доверие. Ваш запрос передан ответственному лицу. Ответственный: Горохов Виталий. Вы можете с ним связаться, позвонив по телефону<br />
+        +7 (495) 123-45-67 доп. номер #107 в рабочее время с 10 до 18 по московскому времени. Предварительный номер вашего договора:  T03-12/2015.<br/>
+<br />
+Пока мы обрабатываем Ваш запрос, Вы можете ознакомиться с шаблоном нашего договора, а также посмотреть наше коммерческое предложение.<br/>
+<a href="/upload/Dogovor_Template_wForms.pdf" target="_blank">Договор на обслуживание информационной системы предприятия</a><br /><br />
+<a href="/upload/Commercial-Prop-IT-Dir.pdf" target="_blank">Доп. соглашение на услугу IT директор</a><br />
+<a href="/upload/Commercial-Prop.pdf" target="_blank">Шаблон коммерческого предложения</a><br />
+        </div>
+</div>
 
     </xsl:template>
 

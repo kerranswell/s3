@@ -2,28 +2,83 @@ function validateEmail(email) {
     var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
     return re.test(email);
 }
+
+function cursorWait(on)
+{
+    if (on) $('body, .button1').addClass('wait');
+    else $('body, .button1').removeClass('wait');
+}
+
 var fullscreen_mode = false;
+function showFullscreen(on)
+{
+    var id = '.fullscreen';
+    var back = '.fullscreen_transparent';
+    if (on)
+    {
+        fullscreen_mode = true;
+        $(id).css({opacity: 0}).show().animate({opacity: 1}, 200);
+        $(back).css({opacity: 0}).show().animate({opacity: 0.9}, 200);
+    } else {
+        $(id).animate({opacity: 0}, 200, function () {$(id).hide(); fullscreen_mode = false;})
+        $(back).animate({opacity: 0}, 200, function () {$(back).hide();})
+    }
+}
+
+function showFormMessageText(frm, type, text)
+{
+    frm.find('div[data-message="' + type + '"] .row').html(text);
+    frm.find('.text').html(frm.find('div[data-message="' + type + '"]').html());
+}
+
+function showFormMessage(frm, type)
+{
+    frm.find('.text').html(frm.find('div[data-message="' + type + '"]').html());
+}
+
+function showFullscreenMessage(content)
+{
+    $('#how').find('.title span').html(content.data('title'));
+    var html = content.html();
+    $('#how .text').html(html);
+    showFullscreen(1)
+}
+
+function hideFullscreenMessage()
+{
+    showFullscreen(0);
+}
+
+function showFormError(frm, type)
+{
+    frm.find('div[data-error="' + type + '"]').removeClass('hidden').addClass('shown');
+}
+
+function hideFormError(frm, type)
+{
+    frm.find('div[data-error="' + type + '"]').removeClass('shown').addClass('hidden');
+}
+
+function hideFormErrors(frm)
+{
+    frm.find('.form-error').removeClass('shown').addClass('hidden');
+}
+
 $(function() {
 
     $('.how a').click(function () {
-        var html = $(this).parent().parent().find('.fullscreen_text').html();
-        $('#how .text').html(html);
-        $('#how').find('.title span').html('Как это работает?');
-        showFullscreen(1)
+        showFullscreenMessage($(this).parent().parent().find('.fullscreen_text'));
         return false;
     });
 
     $('.fullscreen .close').click(function () {
-        showFullscreen(0);
+        hideFullscreenMessage();
     });
 
     $('.column p, .column div, .column li').hyphenate(false);
 
     $('.feedback_link a').click(function () {
-        $('#how').find('.title span').html('Обратная связь');
-        var html = $('#feedback_content').html();
-        $('#how .text').html(html);
-        showFullscreen(1)
+        showFullscreenMessage($('#feedback_content'));
         return false;
     });
 
@@ -51,13 +106,15 @@ $(function() {
         if (!validateEmail(data.email))
         {
             frm.find('input[data-name="email"]').focus();
-            frm.find('.msg').removeClass('hidden').addClass('shown');
+            showFormError(frm,  'email');
             return;
         } else {
-            frm.find('.msg').removeClass('shown').addClass('hidden');
+            hideFormError(frm,  'email');
         }
 
         $('body, .button1').addClass('wait');
+
+        data.act = 'feedback';
 
         $.ajax({
             type: 'POST',
@@ -67,9 +124,9 @@ $(function() {
             success: function(result){
                 if (result.success == 1)
                 {
-                    frm.find('.text').html($('#feedback_success').html());
+                    showFormMessage(frm, 'success');
                 } else {
-                    frm.find('.text').html($('#feedback_error').html());
+                    showFormMessage(frm, 'error');
                 }
             },
             complete : function () {
@@ -82,21 +139,6 @@ $(function() {
 
         return false;
     });
-
-    function showFullscreen(on)
-    {
-        var id = '.fullscreen';
-        var back = '.fullscreen_transparent';
-        if (on)
-        {
-            fullscreen_mode = true;
-            $(id).css({opacity: 0}).show().animate({opacity: 1}, 200);
-            $(back).css({opacity: 0}).show().animate({opacity: 0.9}, 200);
-        } else {
-            $(id).animate({opacity: 0}, 200, function () {$(id).hide(); fullscreen_mode = false;})
-            $(back).animate({opacity: 0}, 200, function () {$(back).hide();})
-        }
-    }
 
     backs = {};
     $('.back').each(function () {

@@ -141,11 +141,11 @@ $(function() {
                     <div class="fscontent">
                         <div class="title"><span>Как это работает?</span><div class="close"></div></div>
                         <div class="clr"></div>
-                        <div class="text"></div>
+                        <div class="text align-center"></div>
                     </div>
                 </div>
                 <div class="fullscreen_transparent"></div>
-                <div id="feedback_content" class="hidden">
+                <div id="feedback_content" class="hidden" data-title="Обратная связь">
                     <div class="row">
                         <table class="input-line"><tbody>
                             <tr><td class="input-line-left">Как к Вам обращаться?</td><td class="input-line-center"><input type="text" data-name="name" value="" /></td><td class="input-line-right"></td></tr>
@@ -155,12 +155,12 @@ $(function() {
                         </tbody></table>
                     </div>
                     <div class="row"><div class="button1 feedback-send">Отправить</div></div>
-                    <div class="row msg hidden">Проверьте правильность электронного адреса</div>
+                    <div class="row hidden form-error" data-error="email">Проверьте правильность электронного адреса</div>
                 </div>
-                <div id="feedback_success" class="hidden">
+                <div class="hidden" data-message="success">
                     <div class="row msg2">Спасибо, мы с Вами свяжемся.</div>
                 </div>
-                <div id="feedback_error" class="hidden">
+                <div class="hidden" data-message="error">
                     <div class="row msg2">Ошибка, пожалуйста, попробуйте еще раз позже.</div>
                 </div>
             </body>

@@ -33,6 +33,83 @@ $(function() {
 
     });
 
+    $('#service_submit').click(function () {
+        showFullscreenMessage($('#service_submit_form'));
+    });
+
+    $('#service-feedback-send').live('click', function () {
+        var data = {};
+
+        var frm = $(this).closest('.fullscreen');
+        data.company = frm.find('input[data-name="company"]').val().trim();
+        data.name = frm.find('input[data-name="name"]').val().trim();
+        data.email = frm.find('input[data-name="email"]').val().trim();
+        data.phone = frm.find('input[data-name="phone"]').val().trim();
+        data.comments = frm.find('textarea[data-name="comments"]').val().trim();
+
+        if (data.name == '')
+        {
+            frm.find('input[data-name="name"]').focus();
+            return;
+        }
+
+        if (data.company == '')
+        {
+            frm.find('input[data-name="company"]').focus();
+            return;
+        }
+
+        if (!validateEmail(data.email))
+        {
+            frm.find('input[data-name="email"]').focus();
+            showFormError(frm,  'email');
+            return;
+        } else {
+            hideFormError(frm,  'email');
+        }
+
+        if (data.phone == '')
+        {
+            frm.find('input[data-name="phone"]').focus();
+            return;
+        }
+
+        if (data.comments == '')
+        {
+            frm.find('textarea[data-name="comments"]').focus();
+            return;
+        }
+
+        cursorWait(1);
+
+        data.act = 'service-submit';
+        data.calc = calc.data;
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/ajx/feedback.php',
+            data: data,
+            success: function(result){
+                if (result.success == 1)
+                {
+                    showFormMessageText(frm, 'success', result.message);
+                    frm.find('.text').hyphenate(false);
+                } else {
+                    showFormMessage(frm, 'error');
+                }
+            },
+            complete : function () {
+                cursorWait(0);
+            },
+            error : function () {
+                frm.find('.text').html($('#feedback_error').html());
+            }
+        });
+
+        return false;
+    });
+
 });
 
 var calc;
@@ -192,7 +269,7 @@ CCalc.prototype.checkPage = function ()
             break;
 
         case 4 :
-            $('body, .button1').addClass('wait');
+            cursorWait(1);
             $.ajax({
                 type: 'POST',
                 dataType: 'JSON',
@@ -205,7 +282,7 @@ CCalc.prototype.checkPage = function ()
                     }
                 },
                 complete : function () {
-                    $('body, .button1').removeClass('wait');
+                    cursorWait(0);
                     self.nextPage2(4);
                 }
             });
@@ -272,6 +349,9 @@ CCalc.prototype.calculate = function ()
     var s = '';
     var stotal = total + '';
     for (var i=stotal.length-1; i >= 0; i--) s = (((stotal.length - i) % 3 && i > 0) ? '' : ' ') + stotal[i] + s;
+
+    this.data.total = total;
+    this.data.total_s = s;
 
     $('#calc_cost').html(s + ' &#8381;');
 
