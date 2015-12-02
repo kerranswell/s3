@@ -10,6 +10,7 @@ function cursorWait(on)
 }
 
 var fullscreen_mode = false;
+var fullscreen_after = '';
 function showFullscreen(on)
 {
     var id = '.fullscreen';
@@ -73,6 +74,13 @@ $(function() {
 
     $('.fullscreen .close').click(function () {
         hideFullscreenMessage();
+        switch (fullscreen_after)
+        {
+            case 'calc-reset' :
+                calc.reset(true);
+                break;
+            default:
+        }
     });
 
     $('.column p, .column div, .column li').hyphenate(false);
@@ -90,6 +98,7 @@ $(function() {
         data.company = frm.find('input[data-name="company"]').val().trim();
         data.email = frm.find('input[data-name="email"]').val().trim();
         data.phone = frm.find('input[data-name="phone"]').val().trim();
+        data.comments = frm.find('textarea[data-name="comments"]').val().trim();
 
         if (data.name == '')
         {
@@ -112,7 +121,13 @@ $(function() {
             hideFormError(frm,  'email');
         }
 
-        $('body, .button1').addClass('wait');
+        if (data.comments == '')
+        {
+            frm.find('textarea[data-name="comments"]').focus();
+            return;
+        }
+
+        cursorWait(1);
 
         data.act = 'feedback';
 
@@ -130,10 +145,10 @@ $(function() {
                 }
             },
             complete : function () {
-                $('body, .button1').removeClass('wait');
+                cursorWait(0);
             },
             error : function () {
-                frm.find('.text').html($('#feedback_error').html());
+                showFormMessage(frm, 'error');
             }
         });
 

@@ -1329,12 +1329,17 @@ input[type="text"].left {
 
 .msg3 {
     font-size: 18px;
-    width: 500px;
+    width: 700px;
     display: inline-block;
 }
 
 .service-submit-message {
     width: 500px;
+    display: inline-block;
+}
+
+.service-refuse-message {
+    width: 700px;
     display: inline-block;
 }
 

@@ -94,16 +94,68 @@ $(function() {
                 if (result.success == 1)
                 {
                     showFormMessageText(frm, 'success', result.message);
-                    frm.find('.text').hyphenate(false);
+//                    frm.find('.text').hyphenate(false);
                 } else {
                     showFormMessage(frm, 'error');
                 }
+                fullscreen_after = 'calc-reset';
             },
             complete : function () {
                 cursorWait(0);
             },
             error : function () {
                 frm.find('.text').html($('#feedback_error').html());
+            }
+        });
+
+        return false;
+    });
+
+    $('#service_refuse').click(function () {
+        showFullscreenMessage($('#service_refuse_form'));
+    });
+
+    $('#service-feedback-refuse').live('click', function () {
+        var data = {};
+
+        var frm = $(this).closest('.fullscreen');
+        data.company = frm.find('input[data-name="company"]').val().trim();
+        data.name = frm.find('input[data-name="name"]').val().trim();
+        data.email = frm.find('input[data-name="email"]').val().trim();
+        data.phone = frm.find('input[data-name="phone"]').val().trim();
+        data.comments = frm.find('textarea[data-name="comments"]').val().trim();
+
+        if (data.comments == '')
+        {
+            frm.find('textarea[data-name="comments"]').focus();
+            return;
+        }
+
+        cursorWait(1);
+
+        data.act = 'service-refuse';
+        data.calc = calc.data;
+
+        $.ajax({
+            type: 'POST',
+            dataType: 'JSON',
+            url: '/ajx/feedback.php',
+            data: data,
+            success: function(result){
+                if (result.success == 1)
+                {
+                    showFormMessage(frm, 'success');
+//                    frm.find('.text').hyphenate(false);
+                } else {
+                    showFormMessage(frm, 'error');
+                }
+                fullscreen_after = 'calc-reset';
+            },
+            complete : function () {
+                cursorWait(0);
+            },
+            error : function () {
+                showFormMessage(frm, 'error');
             }
         });
 

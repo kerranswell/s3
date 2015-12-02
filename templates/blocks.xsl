@@ -164,13 +164,45 @@
             </div>
         </div>
 
+        <div id="service_refuse_form" class="hidden" data-title="Мы вас не устраиваем?">
+            <div class="block columns1 align-center">
+                <div class="column align-center service-refuse-message">
+                    Спасибо за проявленный интерес к нашей компании. Мы будем очень признательны, если Вы укажете причины, по которым мы не подошли Вашим требованиям. Хотим отметить, что у нас работает система мониторинга качества наших услуг. Мы проводим опрос сотрудников о качестве предоставляемых  услуг. Также в нашей компании действует <a href="/upload/Etic_Codecs.pdf" target="_blank">этический кодекс</a>. Ваше сообщение будет отправлено генеральному директору с пометкой «срочно». И, если позволите, мы свяжемся с Вами, чтобы устранить или развеять Ваши сомнения.
+                </div>
+            </div>
+            <div class="row">
+                <table class="input-line"><tbody>
+                    <tr><td class="input-line-left">Название компании</td><td class="input-line-center"><input type="text" data-name="company" value="" /></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">Контактное лицо</td><td class="input-line-center"><input type="text" data-name="name" value="" /></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">Электронная почта</td><td class="input-line-center"><input type="text" data-name="email" value=""/></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">Телефон</td><td class="input-line-center"><input type="text" data-name="phone" value="" /></td><td class="input-line-right"></td></tr>
+                </tbody></table>
+            </div>
+            <div class="row">
+                <table class="input-line"><tbody>
+                    <tr><td class="input-line-left textarea-desc">Комментарии*</td><td class="input-line-center"><textarea data-name="comments"></textarea></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left"></td><td class="input-line-center small-desc">*Поля обязательны для заполнения</td><td class="input-line-right"></td></tr>
+                </tbody></table>
+            </div>
+            <div class="row"><div class="button1" id="service-feedback-refuse">Отправить</div></div>
+            <div class="hidden align-center" data-message="success">
+                <div class="row msg3">
+                    Спасибо, Ваш запрос передан ответственному лицу. Ответственный: Горохов Виталий. Вы можете с ним связаться, позвонив по телефону<br />
+                    +7 (495) 123-45-67 доп. номер #107 в рабочее время с 10 до 18 по московскому времени.<br/>
+                </div>
+            </div>
+            <div class="hidden" data-message="error">
+                <div class="row msg2">Ошибка, пожалуйста, попробуйте еще раз позже.</div>
+            </div>
+        </div>
+
 <div id="submit_test" class="hidden" data-title="Запрос услуги">
     <div class="row msg3">
 Благодарим за оказанное нам доверие. Ваш запрос передан ответственному лицу. Ответственный: Горохов Виталий. Вы можете с ним связаться, позвонив по телефону<br />
         +7 (495) 123-45-67 доп. номер #107 в рабочее время с 10 до 18 по московскому времени. Предварительный номер вашего договора:  T03-12/2015.<br/>
 <br />
-Пока мы обрабатываем Ваш запрос, Вы можете ознакомиться с шаблоном нашего договора, а также посмотреть наше коммерческое предложение.<br/>
-<a href="/upload/Dogovor_Template_wForms.pdf" target="_blank">Договор на обслуживание информационной системы предприятия</a><br /><br />
+Пока мы обрабатываем Ваш запрос, Вы можете ознакомиться с шаблоном нашего договора, а также посмотреть наше коммерческое предложение.<br/><br />
+<a href="/upload/Dogovor_Template_wForms.pdf" target="_blank">Договор на обслуживание информационной системы предприятия</a><br />
 <a href="/upload/Commercial-Prop-IT-Dir.pdf" target="_blank">Доп. соглашение на услугу IT директор</a><br />
 <a href="/upload/Commercial-Prop.pdf" target="_blank">Шаблон коммерческого предложения</a><br />
         </div>

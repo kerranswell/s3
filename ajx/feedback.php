@@ -25,6 +25,7 @@ switch ($_POST['act'])
         $company = $_POST['company'];
         $email = $_POST['email'];
         $phone = empty($_POST['phone']) ? '---' : $_POST['phone'];
+        $comments = $_POST['comments'];
 
         $body = <<<EOF
 С сайта {$host} отправлено письмо:
@@ -33,6 +34,8 @@ switch ($_POST['act'])
 Компания: {$company}
 Email: {$email}
 Телефон: {$phone}
+Комментарий:
+{$comments}
 
 EOF;
 
@@ -59,7 +62,7 @@ EOF;
 
         $mail = new MailMessage();
         $mail->setTo('', $to);
-        $mail->setSubject('Request from / '.$name.' / '.($data['count_servers'] + $data['count_computers']).' / '.$name.' / '.$phone);
+        $mail->setSubject('Request from / '.$company.' / '.($data['count_servers'] + $data['count_computers']).' / '.$name.' / '.$phone);
         $host = HOST;
 
         $tariff = $data['it-director'] ? 'IT-директор' : 'Системный администратор';
@@ -67,6 +70,7 @@ EOF;
         if ($data['inn'] != '') $inn[] = $data['inn'];
         if ($data['contract_number'] != '') $inn[] = $data['contract_number'];
         $inn_num = implode(" / ", $inn);
+        if (trim($inn) == '') $inn = '---';
 
         $body = <<<EOF
 IP адрес отправителя: {$_SERVER['REMOTE_ADDR']}
@@ -95,21 +99,79 @@ EOF;
         $dsp->db->Execute("update `contracts` set `contract_number` = ? where `id` = ?", $contract_number, $id);
 
         $result['message'] = <<<EOF
-Благодарим за оказанное нам доверие.<br />
-Ваш запрос передан ответственному лицу.<br />
-Ответственный: Горохов Виталий<br />
-Вы можете с ним связаться позвонив по телефону +7 (495) 123-45-67 доп. номер #107 в рабочее время с 10 до 18 по московскому времени.<br />
-Предварительный номер вашего договора: {$contract_number}<br />
+Благодарим за оказанное нам доверие. Ваш запрос передан ответственному лицу. Ответственный: Горохов Виталий. Вы можете с ним связаться, позвонив по телефону<br />
+        +7 (495) 123-45-67 доп. номер #107 в рабочее время с 10 до 18 по московскому времени. Предварительный номер вашего договора: {$contract_number}.<br/>
 <br />
-Пока мы обрабатываем Ваш запрос, Вы можете ознакомиться с шаблоном нашего договора.<br />
+Пока мы обрабатываем Ваш запрос, Вы можете ознакомиться с шаблоном нашего договора, а также посмотреть наше коммерческое предложение.<br/><br />
 <a href="/upload/Dogovor_Template_wForms.pdf" target="_blank">Договор на обслуживание информационной системы предприятия</a><br />
-<a href="/upload/Commercial-Prop-IT-Dir.pdf" target="_blank">Доп. соглашение на услугу IT директор</a>	- должно выводиться, если человек выбрал услугу IT директор.<br />
-А также посмотреть шаблон нашего коммерческого предложения:<br />
+<a href="/upload/Commercial-Prop-IT-Dir.pdf" target="_blank">Доп. соглашение на услугу IT директор</a><br />
 <a href="/upload/Commercial-Prop.pdf" target="_blank">Шаблон коммерческого предложения</a><br />
 EOF;
 
 
         $result['success'] = $r ? 1 : 0;
+
+        break;
+
+    case 'service-refuse' :
+//        $to = 'net_AngryLead@citsb.ru';
+        $to = $to_email;
+
+        # данные
+
+        $company = $_POST['company'];
+        $name = $_POST['name'];
+        $email = $_POST['email'];
+        $phone = $_POST['phone'];
+        $comments = $_POST['comments'];
+        $data = $_POST['calc'];
+
+        $mail = new MailMessage();
+        $mail->setTo('', $to);
+
+        # subject
+        $subj = array();
+        $subj[] = "Angry from";
+        if ($company != '') $subj[] = $company;
+        $subj[] = $data['count_servers'] + $data['count_computers'];
+        if ($name != '') $subj[] = $name;
+        if ($phone != '') $subj[] = $phone;
+        $subj = implode(" / ", $subj);
+
+        $mail->setSubject($subj);
+        $host = HOST;
+
+        $tariff = $data['it-director'] ? 'IT-директор' : 'Системный администратор';
+        $inn = array();
+        if ($data['inn'] != '') $inn[] = $data['inn'];
+        if ($data['contract_number'] != '') $inn[] = $data['contract_number'];
+        $inn_num = implode(" / ", $inn);
+        if (trim($inn) == '') $inn = '---';
+        if (empty($company)) $company = '---';
+        if (empty($name)) $name = '---';
+        if (empty($phone)) $phone = '---';
+        if (empty($email)) $email = '---';
+
+        $body = <<<EOF
+IP адрес отправителя: {$_SERVER['REMOTE_ADDR']}
+Тарифный план: {$tariff}
+Количество серверов / количество раб. станций: {$data['count_servers']} / {$data['count_computers']}
+Инн / номер договора рекомендателя: {$inn_num}
+Название компании или ИНН компании: {$company}
+Контактное лицо: {$name}
+Телефон для связи: {$phone}
+E-mail для связи: {$email}
+Комментарий к заказу:
+{$comments}
+
+EOF;
+
+        $mail->setBody($body);
+        $r = $mail->send();
+
+        $result['success'] = $r ? 1 : 0;
+
+        break;
 }
 
 
