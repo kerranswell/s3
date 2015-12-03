@@ -250,6 +250,20 @@
             return $path;
         }
 
+        function resizeFromData( $data, $size_code = 0 ){
+            if(empty($data['idx'])) {
+                // * return empty string if idx is empty
+                return "";
+            }
+
+            $image = $data;
+
+            $ext = $this->image_type_to_extension( (int)$image['type'] );
+            //$path = $this->th_dir . $size_code . '/' . $this->subfolder( $image['name'] ) . '/' . $image['name'] . '-' . $this->hashme($image['name']) . '.' . $ext;
+            $path = (!empty($size_code) ? ($size_code. '/') :  "0/") . $this->subfolder( $image['name'] ) . '/' . $image['name'] . '-' . $this->hashme($image['name']) . '.' . $ext;
+            return $path;
+        }
+
         function getImagesArray( $ids ){
 
             if (count($ids) > 0) $ids = implode(",", $ids);

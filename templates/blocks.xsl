@@ -252,7 +252,7 @@
                                 <xsl:when test="position() mod (6 + floor(position() div 9)*9) = 0 and (position() + 3 &lt;= $cnt)"> marginleft</xsl:when>
                                 <xsl:when test="position() mod 9 = 0"> marginright</xsl:when>
                             </xsl:choose></xsl:attribute>
-                        <div class="pic"><a href="{url}" target="_blank"><img src="{image_url}" /></a></div>
+                        <div class="pic" style="background-image: url({image_url})"><a href="{url}" target="_blank"></a></div>
                     </div>
                     </xsl:if>
                 </xsl:for-each>

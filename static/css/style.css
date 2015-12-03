@@ -794,26 +794,33 @@ body.dark .contacts .email a {
 }
 
 .client {
-    width: 166px;
+    width: 255px;
     display: inline-block;
     margin-left: 0px;
     margin-bottom: 45px;
 }
 
 .client.marginleft {
-    margin-left: 80px;
+    /*margin-left: 80px;*/
 }
 
 .client.marginright {
-    margin-right: 80px;
+    /*margin-right: 80px;*/
 }
 
 .client .pic {
-    width: 96px;
+    width: 155px;
     height: 96px;
-    border-radius: 48px;
+    /*border-radius: 48px;*/
     overflow: hidden;
     margin: 0 auto;
+    background-repeat: no-repeat;
+    background-position: center top;
+}
+
+.client .pic a {
+    display: block;
+    height: 100%;
 }
 
 .align-center {
