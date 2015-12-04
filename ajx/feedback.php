@@ -12,8 +12,8 @@ switch ($_POST['act'])
 {
     case 'feedback' :
 
-        //$to = 'contact@citsb.ru';
-        $to = $to_email;
+        $to = 'contact@citsb.ru';
+//        $to = $to_email;
 
         $mail = new MailMessage();
         $mail->setTo('', $to);
@@ -48,8 +48,8 @@ EOF;
 
     case 'service-submit' :
 
-//        $to = 'net_lead@citsb.ru';
-        $to = $to_email;
+        $to = 'net_lead@citsb.ru';
+//        $to = $to_email;
 
         # данные
 
@@ -114,8 +114,8 @@ EOF;
         break;
 
     case 'service-refuse' :
-//        $to = 'net_AngryLead@citsb.ru';
-        $to = $to_email;
+        $to = 'net_AngryLead@citsb.ru';
+//        $to = $to_email;
 
         # данные
 
