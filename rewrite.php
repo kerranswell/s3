@@ -60,7 +60,7 @@ if (file_exists(ROOT_DIR."admin/version.txt"))
     }
 }
 
-$pass_intro = $_COOKIE['pass_intro'] == 1 ? 1 : 0;
+/*$pass_intro = $_COOKIE['pass_intro'] == 1 ? 1 : 0;
 
 if (!empty($nodes[0]) && $nodes[0] == 'intro')
 {
@@ -72,7 +72,7 @@ if (!empty($nodes[0]) && $nodes[0] == 'intro')
         HOST,
         false
     );
-}
+}*/
 
 /*if (!session_id()) session_start();
 print_r($_SESSION); exit;

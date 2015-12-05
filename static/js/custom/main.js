@@ -155,6 +155,10 @@ $(function() {
         return false;
     });
 
+    var email = $('.contacts .email').data('value');
+    email = atob(email);
+    $('.contacts .email').html('<a href="mailto:' + email + '">' + email + '</a>');
+
     backs = {};
     $('.back').each(function () {
         backs[$(this).data('id')] = new CBack($(this));

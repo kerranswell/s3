@@ -40,7 +40,7 @@ $(function() {
     $('#service-feedback-send').live('click', function () {
         var data = {};
 
-        var frm = $(this).closest('.fullscreen');
+        var frm = $(this).closest('.calc-page');
         data.company = frm.find('input[data-name="company"]').val().trim();
         data.name = frm.find('input[data-name="name"]').val().trim();
         data.email = frm.find('input[data-name="email"]').val().trim();
@@ -85,6 +85,8 @@ $(function() {
         data.act = 'service-submit';
         data.calc = calc.data;
 
+        var res = $('.calc-page[data-finish="2"] .row');
+
         $.ajax({
             type: 'POST',
             dataType: 'JSON',
@@ -93,10 +95,13 @@ $(function() {
             success: function(result){
                 if (result.success == 1)
                 {
-                    showFormMessageText(frm, 'success', result.message);
+                    cursorWait(0);
+                    res.html(result.message);
+                    calc.nextPage();
+//                    showFormMessageText(frm, 'success', result.message);
 //                    frm.find('.text').hyphenate(false);
                 } else {
-                    showFormMessage(frm, 'error');
+//                    showFormMessage(frm, 'error');
                 }
                 fullscreen_after = 'calc-reset';
             },
@@ -104,7 +109,7 @@ $(function() {
                 cursorWait(0);
             },
             error : function () {
-                frm.find('.text').html($('#feedback_error').html());
+//                frm.find('.text').html($('#feedback_error').html());
             }
         });
 

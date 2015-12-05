@@ -6,7 +6,7 @@ require_once(CLASS_DIR . 'mailmessage.php');
 $result = array();
 $result['success'] = 0;
 
-$to_email = 'kdestroy@gmail.com';
+//$to_email = '';
 
 switch ($_POST['act'])
 {

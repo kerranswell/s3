@@ -727,6 +727,10 @@ ul.social_menu li a {
     background-position: -45px top;
 }
 
+.contacts .email {
+
+}
+
 .contacts .feedback_link {
     font-family: FuturaBookC;
     font-size: 18px;
@@ -936,6 +940,7 @@ textarea {
     display: none;
     opacity: 0;
     position: absolute;
+    /*min-height: 423px;*/
 }
 .calc-page:first-child {
     display: block;
@@ -1328,6 +1333,10 @@ input[type="text"].left {
     position: absolute;
     bottom: 0px;
     right: 0px;
+}
+
+.calc-page .how {
+    top: 350px;
 }
 
 .msg2 {

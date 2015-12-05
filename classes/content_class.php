@@ -237,6 +237,10 @@ class content {
         if (!is_array($xml)) $xml = json_decode($xml, true);
         foreach ($xml as &$b)
         {
+            if ($b['type'] == 'contacts') {
+                if (isset($b['cells'][2])) $b['cells'][2] = base64_encode($b['cells'][2]);
+            }
+
             if ($b['type'] == 'picture') continue;
             if (isset($b['cells']) && is_array($b['cells'])) {
                 foreach ($b['cells'] as &$c) {

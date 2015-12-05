@@ -54,8 +54,8 @@
             <div class="phone">
                 <xsl:value-of select="cells/item[@_key=1]" disable-output-escaping="yes"/>
             </div>
-            <div class="email">
-                <a href="mailto:{cells/item[@_key=2]}"><xsl:value-of select="cells/item[@_key=2]" disable-output-escaping="yes"/></a>
+            <div class="email" data-value="{cells/item[@_key=2]}">
+                <!--<a href="mailto:{cells/item[@_key=2]}"><xsl:value-of select="cells/item[@_key=2]" disable-output-escaping="yes"/></a>-->
             </div>
             <div class="feedback_link">
                 <a href="#">Обратная связь</a>
@@ -130,7 +130,44 @@
             </div>
             <div class="row"><span id="calc_cost" class="cost">1 234 567 &#8381;</span></div>
             <div class="row">
-                <div class="button1" id="service_submit">Оформить запрос услуги</div><div class="button1" id="service_refuse">Меня не устраивает</div>
+                <div class="button1 calc-next-step">Оформить запрос услуги</div>
+                <!--<div class="button1" id="service_refuse">Меня не устраивает</div>-->
+            </div>
+            <div class="how"><a id="service_refuse" href="#">Меня не устраивает</a></div>
+        </div>
+
+        <div class="calc-page" data-id="6">
+            <div class="block columns1 align-center">
+                <div class="column align-center service-submit-message">
+                    Спасибо за проявленный интерес! Пожалуйста, заполните анкету заказа. Это не займет у Вас много времени, но поможет нам более качественно подготовиться к презентации наших услуг.
+                </div>
+            </div>
+            <div class="row">
+                <table class="input-line"><tbody>
+                    <tr><td class="input-line-left">Название компании*</td><td class="input-line-center"><input type="text" data-name="company" value="" /></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">Контактное лицо*</td><td class="input-line-center"><input type="text" data-name="name" value="" /></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">Электронная почта*</td><td class="input-line-center"><input type="text" data-name="email" value=""/></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">Телефон*</td><td class="input-line-center"><input type="text" data-name="phone" value="" /></td><td class="input-line-right"></td></tr>
+                </tbody></table>
+            </div>
+            <div class="row">
+                <table class="input-line"><tbody>
+                    <tr><td class="input-line-left textarea-desc">Комментарии*</td><td class="input-line-center"><textarea data-name="comments"></textarea></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left"></td><td class="input-line-center small-desc">*Поля обязательны для заполнения</td><td class="input-line-right"></td></tr>
+                </tbody></table>
+            </div>
+            <div class="row"><div class="button1" id="service-feedback-send">Отправить</div></div>
+            <div class="row hidden form-error" data-error="email">Проверьте правильность электронного адреса</div>
+            <div class="hidden align-center" data-message="success">
+                <div class="row msg3">Спасибо, мы с Вами свяжемся.</div>
+            </div>
+            <div class="hidden" data-message="error">
+                <div class="row msg2">Ошибка, пожалуйста, попробуйте еще раз позже.</div>
+            </div>
+        </div>
+
+        <div class="calc-page" data-id="7" data-finish="2">
+            <div class="row msg3">
             </div>
         </div>
 

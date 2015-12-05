@@ -116,7 +116,7 @@ $(function() {
                 scene.direction = 1;
                 scene.animate(true);
             }
-        }, 3000);
+        }, 5000);
 
         $(window).bind('keyup', function(e) {
             if (scene.busy == true) return;
