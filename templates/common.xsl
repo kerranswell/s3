@@ -52,9 +52,9 @@
                     </ul>
                     <div class="phone_number"><xsl:value-of select="/root/pages_class/pages/item[translit='contacts']/xml/item[name='contacts']/cells/item[@_key=1]" disable-output-escaping="yes"/></div>
                     <ul class="social_menu">
-                        <li><a href="http://vk.com" target="_blank" class="btn-vk"></a></li>
-                        <li><a href="http://facebook.com" target="_blank" class="btn-fb"></a></li>
-                        <li><a href="http://linkedin.com" target="_blank" class="btn-in"></a></li>
+                        <li><a href="http://vk.com/citsb" target="_blank" class="btn-vk"></a></li>
+                        <li><a href="https://www.facebook.com/citsb.citsb" target="_blank" class="btn-fb"></a></li>
+                        <li><a href="https://www.linkedin.com/in/vitaly-gorokhov-831b9993" target="_blank" class="btn-in"></a></li>
                     </ul>
                 </div>
             </div>

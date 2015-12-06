@@ -144,7 +144,7 @@ $(function() {
                         <div class="text align-center"></div>
                     </div>
                 </div>
-                <div class="fullscreen_transparent"></div>
+                <div class="fullscreen_transparent bg-blue"></div>
                 <div id="feedback_content" class="hidden" data-title="Обратная связь">
                     <div class="row">
                         <table class="input-line"><tbody>

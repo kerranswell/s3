@@ -11,12 +11,23 @@ function cursorWait(on)
 
 var fullscreen_mode = false;
 var fullscreen_after = '';
-function showFullscreen(on)
+var fullscreen_bgclass_default = 'bg-blue';
+var fullscreen_bgclass = fullscreen_bgclass_default;
+function showFullscreen(on, bgclass)
 {
     var id = '.fullscreen';
     var back = '.fullscreen_transparent';
     if (on)
     {
+        if (bgclass != '')
+        {
+            if ($(back).hasClass(fullscreen_bgclass)) $(back).removeClass(fullscreen_bgclass);
+            $(back).addClass(bgclass);
+            fullscreen_bgclass = bgclass;
+        } else {
+            if ($(back).hasClass(fullscreen_bgclass)) $(back).removeClass(fullscreen_bgclass);
+            $(back).addClass(fullscreen_bgclass_default);
+        }
         fullscreen_mode = true;
         $(id).css({opacity: 0}).show().animate({opacity: 1}, 200);
         $(back).css({opacity: 0}).show().animate({opacity: 0.9}, 200);
@@ -37,12 +48,14 @@ function showFormMessage(frm, type)
     frm.find('.text').html(frm.find('div[data-message="' + type + '"]').html());
 }
 
-function showFullscreenMessage(content)
+function showFullscreenMessage(c)
 {
-    $('#how').find('.title span').html(content.data('title'));
-    var html = content.html();
+    var bgclass = c.data('bg');
+    if (bgclass == undefined) bgclass = '';
+    $('#how').find('.title span').html(c.data('title'));
+    var html = c.html();
     $('#how .text').html(html);
-    showFullscreen(1)
+    showFullscreen(1, bgclass)
 }
 
 function hideFullscreenMessage()

@@ -133,7 +133,7 @@
                 <div class="button1 calc-next-step">Оформить запрос услуги</div>
                 <!--<div class="button1" id="service_refuse">Меня не устраивает</div>-->
             </div>
-            <div class="how"><a id="service_refuse" href="#">Меня не устраивает</a></div>
+            <div class="how-calc"><a id="service_refuse" href="#">Меня не устраивает</a></div>
         </div>
 
         <div class="calc-page" data-id="6">
@@ -201,7 +201,7 @@
             </div>
         </div>
 
-        <div id="service_refuse_form" class="hidden" data-title="Мы вас не устраиваем?">
+        <div id="service_refuse_form" class="hidden" data-title="Мы вас не устраиваем?" data-bg="bg-black">
             <div class="block columns1 align-center">
                 <div class="column align-center service-refuse-message">
                     Спасибо за проявленный интерес к нашей компании. Мы будем очень признательны, если Вы укажете причины, по которым мы не подошли Вашим требованиям. Хотим отметить, что у нас работает система мониторинга качества наших услуг. Мы проводим опрос сотрудников о качестве предоставляемых  услуг. Также в нашей компании действует <a href="/upload/Etic_Codecs.pdf" target="_blank">этический кодекс</a>. Ваше сообщение будет отправлено генеральному директору с пометкой «срочно». И, если позволите, мы свяжемся с Вами, чтобы устранить или развеять Ваши сомнения.

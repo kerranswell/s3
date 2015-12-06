@@ -754,6 +754,10 @@ body.dark .contacts .email a {
     background-position-y: top;
 }
 
+.teamlist {
+    clear: both;
+}
+
 .teammate {
     display: inline-block;
     width: 217px;
@@ -1288,12 +1292,19 @@ input[type="text"].left {
     position: absolute;
     width: 100%;
     height: 100%;
-    background-color: #000;
     opacity: 0.95;
     display: none;
     left: 0px;
     top: 0px;
     z-index: 900;
+}
+
+.bg-black {
+    background-color: #000;
+}
+
+.bg-blue {
+    background-color: #021A37;
 }
 
 .fullscreen .fscontent {
@@ -1327,7 +1338,7 @@ input[type="text"].left {
     font-family: 'PT Sans';
 }
 
-.how {
+.how, .how-calc {
     font-family: FuturaBookC;
     font-size: 20px;
     position: absolute;
@@ -1335,7 +1346,7 @@ input[type="text"].left {
     right: 0px;
 }
 
-.calc-page .how {
+.how-calc {
     top: 350px;
 }
 
