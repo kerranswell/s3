@@ -5,6 +5,7 @@
 
     <xsl:template name="header">
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="stylesheet" href="/static/css/style.css?v={/root/version}" type="text/css" media="all" />
         <script src="/static/js/jquery.js"></script>
         <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
