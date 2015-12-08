@@ -47,37 +47,56 @@ $(function() {
         data.phone = frm.find('input[data-name="phone"]').val().trim();
         data.comments = frm.find('textarea[data-name="comments"]').val().trim();
 
-        if (data.name == '')
-        {
-            frm.find('input[data-name="name"]').focus();
-            return;
-        }
-
+        var i = frm.find('input[data-name="company"]');
         if (data.company == '')
         {
-            frm.find('input[data-name="company"]').focus();
-            return;
-        }
-
-        if (!validateEmail(data.email))
-        {
-            frm.find('input[data-name="email"]').focus();
-            showFormError(frm,  'email');
+            i.focus();
+            if (!i.hasClass('error')) i.addClass('error');
             return;
         } else {
+            if (i.hasClass('error')) i.removeClass('error');
+        }
+
+        i = frm.find('input[data-name="name"]');
+        if (data.name == '')
+        {
+            i.focus();
+            if (!i.hasClass('error')) i.addClass('error');
+            return;
+        } else {
+            if (i.hasClass('error')) i.removeClass('error');
+        }
+
+        i = frm.find('input[data-name="email"]');
+        if (!validateEmail(data.email))
+        {
+            i.focus();
+            if (data.email != '') showFormError(frm,  'email');
+            if (!i.hasClass('error')) i.addClass('error');
+            return;
+        } else {
+            if (i.hasClass('error')) i.removeClass('error');
             hideFormError(frm,  'email');
         }
 
+        i = frm.find('input[data-name="phone"]');
         if (data.phone == '')
         {
-            frm.find('input[data-name="phone"]').focus();
+            i.focus();
+            if (!i.hasClass('error')) i.addClass('error');
             return;
+        } else {
+            if (i.hasClass('error')) i.removeClass('error');
         }
 
+        i = frm.find('textarea[data-name="comments"]');
         if (data.comments == '')
         {
             frm.find('textarea[data-name="comments"]').focus();
+            if (!i.hasClass('error')) i.addClass('error');
             return;
+        } else {
+            if (i.hasClass('error')) i.removeClass('error');
         }
 
         cursorWait(1);
@@ -285,14 +304,17 @@ CCalc.prototype.reset = function (anim)
 
 CCalc.prototype.resetControls = function ()
 {
-    $('.calc-container input').each(function () {
+    $('.calc-container input, .calc-container textarea').each(function () {
         $(this).val($(this).data('default'));
+        if ($(this).hasClass('error')) $(this).removeClass('error');
     });
 
     $('.calc-container .input-checkbox').each(function () {
         if ($(this).data('default') == 'checked' && !$(this).hasClass('checked')) $(this).addClass('checked');
         if ($(this).data('default') == '' && $(this).hasClass('checked')) $(this).removeClass('checked');
     });
+
+    hideFormErrors($('.calc-container'));
 }
 
 CCalc.prototype.checkPage = function ()
