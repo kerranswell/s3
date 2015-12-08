@@ -68,25 +68,66 @@ tr.act a{color: #ffffff;}
 }
 
 */
+
+/*
 @font-face {
     font-family: FuturaBookC;
-    src: url(../fonts/futurabookc.otf);
+    src: url(../fonts/futura/FTN45.otf);
+    */
+/*src: url(../fonts/futurabookc.otf);*//*
+
 }
 
 @font-face {
     font-family: 'FuturaBookC IE';
-    src: url(../fonts/FuturaBookC.eot);
-}
+    */
+/*src: url(../fonts/FuturaBookC.eot);*//*
 
+}
+*/
+
+
+/*
 @font-face {
     font-family: FuturaLightC;
-    src: url(../fonts/futuralightc.otf);
+    src: url(../fonts/futura/FTN35.otf);
+
+*/
+/*src: url(../fonts/futuralightc.otf);*//*
+
+
+}
+*/
+@font-face {
+  font-family: 'FuturaBookC';
+  src: url('../fonts/futura/FTN45.eot');
+  src: url('../fonts/futura/FTN45.eot?#iefix') format('embedded-opentype'), url('../fonts/futura/FTN45.svg#FuturaLightC') format('svg'), url('../fonts/futura/FTN45.woff') format('woff'), url('../fonts/futura/FTN45.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
 
+
+
+@font-face {
+  font-family: 'FuturaLightC';
+  src: url('../fonts/futura/FTN35.eot');
+  src: url('../fonts/futura/FTN35.eot?#iefix') format('embedded-opentype'), url('../fonts/futura/FTN35.svg#FuturaLightC') format('svg'), url('../fonts/futura/FTN35.woff') format('woff'), url('../fonts/futura/FTN35.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/*
 @font-face {
     font-family: 'FuturaLightC IE';
-    src: url(../fonts/futuralightc.otf);
+    */
+/*src: url(../fonts/futuralightc.otf);*//*
+
 }
+*/
+
+
+
+
 
 html, body {
    width: 100%;

@@ -212,7 +212,7 @@
                 $idx = $this->addImageToDB( $name, $orig_name, $image_size /* = getimagesize()*/, $file_size, $th = 0, $service_id, $item_id);
             }
 
-            if( is_file( $file['tmp_name'] ) ) unlink( $file['tmp_name'] );
+//            if( is_file( $file['tmp_name'] ) ) unlink( $file['tmp_name'] );
 
             return array( $idx, $name );
         }
