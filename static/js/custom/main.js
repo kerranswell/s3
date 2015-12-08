@@ -169,7 +169,7 @@ $(function() {
     });
 
     var email = $('.contacts .email').data('value');
-    email = atob(email);
+    email = Base64.decode(email);
     $('.contacts .email').html('<a href="mailto:' + email + '">' + email + '</a>');
 
     backs = {};

@@ -61,43 +61,6 @@ tr.act a{color: #ffffff;}
 	src: local('PT Sans Bold'), url('../fonts/PTS75F_W.eot?#iefix') format('embedded-opentype'), url('../fonts/PTS75F_W.woff') format('woff'),url('../fonts/PTS75F_W.ttf') format('truetype'), url('../fonts/PTS75F_W.svg#PTSans-Bold') format('svg');}
 
 
-/*
-@font-face {
-    font-family: FuturaDemiC;
-    src: url(../fonts/futurademic.otf);
-}
-
-*/
-
-/*
-@font-face {
-    font-family: FuturaBookC;
-    src: url(../fonts/futura/FTN45.otf);
-    */
-/*src: url(../fonts/futurabookc.otf);*//*
-
-}
-
-@font-face {
-    font-family: 'FuturaBookC IE';
-    */
-/*src: url(../fonts/FuturaBookC.eot);*//*
-
-}
-*/
-
-
-/*
-@font-face {
-    font-family: FuturaLightC;
-    src: url(../fonts/futura/FTN35.otf);
-
-*/
-/*src: url(../fonts/futuralightc.otf);*//*
-
-
-}
-*/
 @font-face {
   font-family: 'FuturaBookC';
   src: url('../fonts/futura/FTN45.eot');
@@ -115,18 +78,6 @@ tr.act a{color: #ffffff;}
   font-weight: normal;
   font-style: normal;
 }
-
-/*
-@font-face {
-    font-family: 'FuturaLightC IE';
-    */
-/*src: url(../fonts/futuralightc.otf);*//*
-
-}
-*/
-
-
-
 
 
 html, body {
@@ -876,6 +827,33 @@ body.dark .contacts .email a {
     text-align: center;
 }
 
+.form {
+    width: 650px;
+    display: inline-block;
+}
+
+.form td {
+    padding-bottom: 15px;
+}
+
+.padbottom-less td {
+    padding-bottom: 5px;
+}
+
+.form .input-title {
+    text-align: right;
+    padding-right: 5px;
+}
+
+.form .input-input {
+    width: 164px;
+}
+
+.form .input-input input[type="text"] {
+    width: 164px;
+}
+
+
 .input-line {
     width: 100%;
 }
@@ -961,7 +939,7 @@ textarea {
     border: 1px solid black;
     border-radius: 3px;
     width: 417px;
-    height: 170px;
+    height: 120px;
 }
 
 .input-checkbox {
@@ -987,7 +965,8 @@ textarea {
     position: absolute;
     /*min-height: 423px;*/
 }
-.calc-page:first-child {
+/*.calc-page:first-child {*/
+.calc-page[data-id="1"] {
     display: block;
     opacity: 1;
 }
@@ -1402,7 +1381,7 @@ input[type="text"].left {
 }
 
 .service-submit-message {
-    width: 500px;
+    width: 650px;
     display: inline-block;
 }
 

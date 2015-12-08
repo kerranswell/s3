@@ -49,7 +49,6 @@ EOF;
     case 'service-submit' :
 
         $to = 'net_lead@citsb.ru';
-//        $to = $to_email;
 
         # данные
 
@@ -115,7 +114,6 @@ EOF;
 
     case 'service-refuse' :
         $to = 'net_AngryLead@citsb.ru';
-//        $to = $to_email;
 
         # данные
 

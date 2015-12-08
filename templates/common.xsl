@@ -4,6 +4,8 @@
     <xsl:import href="blocks.xsl"/>
 
     <xsl:template name="header">
+        <title>Центр IT-поддержки бизнеса</title>
+        <meta name="title" content="Центр IT-поддержки бизнеса" />
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <link rel="icon" type="image/png" href="/favicon.png" />
         <link rel="stylesheet" href="/static/css/style.css?v={/root/version}" type="text/css" media="all" />
@@ -11,6 +13,7 @@
         <script src="/static/js/jquery-ui/jquery-ui.min.js"></script>
         <script src="/static/js/jquery-mousewheel-master/jquery.mousewheel.min.js"></script>
         <script src="/static/js/jquery.hyphen.ru.js?v={/root/version}"></script>
+        <script src="/static/js/base64.js"></script>
         <!--<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script>-->
         <script src="/static/js/custom/intro.js?v={/root/version}"></script>
         <script src="/static/js/custom/main.js?v={/root/version}"></script>

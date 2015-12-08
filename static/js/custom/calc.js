@@ -118,6 +118,8 @@ $(function() {
 
     $('#service_refuse').click(function () {
         showFullscreenMessage($('#service_refuse_form'));
+
+        return false;
     });
 
     $('#service-feedback-refuse').live('click', function () {
