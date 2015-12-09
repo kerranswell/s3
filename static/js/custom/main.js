@@ -48,6 +48,17 @@ function showFormMessage(frm, type)
     frm.find('.text').html(frm.find('div[data-message="' + type + '"]').html());
 }
 
+function initCaptcha(frm)
+{
+    if (!frm) frm = $('.fullscreen');
+    frm.find('.captcha').html('<img src="/captcha/?t=' + Date.now() + '" />');
+}
+
+function updateCaptchaImg(i)
+{
+    i.attr('src', '/captcha/?t=' + Date.now());
+}
+
 function showFullscreenMessage(c)
 {
     var bgclass = c.data('bg');
@@ -91,6 +102,7 @@ $(function() {
         {
             case 'calc-reset' :
                 calc.reset(true);
+                fullscreen_after = '';
                 break;
             default:
         }
@@ -100,6 +112,7 @@ $(function() {
 
     $('.feedback_link a').click(function () {
         showFullscreenMessage($('#feedback_content'));
+        initCaptcha(0);
         return false;
     });
 
@@ -112,32 +125,58 @@ $(function() {
         data.email = frm.find('input[data-name="email"]').val().trim();
         data.phone = frm.find('input[data-name="phone"]').val().trim();
         data.comments = frm.find('textarea[data-name="comments"]').val().trim();
+        data.code = frm.find('input[data-name="captcha"]').val().trim();
 
+        var i = frm.find('input[data-name="name"]');
         if (data.name == '')
         {
-            frm.find('input[data-name="name"]').focus();
-            return;
-        }
-
-        if (data.company == '')
-        {
-            frm.find('input[data-name="company"]').focus();
-            return;
-        }
-
-        if (!validateEmail(data.email))
-        {
-            frm.find('input[data-name="email"]').focus();
-            showFormError(frm,  'email');
+            i.focus();
+            if (!i.hasClass('error')) i.addClass('error');
             return;
         } else {
+            if (i.hasClass('error')) i.removeClass('error');
+        }
+
+        var i = frm.find('input[data-name="company"]');
+        if (data.company == '')
+        {
+            i.focus();
+            if (!i.hasClass('error')) i.addClass('error');
+            return;
+        } else {
+            if (i.hasClass('error')) i.removeClass('error');
+        }
+
+        i = frm.find('input[data-name="email"]');
+        if (!validateEmail(data.email))
+        {
+            i.focus();
+            if (data.email != '') showFormError(frm,  'email');
+            if (!i.hasClass('error')) i.addClass('error');
+            return;
+        } else {
+            if (i.hasClass('error')) i.removeClass('error');
             hideFormError(frm,  'email');
         }
 
+        var i = frm.find('input[data-name="captcha"]');
+        if (data.code == '')
+        {
+            i.focus();
+            if (!i.hasClass('error')) i.addClass('error');
+            return;
+        } else {
+            if (i.hasClass('error')) i.removeClass('error');
+        }
+
+        i = frm.find('textarea[data-name="comments"]');
         if (data.comments == '')
         {
-            frm.find('textarea[data-name="comments"]').focus();
+            i.focus();
+            if (!i.hasClass('error')) i.addClass('error');
             return;
+        } else {
+            if (i.hasClass('error')) i.removeClass('error');
         }
 
         cursorWait(1);
@@ -152,9 +191,22 @@ $(function() {
             success: function(result){
                 if (result.success == 1)
                 {
-                    showFormMessage(frm, 'success');
+                    hideFormError(frm,  'captcha');
+                    i = frm.find('input[data-name="captcha"]');
+                    if (i.hasClass('error')) i.removeClass('error');
+
+                    showFormMessageText(frm, 'success', result.message);
                 } else {
-                    showFormMessage(frm, 'error');
+                    if (result.captcha_error == 1)
+                    {
+                        i = frm.find('input[data-name="captcha"]');
+                        i.val('').focus();
+                        if (!i.hasClass('error')) i.addClass('error');
+                        showFormError(frm,  'captcha');
+                        updateCaptchaImg(frm.find('.captcha img'));
+                    } else {
+                        showFormMessage(frm, 'error');
+                    }
                 }
             },
             complete : function () {
@@ -302,6 +354,10 @@ $(function() {
         if ($(this).hasClass('active')) return;
         pager.pageJump($(this).data('id'));
         return false;
+    });
+
+    $('.captcha img').live('click', function () {
+        updateCaptchaImg($(this));
     });
 
 });

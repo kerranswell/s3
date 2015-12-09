@@ -118,7 +118,7 @@ $(function() {
             }
         }, 5000);
 
-        $(window).bind('keyup', function(e) {
+        $(window).on('keyup', function(e) {
             if (scene.busy == true) return;
 
             if (!$('body').hasClass('intro')) return false;
@@ -126,13 +126,34 @@ $(function() {
 
             switch (code)
             {
-                case 38 :
+                case 37:case 38 :
                     scene.direction = -1;
                     scene.animate(false);
+
+                    e.preventDefault();
+                    return false;
+
                     break;
-                case 40 :
+                case 39:case 40 :
                     scene.direction = 1;
                     scene.animate(false);
+
+                    e.preventDefault();
+                    return false;
+
+                    break;
+            }
+        });
+
+        $(window).on('keydown', function (e) {
+            var code = e.keyCode || e.which;
+
+            switch (code)
+            {
+                case 37:case 38 :case 39:case 40 :
+                    e.preventDefault();
+                    return false;
+
                     break;
             }
         });

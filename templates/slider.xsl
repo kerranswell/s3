@@ -152,6 +152,7 @@ $(function() {
                             <tr><td class="input-line-left">Название Вашей компании*</td><td class="input-line-center"><input type="text" data-name="company" value="" /></td><td class="input-line-right"></td></tr>
                             <tr><td class="input-line-left">Электронная почта*</td><td class="input-line-center"><input type="text" data-name="email" value=""/></td><td class="input-line-right"></td></tr>
                             <tr><td class="input-line-left">Телефон</td><td class="input-line-center"><input type="text" data-name="phone" value="" /></td><td class="input-line-right"></td></tr>
+                            <tr><td class="input-line-left">Введите код*</td><td class="input-line-center"><input type="text" data-name="captcha" value="" /></td><td class="input-line-right captcha"></td></tr>
                         </tbody></table>
                     </div>
                     <div class="row">
@@ -162,8 +163,9 @@ $(function() {
                     </div>
                     <div class="row"><div class="button1 feedback-send">Отправить</div></div>
                     <div class="row hidden form-error" data-error="email">Проверьте правильность электронного адреса</div>
+                    <div class="row hidden form-error" data-error="captcha">Неверно введен код</div>
                     <div class="hidden" data-message="success">
-                        <div class="row msg2">Спасибо, мы с Вами свяжемся.</div>
+                        <div class="row msg2 success-feedback">Спасибо, мы с Вами свяжемся.</div>
                     </div>
                     <div class="hidden" data-message="error">
                         <div class="row msg2">Ошибка, пожалуйста, попробуйте еще раз позже.</div>

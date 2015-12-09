@@ -92,7 +92,7 @@ $(function() {
         i = frm.find('textarea[data-name="comments"]');
         if (data.comments == '')
         {
-            frm.find('textarea[data-name="comments"]').focus();
+            i.focus();
             if (!i.hasClass('error')) i.addClass('error');
             return;
         } else {
@@ -122,7 +122,6 @@ $(function() {
                 } else {
 //                    showFormMessage(frm, 'error');
                 }
-                fullscreen_after = 'calc-reset';
             },
             complete : function () {
                 cursorWait(0);
@@ -137,6 +136,7 @@ $(function() {
 
     $('#service_refuse').click(function () {
         showFullscreenMessage($('#service_refuse_form'));
+        initCaptcha(0);
 
         return false;
     });
@@ -150,11 +150,26 @@ $(function() {
         data.email = frm.find('input[data-name="email"]').val().trim();
         data.phone = frm.find('input[data-name="phone"]').val().trim();
         data.comments = frm.find('textarea[data-name="comments"]').val().trim();
+        data.code = frm.find('input[data-name="captcha"]').val().trim();
 
+        var i = frm.find('input[data-name="captcha"]');
+        if (data.code == '')
+        {
+            i.focus();
+            if (!i.hasClass('error')) i.addClass('error');
+            return;
+        } else {
+            if (i.hasClass('error')) i.removeClass('error');
+        }
+
+        i = frm.find('textarea[data-name="comments"]')
         if (data.comments == '')
         {
-            frm.find('textarea[data-name="comments"]').focus();
+            i.focus();
+            if (!i.hasClass('error')) i.addClass('error');
             return;
+        } else {
+            if (i.hasClass('error')) i.removeClass('error');
         }
 
         cursorWait(1);
@@ -170,12 +185,25 @@ $(function() {
             success: function(result){
                 if (result.success == 1)
                 {
+                    hideFormError(frm,  'captcha');
+                    i = frm.find('input[data-name="captcha"]');
+                    if (i.hasClass('error')) i.removeClass('error');
+
                     showFormMessage(frm, 'success');
+                    fullscreen_after = 'calc-reset';
 //                    frm.find('.text').hyphenate(false);
                 } else {
-                    showFormMessage(frm, 'error');
+                    if (result.captcha_error == 1)
+                    {
+                        i = frm.find('input[data-name="captcha"]');
+                        i.val('').focus();
+                        if (!i.hasClass('error')) i.addClass('error');
+                        showFormError(frm,  'captcha');
+                        updateCaptchaImg(frm.find('.captcha img'));
+                    } else {
+                        showFormMessage(frm, 'error');
+                    }
                 }
-                fullscreen_after = 'calc-reset';
             },
             complete : function () {
                 cursorWait(0);

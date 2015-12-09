@@ -11,7 +11,7 @@ class MailMessage {
 	var $charset;
  
 	function MailMessage() {
-		$this->fromName         = HOST.' feedback';
+		$this->fromName         = 'Citsb.Ru Site';
 		$this->fromEmail        = 'auto@citsb.ru';
 		$this->toName           = NULL;
 		$this->toEmail          = NULL;

@@ -3,22 +3,19 @@
 require_once(dirname(__FILE__) . "/../core/core.php");
 require_once(CLASS_DIR . 'mailmessage.php');
 
+if (!session_id()) session_start();
+
 $result = array();
 $result['success'] = 0;
-
-//$to_email = '';
 
 switch ($_POST['act'])
 {
     case 'feedback' :
 
         $to = 'contact@citsb.ru';
-//        $to = $to_email;
 
         $mail = new MailMessage();
-        $mail->setTo('', $to);
-        $mail->setSubject('Письмо с сайта');
-        //$mail->setTemplate($_SERVER["DOCUMENT_ROOT"] . '/templates/mail/remindpassword.xsl', array('pass' => $password, 'link' => $link));
+        $mail->setTo('Citsb.Ru Site', $to);
         $host = HOST;
 
         $name = $_POST['name'];
@@ -26,29 +23,74 @@ switch ($_POST['act'])
         $email = $_POST['email'];
         $phone = empty($_POST['phone']) ? '---' : $_POST['phone'];
         $comments = $_POST['comments'];
+        $code = $_POST['code'];
 
-        $body = <<<EOF
-С сайта {$host} отправлено письмо:
+        if ($code != $_SESSION['captcha_keystring'])
+        {
+            $result['captcha_error'] = 1;
+        } else {
 
-Имя: {$name}
+            $sql = "insert into `messages` (`id`, `name`, `company`, `email`, `phone`, `comments`, `date`) values (0,?,?,?,?,?,?)";
+            $dsp->db->Execute($sql, $name, $company, $email, $phone, $comments, time());
+            $id = $dsp->db->LastInsertId();
+            $r = $id > 0;
+
+            $message_number = $dsp->messages->getNumber($id);
+            $dsp->db->Execute("update `messages` set `number` = ? where `id` = ?", $message_number, $id);
+
+            $mail->setSubject('Citsb.Ru: BM'.$message_number.'.');
+
+            $body = <<<EOF
+Автор: {$name}
 Компания: {$company}
-Email: {$email}
-Телефон: {$phone}
+Контактный e-mail: {$email}
+Контактный номер телефона: {$phone}
 Комментарий:
 {$comments}
 
 EOF;
 
-        $mail->setBody($body);
-        $r = $mail->send();
+            $mail->setBody($body);
+            $r = $r && $mail->send();
 
-        $result['success'] = $r ? 1 : 0;
+            # письмо человеку
+            $mail->setTo('', $email);
+            $mail->setSubject('CITSB.RU: Уведомление о получении запроса по линии обратной связи. #BM'.$message_number.'.');
 
+            $body = <<<EOF
+{$name}, благодарим за проявленный интерес к нашей компании.
+Ваше сообщение получено автоматизированной системой обработки сообщений.
+Ему присвоен номер BM{$message_number}.
+
+Текст Вашего сообщения:
+Компания: {$company}
+Контактный e-mail: {$email}
+Контактный номер телефона: {$phone}
+Комментарий:
+{$comments}
+
+Вы также можете связаться с нами по телефону +7 (495) 268-14-30 и назвав номер данного сообщения: BM{$message_number}.
+EOF;
+
+            $mail->setBody($body);
+            $mail->send();
+
+            $result['message'] = <<<EOF
+Благодарим за внимание к нашей компании. Ваше сообщение успешно отправлено.<br />
+Ему присвоен номер {$message_number}.<br />
+Если спешите, Вы можете связаться с нами по телефону +7 (495) 268-14-20 и узнать статус сообщения, или дождаться нашего ответа.<br />
+Нам важно Ваше мнение. Мы обязательно с Вами свяжемся!
+EOF;
+
+
+            $result['success'] = $r ? 1 : 0;
+        }
         break;
 
     case 'service-submit' :
 
-        $to = 'net_lead@citsb.ru';
+//        $to = 'net_lead@citsb.ru';
+        $to = 'kdestroy@gmail.com';
 
         # данные
 
@@ -60,7 +102,7 @@ EOF;
         $data = $_POST['calc'];
 
         $mail = new MailMessage();
-        $mail->setTo('', $to);
+        $mail->setTo('Citsb.Ru Site', $to);
         $mail->setSubject('Request from / '.$company.' / '.($data['count_servers'] + $data['count_computers']).' / '.$name.' / '.$phone);
         $host = HOST;
 
@@ -107,6 +149,9 @@ EOF;
 <a href="/upload/Commercial-Prop.pdf" target="_blank">Шаблон коммерческого предложения</a><br />
 EOF;
 
+        $mail->setTo('Citsb.Ru Site', $to);
+        $mail->setSubject('Request from / '.$company.' / '.($data['count_servers'] + $data['count_computers']).' / '.$name.' / '.$phone);
+
 
         $result['success'] = $r ? 1 : 0;
 
@@ -123,9 +168,14 @@ EOF;
         $phone = $_POST['phone'];
         $comments = $_POST['comments'];
         $data = $_POST['calc'];
+        $code = $_POST['code'];
+    if ($code != $_SESSION['captcha_keystring'])
+    {
+        $result['captcha_error'] = 1;
+    } else {
 
         $mail = new MailMessage();
-        $mail->setTo('', $to);
+        $mail->setTo('Citsb.Ru Site', $to);
 
         # subject
         $subj = array();
@@ -168,7 +218,7 @@ EOF;
         $r = $mail->send();
 
         $result['success'] = $r ? 1 : 0;
-
+    }
         break;
 }
 

@@ -32,6 +32,7 @@ define("IMAGE_DIR", $DOCUMENT_ROOT . IMAGE_FOLDER);
 define("SHOWS_DIR", "shows/") ;
 define("TPL_DIR", ROOT_DIR . "templates/");
 define("CLASS_DIR", ROOT_DIR . "classes/");
+define("LIB_DIR", ROOT_DIR . "lib/");
 define("POST_DIR", ROOT_DIR . "_post/");
 define("TABLE_DIR", CLASS_DIR . "tables/");
 define("LOGS_DIR", ROOT_DIR . "logs/");
@@ -64,7 +65,7 @@ define('TESTS_LOGIC_GROUP_ANSWERS', 4);
 
 define('ARTICLE_TITLE_DELIMITER', "<br>"); // this value must be preg_match pattern valid string! (see admin/art_editor.php)
 
-if (!defined('HOST')) define('HOST', 'tsi.elle.www.hsmdev.ru');
+if (!defined('HOST')) define('HOST', 'citsb.ru');
 
 /* THUMBNAILS CODES */
 define('TH_BG_IMAGE_ADMIN', 1);

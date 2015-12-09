@@ -3,7 +3,7 @@ ob_start();
 //$_core_mode_ = 'wrapper';
 require_once(dirname(__FILE__) . "/core/core.php");
 //require_once(CLASS_DIR . "/record_admin_class.php");
-
+//if ($_GET['sess']) {session_start(); print_r($_SESSION); exit;}
 if ($_REQUEST['p_'] == '')
 {
     $_REQUEST['p_'] = 'intro/';

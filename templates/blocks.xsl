@@ -205,6 +205,7 @@
             </div>
             <div class="row"><div class="button1" id="service-feedback-send">Отправить</div></div>
             <div class="row hidden form-error" data-error="email">Проверьте правильность электронного адреса</div>
+            <div class="row hidden form-error" data-error="captcha">Неверно введен код</div>
             <div class="hidden align-center" data-message="success">
                 <div class="row msg3">Спасибо, мы с Вами свяжемся.</div>
             </div>
@@ -225,6 +226,7 @@
                     <tr><td class="input-line-left">Контактное лицо</td><td class="input-line-center"><input type="text" data-name="name" value="" /></td><td class="input-line-right"></td></tr>
                     <tr><td class="input-line-left">Электронная почта</td><td class="input-line-center"><input type="text" data-name="email" value=""/></td><td class="input-line-right"></td></tr>
                     <tr><td class="input-line-left">Телефон</td><td class="input-line-center"><input type="text" data-name="phone" value="" /></td><td class="input-line-right"></td></tr>
+                    <tr><td class="input-line-left">Введите код*</td><td class="input-line-center"><input type="text" data-name="captcha" value="" /></td><td class="input-line-right captcha"></td></tr>
                 </tbody></table>
             </div>
             <div class="row">
@@ -234,6 +236,7 @@
                 </tbody></table>
             </div>
             <div class="row"><div class="button1" id="service-feedback-refuse">Отправить</div></div>
+            <div class="row hidden form-error" data-error="captcha">Неверно введен код</div>
             <div class="hidden align-center" data-message="success">
                 <div class="row msg3">
                     Спасибо, Ваш запрос передан ответственному лицу. Ответственный: Горохов Виталий. Вы можете с ним связаться, позвонив по телефону<br />
