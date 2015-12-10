@@ -87,9 +87,9 @@ class MailMessage {
 	function createSmtpMail() {
  
 		$this->addHeaders = $this->_writeSmtpHeaders();
- 
+
 		$contentType = $this->format == 'html' ? 'text/html' : 'text/plain';
- 
+
 		$this->addHeaders .= "Content-Type: ".$contentType."; charset=".$this->charset."\n";
 		$this->addHeaders .= "Content-Transfer-Encoding: 8bit";
  
@@ -109,7 +109,7 @@ class MailMessage {
  
 		return $_subject;
 	}
- 
+
 	function send() {
 		if (!isset($this->toEmail)) {
 			return false;

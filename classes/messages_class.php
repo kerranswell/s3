@@ -22,4 +22,16 @@ class messages extends record
         return $num."-".date("dmy", $row['date']);
     }
 
+    public function add($data, $type = 'message')
+    {
+        $sql = "insert into `messages` (`id`, `name`, `company`, `email`, `phone`, `comments`, `date`, `type`) values (0,?,?,?,?,?,?,?)";
+        $this->dsp->db->Execute($sql, $data['name'], $data['company'], $data['email'], $data['phone'], $data['comments'], time(), $type);
+        $id = $this->dsp->db->LastInsertId();
+
+        $message_number = $this->dsp->messages->getNumber($id);
+        $this->dsp->db->Execute("update `messages` set `number` = ?, `contracts_id` = ? where `id` = ?", $message_number, $type == 'contract' && isset($data['contracts_id']) ? $data['contracts_id'] : 0, $id);
+
+        return array('number' => $message_number, 'id' => $id);
+    }
+
 }

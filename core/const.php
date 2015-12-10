@@ -67,6 +67,8 @@ define('ARTICLE_TITLE_DELIMITER', "<br>"); // this value must be preg_match patt
 
 if (!defined('HOST')) define('HOST', 'citsb.ru');
 
+define('SITE_NAME', 'Citsb.Ru Site');
+
 /* THUMBNAILS CODES */
 define('TH_BG_IMAGE_ADMIN', 1);
 define('TH_LISTS_BG_IMAGE_ADMIN', 2);
