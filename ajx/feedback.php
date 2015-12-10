@@ -16,8 +16,8 @@ switch ($_POST['act'])
 {
     case 'feedback' :
 
-//        $to = 'contact@citsb.ru';
-        $to = 'kdestroy@gmail.com';
+        $to = 'contact@citsb.ru';
+//        $to = 'kdestroy@gmail.com';
 
         $mail->addAddress($to, SITE_NAME);
         $host = HOST;
@@ -89,8 +89,8 @@ EOF;
 
     case 'service-submit' :
 
-//        $to = 'net_lead@citsb.ru';
-        $to = 'kdestroy@gmail.com';
+        $to = 'net_lead@citsb.ru';
+//        $to = 'kdestroy@gmail.com';
 
         # данные
 
@@ -124,10 +124,10 @@ EOF;
         $contract_number = $dsp->contracts->getContractNumber($id);
         $dsp->db->Execute("update `contracts` set `contract_number` = ? where `id` = ?", $contract_number, $id);
 
-        $ret = $dsp->messages->add(array('name' => $name, 'company' => $company, 'email' => $email, 'phone' => $phone, 'comments' => $comments, 'contracts_id' => $id), 'contract');
-        $message_number = $ret['number'];
+//        $ret = $dsp->messages->add(array('name' => $name, 'company' => $company, 'email' => $email, 'phone' => $phone, 'comments' => $comments, 'contracts_id' => $id), 'contract');
+//        $message_number = $ret['number'];
 
-        $mail->Subject = 'Request from / '.$company.' / '.($data['count_servers'] + $data['count_computers']).' / '.$name.' / '.$phone.' BM'.$message_number;
+        $mail->Subject = 'Request from / '.$company.' / '.($data['count_servers'] + $data['count_computers']).' / '.$name.' / '.$phone.' '.$contract_number;
 
         $body = <<<EOF
 IP адрес отправителя: {$_SERVER['REMOTE_ADDR']}
@@ -139,7 +139,6 @@ IP адрес отправителя: {$_SERVER['REMOTE_ADDR']}
 Телефон для связи: {$phone}
 E-mail для связи: {$email}
 Предварительный номер договора: {$contract_number}
-Номер сообщения: {$message_number}
 Комментарий к заказу:
 {$comments}
 
@@ -161,7 +160,7 @@ EOF;
         $mail->clearAllRecipients();
 
         $mail->addAddress($email, $name);
-        $mail->Subject = 'CITSB.RU: Уведомление о получении запроса на обслуживание. #BM'.$message_number;
+        $mail->Subject = 'CITSB.RU: Уведомление о получении запроса на обслуживание. '.$contract_number;
 
         $body = <<<EOF
 {$name}, благодарим за проявленный интерес к услугам нашей компании.
@@ -187,8 +186,8 @@ EOF;
         break;
 
     case 'service-refuse' :
-//        $to = 'net_AngryLead@citsb.ru';
-        $to = 'kdestroy@gmail.com';
+        $to = 'net_AngryLead@citsb.ru';
+//        $to = 'kdestroy@gmail.com';
 
         # данные
 

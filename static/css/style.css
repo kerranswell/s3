@@ -1405,8 +1405,13 @@ input.error, textarea.error {
 }
 
 .captcha img {
-    height: 42px;
-    width: 120px;
+    height: 29px;
+    /*height: 27px;*/
+    width: 100px;
+    /*width: 78px;*/
+    margin-left: -8px;
+    position: absolute;
+    margin-top: -14px;
 }
 
 .success-feedback {
