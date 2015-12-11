@@ -13,15 +13,15 @@ $allowed_symbols = "23456789abcdegikpqsvxyz"; #alphabet without similar symbols 
 $fontsdir = 'fonts';	
 
 # CAPTCHA string length
-$length = mt_rand(5,7); # random 5 or 6 or 7
+$length = mt_rand(4,5); # random 5 or 6 or 7
 //$length = 6;
 
 # CAPTCHA image size (you do not need to change it, this parameters is optimal)
-$width = 150;
+$width = 110;
 $height = 60;
 
 # symbol's vertical fluctuation amplitude
-$fluctuation_amplitude = 8;
+$fluctuation_amplitude = 6;
 
 #noise
 //$white_noise_density=0; // no white noise

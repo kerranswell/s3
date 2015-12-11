@@ -147,23 +147,29 @@ $(function() {
                 <div class="fullscreen_transparent bg-blue"></div>
                 <div id="feedback_content" class="hidden" data-title="Обратная связь">
                     <div class="row">
-                        <table class="input-line"><tbody>
-                            <tr><td class="input-line-left">Как к Вам обращаться?*</td><td class="input-line-center"><input type="text" data-name="name" value="" /></td><td class="input-line-right"></td></tr>
-                            <tr><td class="input-line-left">Название Вашей компании*</td><td class="input-line-center"><input type="text" data-name="company" value="" /></td><td class="input-line-right"></td></tr>
-                            <tr><td class="input-line-left">Электронная почта*</td><td class="input-line-center"><input type="text" data-name="email" value=""/></td><td class="input-line-right"></td></tr>
-                            <tr><td class="input-line-left">Телефон</td><td class="input-line-center"><input type="text" data-name="phone" value="" /></td><td class="input-line-right"></td></tr>
-                            <tr><td class="input-line-left">Введите код*</td><td class="input-line-center"><input type="text" data-name="captcha" value="" /></td><td class="input-line-right captcha"></td></tr>
+                        <table class="form feedback"><tbody>
+                            <tr>
+                                <td class="input-title">Как к Вам обращаться?*</td><td class="input-input"><input tabindex="1" type="text" data-name="name" value="" /></td>
+                                <td class="input-title">Эл. почта*</td><td class="input-input"><input type="text" tabindex="3" data-name="email" value=""/></td>
+                            </tr>
+                            <tr>
+                                <td class="input-title">Название Вашей компании*</td><td class="input-input"><input tabindex="2" type="text" data-name="company" value="" /></td>
+                                <td class="input-title">Телефон</td><td class="input-input"><input tabindex="4" type="text" data-name="phone" value="" /></td>
+                            </tr>
+                            <tr><td class="textarea-desc">Комментарии*</td><td colspan="3" class="input-input"><textarea tabindex="5" data-name="comments"></textarea></td></tr>
+                            <tr class="padbottom-less">
+                                <td class="input-title">Введите код*</td><td class="input-input"><input tabindex="6" type="text" data-name="captcha" value="" /></td>
+                                <td class="input-title captcha"></td><td class="input-input"><div class="button-update"></div></td>
+                            </tr>
+                            <tr><td class="input-title"></td><td colspan="3" class="input-input small-desc">*Поля обязательны для заполнения</td></tr>
+                            <tr class="padbottom-less"><td class="input-title"></td><td colspan="3" class="input-input"><div class="button1 feedback-send">Отправить</div>
+                                <br /><br />
+                                <div class="row hidden form-error" data-error="email">Проверьте правильность электронного адреса</div>
+                                <div class="row hidden form-error" data-error="captcha">Неверно введен код</div>
+                            </td></tr>
                         </tbody></table>
                     </div>
-                    <div class="row">
-                        <table class="input-line"><tbody>
-                            <tr><td class="input-line-left textarea-desc">Комментарии*</td><td class="input-line-center"><textarea data-name="comments"></textarea></td><td class="input-line-right"></td></tr>
-                            <tr><td class="input-line-left"></td><td class="input-line-center small-desc">*Поля обязательны для заполнения</td><td class="input-line-right"></td></tr>
-                        </tbody></table>
-                    </div>
-                    <div class="row"><div class="button1 feedback-send">Отправить</div></div>
-                    <div class="row hidden form-error" data-error="email">Проверьте правильность электронного адреса</div>
-                    <div class="row hidden form-error" data-error="captcha">Неверно введен код</div>
+
                     <div class="hidden" data-message="success">
                         <div class="row msg2 success-feedback">Спасибо, мы с Вами свяжемся.</div>
                     </div>

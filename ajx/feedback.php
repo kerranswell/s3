@@ -17,7 +17,6 @@ switch ($_POST['act'])
     case 'feedback' :
 
         $to = 'contact@citsb.ru';
-//        $to = 'kdestroy@gmail.com';
 
         $mail->addAddress($to, SITE_NAME);
         $host = HOST;
@@ -90,7 +89,6 @@ EOF;
     case 'service-submit' :
 
         $to = 'net_lead@citsb.ru';
-//        $to = 'kdestroy@gmail.com';
 
         # данные
 
@@ -100,36 +98,42 @@ EOF;
         $phone = $_POST['phone'];
         $comments = $_POST['comments'];
         $data = $_POST['calc'];
+        $code = $_POST['code'];
 
-        $mail->addAddress($to, SITE_NAME);
-        $host = HOST;
+        if ($code != $_SESSION['captcha_keystring'])
+        {
+            $result['captcha_error'] = 1;
+        } else {
 
-        $tariff = $data['it-director'] ? 'IT-директор' : 'Системный администратор';
-        $inn = array();
-        if ($data['inn'] != '') $inn[] = $data['inn'];
-        if ($data['contract_number'] != '') $inn[] = $data['contract_number'];
-        $inn_num = implode(" / ", $inn);
-        $inbase_s = "";
-        if (trim($inn_num) == '') $inn_num = '---';
-        else $inbase_s = "Вы пришли по рекомендации из компании ".$inn_num.".
+            $mail->addAddress($to, SITE_NAME);
+            $host = HOST;
+
+            $tariff = $data['it-director'] ? 'IT-директор' : 'Системный администратор';
+            $inn = array();
+            if ($data['inn'] != '') $inn[] = $data['inn'];
+            if ($data['contract_number'] != '') $inn[] = $data['contract_number'];
+            $inn_num = implode(" / ", $inn);
+            $inbase_s = "";
+            if (trim($inn_num) == '') $inn_num = '---';
+            else $inbase_s = "Вы пришли по рекомендации из компании ".$inn_num.".
 ";
 
 
-        $sql = "insert into `contracts` (`id`, `tariff`, `servers`, `computers`, `rec_inn`, `rec_num`, `company`, `name`, `phone`, `email`, `comments`, `business`, `date`, `request`, `total`)
-                values (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?)";
-        $dsp->db->Execute($sql, $data['it-director'] ? 'it' : 'sys', $data['count_servers'], $data['count_computers'], $data['inn'], $data['contract_number'], $company, $name, $phone, $email, $comments, $data['business-yes'] ? 1 : 0, time(), $data['total']);
-        $id = $dsp->db->LastInsertId();
-        $r = $id > 0;
+            $sql = "insert into `contracts` (`id`, `tariff`, `servers`, `computers`, `rec_inn`, `rec_num`, `company`, `name`, `phone`, `email`, `comments`, `business`, `date`, `request`, `total`)
+                    values (0, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?)";
+            $dsp->db->Execute($sql, $data['it-director'] ? 'it' : 'sys', $data['count_servers'], $data['count_computers'], $data['inn'], $data['contract_number'], $company, $name, $phone, $email, $comments, $data['business-yes'] ? 1 : 0, time(), $data['total']);
+            $id = $dsp->db->LastInsertId();
+            $r = $id > 0;
 
-        $contract_number = $dsp->contracts->getContractNumber($id);
-        $dsp->db->Execute("update `contracts` set `contract_number` = ? where `id` = ?", $contract_number, $id);
+            $contract_number = $dsp->contracts->getContractNumber($id);
+            $dsp->db->Execute("update `contracts` set `contract_number` = ? where `id` = ?", $contract_number, $id);
 
-//        $ret = $dsp->messages->add(array('name' => $name, 'company' => $company, 'email' => $email, 'phone' => $phone, 'comments' => $comments, 'contracts_id' => $id), 'contract');
-//        $message_number = $ret['number'];
+    //        $ret = $dsp->messages->add(array('name' => $name, 'company' => $company, 'email' => $email, 'phone' => $phone, 'comments' => $comments, 'contracts_id' => $id), 'contract');
+    //        $message_number = $ret['number'];
 
-        $mail->Subject = 'Request from / '.$company.' / '.($data['count_servers'] + $data['count_computers']).' / '.$name.' / '.$phone.' '.$contract_number;
+            $mail->Subject = 'Request from / '.$company.' / '.($data['count_servers'] + $data['count_computers']).' / '.$name.' / '.$phone.' '.$contract_number;
 
-        $body = <<<EOF
+            $body = <<<EOF
 IP адрес отправителя: {$_SERVER['REMOTE_ADDR']}
 Тарифный план: {$tariff}
 Количество серверов / количество раб. станций: {$data['count_servers']} / {$data['count_computers']}
@@ -144,10 +148,10 @@ E-mail для связи: {$email}
 
 EOF;
 
-        $mail->Body = $body;
-        $r = $r && $mail->send();
+            $mail->Body = $body;
+            $r = $r && $mail->send();
 
-        $result['message'] = <<<EOF
+            $result['message'] = <<<EOF
 Благодарим за оказанное нам доверие. Ваш запрос передан ответственному лицу. Ответственный: Горохов Виталий. Вы можете с ним связаться, позвонив по телефону<br />
         +7 (495) 268-14-20 доп. номер #107 в рабочее время с 10 до 18 по московскому времени. Предварительный номер вашего договора: {$contract_number}.<br/>
 <br />
@@ -157,12 +161,12 @@ EOF;
 <a href="/upload/Commercial-Prop.pdf" target="_blank">Шаблон коммерческого предложения</a><br />
 EOF;
 
-        $mail->clearAllRecipients();
+            $mail->clearAllRecipients();
 
-        $mail->addAddress($email, $name);
-        $mail->Subject = 'CITSB.RU: Уведомление о получении запроса на обслуживание. '.$contract_number;
+            $mail->addAddress($email, $name);
+            $mail->Subject = 'CITSB.RU: Уведомление о получении запроса на обслуживание. '.$contract_number;
 
-        $body = <<<EOF
+            $body = <<<EOF
 {$name}, благодарим за проявленный интерес к услугам нашей компании.
 Ваше сообщение получено автоматизированной системой обработки сообщений.
 Ему присвоен предварительный номер договора: {$contract_number}.
@@ -175,19 +179,19 @@ EOF;
 Мы обязательно с Вами свяжемся.
 EOF;
 
-        $mail->Body = $body;
-        $mail->addAttachment(ROOT_DIR.'upload/Dogovor_Template_wForms.pdf');
-        $mail->addAttachment(ROOT_DIR.'upload/Commercial-Prop-IT-Dir.pdf');
-        $mail->addAttachment(ROOT_DIR.'upload/Commercial-Prop.pdf');
-        $r = $mail->send();
+            $mail->Body = $body;
+            $mail->addAttachment(ROOT_DIR.'upload/Dogovor_Template_wForms.pdf');
+            $mail->addAttachment(ROOT_DIR.'upload/Commercial-Prop-IT-Dir.pdf');
+            $mail->addAttachment(ROOT_DIR.'upload/Commercial-Prop.pdf');
+            $r = $mail->send();
 
-        $result['success'] = $r ? 1 : 0;
+            $result['success'] = $r ? 1 : 0;
+        }
 
         break;
 
     case 'service-refuse' :
         $to = 'net_AngryLead@citsb.ru';
-//        $to = 'kdestroy@gmail.com';
 
         # данные
 

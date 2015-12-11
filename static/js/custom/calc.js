@@ -46,6 +46,7 @@ $(function() {
         data.email = frm.find('input[data-name="email"]').val().trim();
         data.phone = frm.find('input[data-name="phone"]').val().trim();
         data.comments = frm.find('textarea[data-name="comments"]').val().trim();
+        data.code = frm.find('input[data-name="captcha"]').val().trim();
 
         var i = frm.find('input[data-name="company"]');
         if (data.company == '')
@@ -99,6 +100,16 @@ $(function() {
             if (i.hasClass('error')) i.removeClass('error');
         }
 
+        var i = frm.find('input[data-name="captcha"]');
+        if (data.code == '')
+        {
+            i.focus();
+            if (!i.hasClass('error')) i.addClass('error');
+            return;
+        } else {
+            if (i.hasClass('error')) i.removeClass('error');
+        }
+
         cursorWait(1);
 
         data.act = 'service-submit';
@@ -115,12 +126,25 @@ $(function() {
                 if (result.success == 1)
                 {
                     cursorWait(0);
+                    hideFormError(frm,  'captcha');
+                    i = frm.find('input[data-name="captcha"]');
+                    if (i.hasClass('error')) i.removeClass('error');
+
                     res.html(result.message);
                     calc.nextPage();
 //                    showFormMessageText(frm, 'success', result.message);
 //                    frm.find('.text').hyphenate(false);
                 } else {
+                    if (result.captcha_error == 1)
+                    {
+                        i = frm.find('input[data-name="captcha"]');
+                        i.val('').focus();
+                        if (!i.hasClass('error')) i.addClass('error');
+                        showFormError(frm,  'captcha');
+                        updateCaptchaImg(frm.find('.captcha img'));
+                    } else {
 //                    showFormMessage(frm, 'error');
+                    }
                 }
             },
             complete : function () {
@@ -136,7 +160,7 @@ $(function() {
 
     $('#service_refuse').click(function () {
         showFullscreenMessage($('#service_refuse_form'));
-        initCaptcha(0);
+//        initCaptcha(0);
 
         return false;
     });
@@ -152,8 +176,8 @@ $(function() {
         data.comments = frm.find('textarea[data-name="comments"]').val().trim();
         data.code = frm.find('input[data-name="captcha"]').val().trim();
 
-        var i = frm.find('input[data-name="captcha"]');
-        if (data.code == '')
+        i = frm.find('textarea[data-name="comments"]')
+        if (data.comments == '')
         {
             i.focus();
             if (!i.hasClass('error')) i.addClass('error');
@@ -162,8 +186,8 @@ $(function() {
             if (i.hasClass('error')) i.removeClass('error');
         }
 
-        i = frm.find('textarea[data-name="comments"]')
-        if (data.comments == '')
+        var i = frm.find('input[data-name="captcha"]');
+        if (data.code == '')
         {
             i.focus();
             if (!i.hasClass('error')) i.addClass('error');
@@ -226,6 +250,7 @@ function CCalc()
     this.pages = new Array();
     this.index = 0;
     var self = this;
+    initCaptcha($('.calc-container'));
     $('.calc-container .calc-page').each(function () {
         var p = {id:$(this).data('id'),obj:$(this)};
         self.pages.push(p);
@@ -279,6 +304,7 @@ CCalc.prototype.nextPage = function ()
         this.calculate();
     }
 
+    if (next.obj.find('.captcha').length > 0) initCaptcha(next.obj);
     this.switchPage(prev, next, 1);
 }
 

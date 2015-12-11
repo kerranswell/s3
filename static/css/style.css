@@ -832,6 +832,10 @@ body.dark .contacts .email a {
     display: inline-block;
 }
 
+.form.feedback {
+    margin-left: -135px;
+}
+
 .form td {
     padding-bottom: 15px;
 }
@@ -840,9 +844,13 @@ body.dark .contacts .email a {
     padding-bottom: 5px;
 }
 
-.form .input-title {
+.form .input-title, .form .textarea-desc {
     text-align: right;
     padding-right: 5px;
+}
+
+.form .input-title {
+    vertical-align: middle;
 }
 
 .form .input-input {
@@ -894,7 +902,7 @@ body.dark .contacts .email a {
 
 .row {margin-top: 20px;}
 .fullscreen .row {text-align: center;}
-.fullscreen input[type="text"] {width: 158px; margin-right: 10px;}
+/*.fullscreen input[type="text"] {width: 158px; margin-right: 10px;}*/
 
 .button1 {
     color: black;
@@ -939,7 +947,7 @@ textarea {
     border: 1px solid black;
     border-radius: 3px;
     width: 417px;
-    height: 120px;
+    height: 85px;
 }
 
 .input-checkbox {
@@ -1405,16 +1413,20 @@ input.error, textarea.error {
 }
 
 .captcha img {
-    height: 29px;
-    /*height: 27px;*/
-    width: 100px;
-    /*width: 78px;*/
-    margin-left: -8px;
-    position: absolute;
-    margin-top: -14px;
+    width: 78px;
+    height: 27px;
 }
 
 .success-feedback {
     width: 700px;
     display: inline-block;
+}
+
+.button-update {
+    background: url(../i/update.png) no-repeat left top;
+    width: 27px;
+    height: 22px;
+    margin-left: 5px;
+    cursor: pointer;
+    margin-top: 2px;
 }

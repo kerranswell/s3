@@ -159,8 +159,8 @@ $(function() {
             hideFormError(frm,  'email');
         }
 
-        var i = frm.find('input[data-name="captcha"]');
-        if (data.code == '')
+        i = frm.find('textarea[data-name="comments"]');
+        if (data.comments == '')
         {
             i.focus();
             if (!i.hasClass('error')) i.addClass('error');
@@ -169,8 +169,8 @@ $(function() {
             if (i.hasClass('error')) i.removeClass('error');
         }
 
-        i = frm.find('textarea[data-name="comments"]');
-        if (data.comments == '')
+        var i = frm.find('input[data-name="captcha"]');
+        if (data.code == '')
         {
             i.focus();
             if (!i.hasClass('error')) i.addClass('error');
@@ -358,6 +358,10 @@ $(function() {
 
     $('.captcha img').live('click', function () {
         updateCaptchaImg($(this));
+    });
+
+    $('.button-update').live('click', function () {
+        updateCaptchaImg($(this).parent().parent().find('.captcha img'));
     });
 
 });
