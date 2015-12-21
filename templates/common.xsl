@@ -31,7 +31,7 @@
         <div id="header_menu">
             <xsl:attribute name="class">header_strip<xsl:if test="/root/common_class/root = 1"> transparent hidden</xsl:if></xsl:attribute>
             <div class="header">
-                <div class="logo"><a class="logo-title" href="/"></a></div>
+                <div class="logo"><a class="logo-title" href="/about/mission/"></a></div>
                 <div class="right_block">
                     <ul class="main_menu">
                         <xsl:for-each select="/root/pages_class/pages/item[pid = 0 and translit != 'intro']">
@@ -65,10 +65,54 @@
         </div>
     </xsl:template>
 
+    <xsl:template name="afterbody_codes">
+        <xsl:comment>LiveInternet counter</xsl:comment><script type="text/javascript"><xsl:comment>
+        new Image().src = "//counter.yadro.ru/hit?r"+
+        escape(document.referrer)+((typeof(screen)=="undefined")?"":
+        ";s"+screen.width+"*"+screen.height+"*"+(screen.colorDepth?
+        screen.colorDepth:screen.pixelDepth))+";u"+escape(document.URL)+
+        ";"+Math.random();//</xsl:comment></script><xsl:comment>/LiveInternet</xsl:comment>
+    </xsl:template>
+
     <xsl:template name="footer_codes">
         <script async="async" defer="defer"
                 src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjXTwuj2uf0fI8TGTQYKLFmk2qol2NV-w&amp;callback=initMap">
         </script>
+        <xsl:comment> Yandex.Metrika counter </xsl:comment>
+        <script type="text/javascript">
+            (function (d, w, c) {
+                (w[c] = w[c] || []).push(function() {
+                    try {
+                        w.yaCounter34323920 = new Ya.Metrika({
+                            id:34323920,
+                            clickmap:true,
+                            trackLinks:true,
+                            accurateTrackBounce:true,
+                            webvisor:true,
+                            trackHash:true
+                        });
+                    } catch(e) { }
+                });
+
+                var n = d.getElementsByTagName("script")[0],
+                    s = d.createElement("script"),
+                    f = function () { n.parentNode.insertBefore(s, n); };
+                s.type = "text/javascript";
+                s.async = true;
+                s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+                if (w.opera == "[object Opera]") {
+                    d.addEventListener("DOMContentLoaded", f, false);
+                } else { f(); }
+            })(document, window, "yandex_metrika_callbacks");
+        </script>
+        <noscript><div><img src="https://mc.yandex.ru/watch/34323920" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+        <xsl:comment> /Yandex.Metrika counter </xsl:comment>
+
+        <xsl:comment>LiveInternet logo</xsl:comment><a href="//www.liveinternet.ru/click"
+        target="_blank"><img src="//counter.yadro.ru/logo?26.10"
+        title="LiveInternet: number of visitors for today is shown"
+        alt="" border="0" width="0" height="0"/></a><xsl:comment>/LiveInternet</xsl:comment>
     </xsl:template>
 
 </xsl:stylesheet>

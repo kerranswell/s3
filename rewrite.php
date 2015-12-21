@@ -1,4 +1,5 @@
 <?php
+//echo 'under construction'; exit;
 ob_start();
 //$_core_mode_ = 'wrapper';
 require_once(dirname(__FILE__) . "/core/core.php");

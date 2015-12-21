@@ -384,15 +384,23 @@ CCalc.prototype.checkPage = function ()
     switch (page.id)
     {
         case 1 :
-            if (data['count_servers'] == 0)
+            var is = page.obj.find('input[data-name="count_servers"]');
+            var i = page.obj.find('input[data-name="count_computers"]');
+
+            if (is.val() == '')
             {
-                page.obj.find('input[data-name="count_servers"]').focus();
+                is.val('0');
+                i.focus();
                 return false;
             }
-            if (data['count_computers'] == 0)
+
+            if (data['count_computers'] <= 0)
             {
-                page.obj.find('input[data-name="count_computers"]').focus();
+                if (!i.hasClass('error')) i.addClass('error');
+                i.focus();
                 return false;
+            } else {
+                if (i.hasClass('error')) i.removeClass('error');
             }
             break;
         case 2 :

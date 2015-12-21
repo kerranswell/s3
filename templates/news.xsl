@@ -18,7 +18,7 @@
             </head>
 
             <body class="light news">
-
+                <xsl:call-template name="afterbody_codes"/>
                 <xsl:call-template name="topmenu"/>
 
                 <div id="wrapper">
@@ -48,6 +48,7 @@
                         <xsl:apply-templates select="/root/news_class/paginator" />
                     </div>
                 </div>
+                <xsl:call-template name="footer_codes"/>
             </body>
 
         </html>
