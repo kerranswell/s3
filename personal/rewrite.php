@@ -25,6 +25,10 @@ switch ($nodes[0])
     case 'logout' :
         require "logout.php";
         break;
+
+    case 'download' :
+        require "download.php";
+        break;
 }
 
 $dsp->common->addValueToXml(array('user' => $dsp->authadmin->user['login']));

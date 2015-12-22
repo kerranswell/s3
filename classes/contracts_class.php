@@ -38,9 +38,19 @@ class contracts extends record
     {
         $this->loadDocs();
 
-        $this->addValueToXml(array('items' => $this->documents));
+        $b = $this->dsp->_Builder->addNode($this->dsp->_Builder->createNode('items', array()), $this->getBuilderBlock());
 
-        $this->dsp->_Builder->Transform( 'docs.xsl');
+        foreach ($this->documents as $d)
+        {
+            $b_item = $this->dsp->_Builder->addNode($this->dsp->_Builder->createNode('item', array()), $b);
+            $b_cd = $this->dsp->_Builder->addNode($this->dsp->_Builder->createNode('diz', array()), $b_item);
+            $cd = $this->dsp->_Builder->doc->createCDATASection($d['diz']);
+            $b_cd->appendChild($cd);
+            $this->dsp->_Builder->addNode($this->dsp->_Builder->createNode('file', array(), $d['file']), $b_item);
+        }
+//        $this->addValueToXml(array('items' => $this->documents));
+
+        $this->dsp->_Builder->Transform( 'docs.xsl' );
     }
 
     private function loadDocs()
@@ -66,9 +76,9 @@ class contracts extends record
             {
                 if ($matches[2] == '.diz') continue;
 
-                if (isset($docs[$matches[1]]))
+                if (isset($docs[$matches[0]]))
                 {
-                    $docs[$matches[1]]['file'] = $file;
+                    $docs[$matches[0]]['file'] = $file;
                 }
             }
         }
@@ -87,7 +97,7 @@ class contracts extends record
         $c = $this->dsp->transforms->stripInvalidXml($c);
         $this->dsp->transforms->replaceEntityBack( $c );
         $this->dsp->transforms->replaceEntity2Simbols( $c );
-        $c = '<![CDATA['.$c.']]>';
+//        $c = "<![CDATA[".$c."]]>";
         return $c;
     }
 

@@ -28,7 +28,7 @@ class lists_admin extends record {
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Ссылка'),
         'translit' => array('type' => 'string', 'params' => array(
-            'edit' => array('showtype' => 'string'),
+            'edit' => array('showtype' => 'none'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Translit'),
         'text' => array('type' => 'text', 'params' => array(
