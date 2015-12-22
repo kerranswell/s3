@@ -30,7 +30,12 @@
                             <ul class="left_menu">
                                 <li><a href="/news/">Новости</a></li>
                                 <li><a href="/blog/">Блог директора</a></li>
-                                <li><a href="/personal/" target="_blank">Вход</a></li>
+                                <li><a href="/personal/" target="_blank">
+                                    <xsl:choose>
+                                        <xsl:when test="/root/usersadmin_class/user/id &gt; 0"><xsl:value-of select="/root/usersadmin_class/user/login"/></xsl:when>
+                                        <xsl:otherwise>Вход</xsl:otherwise>
+                                    </xsl:choose>
+                                </a></li>
                             </ul>
 <!--
                             <xsl:for-each select="/root/pages_class/pages/item[pid = 0]"><xsl:variable name="id" select="id"/>

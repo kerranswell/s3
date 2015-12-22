@@ -6,8 +6,8 @@ class usersadmin extends Record {
     private static $ptrn_pass  = "/^[a-zA-Z0-9_-]+$/i";
 
     public $user_roles = array(
-        USER_ROLE_USER => 'Клиент',
-        USER_ROLE_EDITOR => 'Редактор',
+        USER_ROLE_USER => 'Пользователь',
+        USER_ROLE_EDITOR => 'Администратор',
         USER_ROLE_SUPER => 'Админ'
     );
 
@@ -59,7 +59,7 @@ class usersadmin extends Record {
             return Array();
         }
         $result = $this->dsp->db->SelectRow(
-          "SELECT * FROM {$this->__tablename__} WHERE `login` = ? AND `pass` = SHA1(?)",
+          "SELECT * FROM {$this->__tablename__} WHERE `login` = ? AND `pass` = SHA1(?) AND `status` = 1",
           strtolower($login), ($pass.$salt)
         );
         return $result;
@@ -101,6 +101,11 @@ class usersadmin extends Record {
         
         return $item;
     } // afterGet()
+
+    function loadUser()
+    {
+        $this->addValueToXml(array('user' => array('id' => $this->dsp->authadmin->user['id'], 'login' => $this->dsp->authadmin->user['login'])));
+    }
          
 } // class Users_admin
 

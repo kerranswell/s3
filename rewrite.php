@@ -84,6 +84,8 @@ else if (!empty($nodes[0]) && $nodes[0] == 'intro')
     $_SESSION['pass_intro'] = 1;
 }*/
 
+
+$dsp->usersadmin->loadUser();
 $dsp->_Builder->addArray(array('timestamp' => time(), 'version' => $num, 'mobile' => isset($_REQUEST['mobile']) ? 1 : 0, 'pass_intro' => $pass_intro));
 
 if (!empty($nodes[0]) && $nodes[0] == 'intro' && $pass_intro)

@@ -90,6 +90,9 @@
 
 
     <xsl:template match="item" mode="edit_item">
+        <xsl:if test="/root/common/msg != ''">
+            <p class="admin-message"><xsl:value-of select="/root/common/msg"/></p>
+        </xsl:if>
         <form method="post" class="edit_item_form" action="" enctype="multipart/form-data">
             <table border="0" width="100%">
                 <tr>

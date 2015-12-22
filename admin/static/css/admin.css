@@ -273,3 +273,9 @@ button {
 .fullscreen_text table {
     background-color: #bdbdbd;
 }
+
+.admin-message {
+    color: green;
+    font-weight: bold;
+    margin-left: 39px;
+}

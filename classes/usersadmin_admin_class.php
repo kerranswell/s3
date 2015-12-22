@@ -38,6 +38,14 @@ class usersadmin_admin extends record {
         $this->act = empty($_REQUEST['act']) ? 'list' : $_REQUEST['act'];
     }
 
+
+    public function getPath()
+    {
+        $rows = array(array('id' => 0, 'pid' => 0, 'title' => 'Пользователи'));
+
+        return $rows;
+    }
+
     public function getList()
     {
         $wheres = array();
@@ -152,6 +160,8 @@ class usersadmin_admin extends record {
             $this->dsp->db->Execute($sql, $save['login'], $save['pass'], $save['salt'], !empty($save['status']) ? 1 : 0, $save['role']);
 
             $new_id = $this->dsp->db->LastInsertId();
+
+            $_SESSION['admin_message'] = 'Пользователь успешно создан';
 
             Redirect('/admin/?op=usersadmin&act=edit&id='.$new_id);
         }

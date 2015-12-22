@@ -32,7 +32,7 @@ class lists_admin extends record {
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Translit'),
         'text' => array('type' => 'text', 'params' => array(
-            'edit' => array('showtype' => 'editor'),
+            'edit' => array('showtype' => 'none'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Текст'),
         'pos' => array('type' => 'int', 'params' => array(
