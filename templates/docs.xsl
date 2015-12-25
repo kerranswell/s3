@@ -18,7 +18,7 @@
                     <tbody>
             <xsl:for-each select="/root/contracts_class/items/item">
                 <tr>
-                    <td><a target="_blank" href="/docs/{file}"><xsl:value-of select="file"/></a></td>
+                    <td><a target="_blank" href="/personal/download/{file}"><xsl:value-of select="file"/></a></td>
                     <td><xsl:value-of select="diz" disable-output-escaping="yes" /></td>
                 </tr>
             </xsl:for-each>

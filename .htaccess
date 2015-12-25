@@ -4,7 +4,7 @@ ErrorDocument 404 /rewrite.php?er=1
 
 	RewriteEngine On
 
-    RewriteRule ^docs/(.*)$ personal/download/$1/ [L,QSA]
+#    RewriteRule ^docs/(.*)$ personal/download/$1/ [L,QSA]
 
     RewriteRule ^images/c/(.*)$ th.php?url=$1 [L,QSA]
 
