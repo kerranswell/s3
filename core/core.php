@@ -897,6 +897,36 @@ function _isMobileGlobal() {
 
 }
 
+function email_validate($email = "")
+{
+        $email = trim($email);
+
+
+        $email = preg_replace( "# #uis", "", $email );
+
+
+        # @ only once!
+        if ( substr_count( $email, '@' ) > 1 )
+        {
+                return '';
+        }
+
+        # fuck all special symbols
+        $email = preg_replace( "#[\;\#\n\r\*\'\"<>&\%\!\(\)\{\}\[\]\?\\/\s]#u", "", $email );
+
+
+        if ( preg_match( "/^.+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,4})(\]?)$/u", $email) )
+        {
+                return $email;
+        }
+        else
+        {
+                return '';
+        }
+}
+
+
+
 function redirectUpperCased()
 {
     if (preg_match('/[A-Z]/', $_REQUEST['p_']))

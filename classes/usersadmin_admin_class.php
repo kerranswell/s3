@@ -23,6 +23,10 @@ class usersadmin_admin extends record {
             'edit' => array('showtype' => 'password'),
             'list' => array('showtype' => 'none'),
         ), 'title' => 'Подтверждение'),
+        'email' => array('type' => 'string', 'params' => array(
+            'edit' => array('showtype' => 'string'),
+            'list' => array('showtype' => 'label'),
+        ), 'title' => 'Email'),
         'status' => array('type' => 'int', 'params' => array(
             'edit' => array('showtype' => 'checkbox'),
             'list' => array('showtype' => 'none'),
@@ -57,7 +61,7 @@ class usersadmin_admin extends record {
             default: $wheres[] = "role != ".USER_ROLE_SUPER;
         }
         if (count($wheres) > 0) $wheres = " where (".implode(") and (", $wheres).")";
-        $sql = "select `id`, `login`, `role` from `".$this->__tablename__."`
+        $sql = "select `id`, `login`, `email`, `role` from `".$this->__tablename__."`
                 ".$wheres;
 
         $rows = $this->dsp->db->Select($sql);
@@ -128,9 +132,9 @@ class usersadmin_admin extends record {
             return;
         }
 
-        if (!empty($save['login'])) {
+/*        if (!empty($save['login'])) {
             $save['login'] = strtolower($save['login']);
-        }
+        }*/
 
         if ($id > 0)
         {
@@ -142,11 +146,12 @@ class usersadmin_admin extends record {
             $sql = "update `".$this->__tablename__."` set
                 `login` = ?,
                 `pass` = ?,
+                `email` = ?,
                 `status` = ?
                 where `id` = ?
             ".'';
 
-            $this->dsp->db->Execute($sql, $save['login'], $save['pass'], !empty($save['status']) ? 1 : 0, $id);
+            $this->dsp->db->Execute($sql, $save['login'], $save['pass'], $save['email'], !empty($save['status']) ? 1 : 0, $id);
 
             if ($this->dsp->authadmin->IsLogged() && $id == $this->dsp->authadmin->user['id']) {
                 $this->dsp->authadmin->user = array_merge($this->dsp->authadmin->user, $save);
@@ -156,8 +161,8 @@ class usersadmin_admin extends record {
         } else {
             $save['salt'] = generatePass();
             $save['pass'] = sha1($save['pass'].$save['salt']);
-            $sql = "insert into `usersadmin` (`id`, `login`, `pass`, `salt`, `status`, `role`) values (0, ?, ?, ?, ?, ?)".'';
-            $this->dsp->db->Execute($sql, $save['login'], $save['pass'], $save['salt'], !empty($save['status']) ? 1 : 0, $save['role']);
+            $sql = "insert into `usersadmin` (`id`, `login`, `pass`, `email`, `salt`, `status`, `role`) values (0, ?, ?, ?, ?, ?, ?)".'';
+            $this->dsp->db->Execute($sql, $save['login'], $save['pass'], $save['email'], $save['salt'], !empty($save['status']) ? 1 : 0, $save['role']);
 
             $new_id = $this->dsp->db->LastInsertId();
 
@@ -167,7 +172,7 @@ class usersadmin_admin extends record {
         }
     }
 
-    protected function checkUpdate($item)
+    protected function checkUpdate(&$item)
     {
         $errors = array();
         if (strlen(trim($item['login'])) < 4) $errors['login'] = 'Слишком короткий логин, должно быть не менее 4 символов';
@@ -181,6 +186,14 @@ class usersadmin_admin extends record {
         if ($item['pass'] != $item['pass2'])
         {
             $errors['pass'] = 'Пароли не совпадают';
+        }
+
+        $item['email'] = email_validate($item['email']);
+        if (!$item['email']) $errors['email'] = 'Неверно введен email';
+        else {
+            $sql = "select count(*) from `" . $this->__tablename__ . "` where `email` = ? and `id` != ?" . '';
+            $v = $this->dsp->db->SelectValue($sql, $item['email'], $item['id']);
+            if ($v > 0) $errors['email'] = 'Такой email уже существует';
         }
 
         return $errors;

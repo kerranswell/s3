@@ -1,6 +1,6 @@
 <?php
 
-    if (!$dsp->authadmin->IsLogged() && $_POST['opcode'] != 'login') exit;
+    if (!$dsp->authadmin->IsLogged() && $_POST['opcode'] != 'login'&& $_POST['opcode'] != 'restore') exit;
 
     if (!empty($_POST['opcode'])) {
 //        print ADMIN_POST_DIR . $_POST['opcode'] . '.php';

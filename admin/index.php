@@ -22,6 +22,21 @@
         $bp->append_simple_node($dom_head, 'notify', $notify, $param);
     }
 
+    $op = $_REQUEST['op'];
+
+    $msg = '';
+    if (!empty($_SESSION['admin_message']))
+    {
+        $msg = $_SESSION['admin_message'];
+        unset($_SESSION['admin_message']);
+    }
+
+    $common = array('op' => $op, '_get' => $_GET, 'msg' => $msg);
+//print_r($_SESSION); exit;
+    $b_common = $dsp->_Builder->addNode($dsp->_Builder->createNode('common', array()));
+    $dsp->_Builder->addArray($common, '', array(), $b_common, false);
+
+
     $dsp->authadmin->Init();
 
     if (!$dsp->authadmin->IsLogged()) {
@@ -42,19 +57,6 @@
     // Navigation Block
     $dom_block_nav = $dsp->_BuilderPatterns->create_block('nav', 'nav', 'left');
     $dsp->_Builder->addArray($dsp->admin_menu->getAdminMenu(), '', array(), $dom_block_nav, false);
-
-    $op = $_REQUEST['op'];
-
-    $msg = '';
-    if (!empty($_SESSION['admin_message']))
-    {
-        $msg = $_SESSION['admin_message'];
-        unset($_SESSION['admin_message']);
-    }
-
-    $common = array('op' => $op, '_get' => $_GET, 'msg' => $msg);
-    $b_common = $dsp->_Builder->addNode($dsp->_Builder->createNode('common', array()));
-    $dsp->_Builder->addArray($common, '', array(), $b_common, false);
 
 //    $dsp->_Builder->addNode($dsp->_Builder->createNode('block', array('align' => 'center', 'id' => 'main_menu', 'name' => 'main_menu')));
     if ($op != '') {

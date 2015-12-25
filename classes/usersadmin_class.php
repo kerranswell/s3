@@ -2,8 +2,8 @@
 
 class usersadmin extends Record {
 
-    private static $ptrn_login = "/^[a-zA-Z0-9_-]+$/i";
-    private static $ptrn_pass  = "/^[a-zA-Z0-9_-]+$/i";
+    private static $ptrn_login = "/^[a-zA-Z0-9_-]+$/";
+    private static $ptrn_pass  = "/^[a-zA-Z0-9_-]+$/";
 
     public $user_roles = array(
         USER_ROLE_USER => 'Пользователь',
@@ -17,9 +17,9 @@ class usersadmin extends Record {
         }
         unset($item['pass']);
         
-        if (!empty($item['login'])) {
+/*        if (!empty($item['login'])) {
             $item['login'] = strtolower($item['login']);
-        }
+        }*/
         
         return $item;
     } // beforeAdd()
@@ -49,7 +49,7 @@ class usersadmin extends Record {
 
     function GetByLoginPass($login, $pass) {
         $salt = $this->dsp->db->SelectRow(
-          "SELECT `salt` FROM {$this->__tablename__} WHERE `login` = ?", strtolower($login)
+          "SELECT `salt` FROM {$this->__tablename__} WHERE BINARY `login` = ?", $login
         );
         if (0 == count($salt)) {
             return array();
@@ -59,8 +59,8 @@ class usersadmin extends Record {
             return Array();
         }
         $result = $this->dsp->db->SelectRow(
-          "SELECT * FROM {$this->__tablename__} WHERE `login` = ? AND `pass` = SHA1(?) AND `status` = 1",
-          strtolower($login), ($pass.$salt)
+          "SELECT * FROM {$this->__tablename__} WHERE BINARY `login` = ? AND `pass` = SHA1(?) AND `status` = 1",
+          $login, ($pass.$salt)
         );
         return $result;
     } // GetByLoginPass()
@@ -79,7 +79,7 @@ class usersadmin extends Record {
         if (!preg_match(self::$ptrn_login, $login)) {
             return false;
         }
-        $result = $this->GetByCause(array('login' => strtolower($login)));
+        $result = $this->GetByCause(array('login' => $login));
         if (empty($result)) {
             return false;
         }
@@ -105,6 +105,23 @@ class usersadmin extends Record {
     function loadUser()
     {
         $this->addValueToXml(array('user' => array('id' => $this->dsp->authadmin->user['id'], 'login' => $this->dsp->authadmin->user['login'])));
+    }
+
+    function getUserByEmail($email)
+    {
+        $sql = "select * from `".$this->__tablename__."` where `email` = ?";
+        $user = $this->dsp->db->SelectRow($sql, $email);
+        if (!empty($user['id'])) return $user;
+
+        return 0;
+    }
+
+    function setNewPassword($password, $id)
+    {
+        $salt = generatePass();
+        $pass = sha1($password.$salt);
+        $sql = "update `".$this->__tablename__."` set `pass` = ?, `salt` = ? where `id` = ?";
+        $this->dsp->db->Execute($sql, $pass, $salt, $id);
     }
          
 } // class Users_admin

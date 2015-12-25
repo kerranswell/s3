@@ -15,7 +15,7 @@ if (!empty($notify)) {
 $dsp->authadmin->Init();
 
 if (!$dsp->authadmin->IsLogged()) {
-    $dsp->_Builder->addNode($dsp->_Builder->createNode('block', array('align' => 'center', 'id' => 'login', 'name' => 'login', 'act' => '/admin/')));
+    $dsp->_Builder->addNode($dsp->_Builder->createNode('block', array('align' => 'center', 'id' => 'login', 'name' => 'login', 'act' => '/admin/', 'personal' => 1)));
     $dsp->_Builder->Transform('admin/login.xsl');
     exit();
 }
