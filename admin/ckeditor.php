@@ -70,7 +70,11 @@ function htmlspecialchars_decode (string, quote_style) {
 
 $(document).ready(function(){
     $('#ckeditor').val($(window.opener.document).find('#ckeditor_temp').val());
-
+    CKEDITOR.replace('ckeditor', {
+      "filebrowserImageUploadUrl": "/admin/static/ckeditor/plugins/imgupload.php",
+    'extraPlugins': 'imgbrowse',
+    'filebrowserImageBrowseUrl': '/admin/static/ckeditor/plugins/imgbrowse/imgbrowse.html?imgroot=/ckupload/',
+    });
 });
 
 function word_filter(editor){

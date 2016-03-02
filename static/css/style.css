@@ -1225,6 +1225,14 @@ div.intro_c {
     margin-bottom: 20px;
 }
 
+.block.columns1 img[style*="float: right;"] {
+    margin-left: 10px;
+}
+
+.block.columns1 img[style*="float: left;"] {
+    margin-right: 10px;
+}
+
 div.picture {
     text-align: center;
 }

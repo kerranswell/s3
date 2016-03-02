@@ -27,6 +27,7 @@ define('USER_ROLE_USER', 0);
 define("SERVER_PROTOCOL", "http://");
 define("SERVER_REL_PATH", '');
 define("ROOT_DIR", $DOCUMENT_ROOT . SERVER_REL_PATH . "/");
+define("DOCS_DIR", ROOT_DIR. "../Restricted.Area");
 define("IMAGE_FOLDER", "/images/");
 define("IMAGE_DIR", $DOCUMENT_ROOT . IMAGE_FOLDER);
 define("SHOWS_DIR", "shows/") ;

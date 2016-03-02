@@ -2,8 +2,8 @@
 
 class usersadmin extends Record {
 
-    private static $ptrn_login = "/^[a-zA-Z0-9_-]+$/";
-    private static $ptrn_pass  = "/^[a-zA-Z0-9_-]+$/";
+    private static $ptrn_login = "/^[a-zA-Z0-9_@\.-]+$/";
+    private static $ptrn_pass  = "/^[a-zA-Z0-9_\s-]+$/";
 
     public $user_roles = array(
         USER_ROLE_USER => 'Пользователь',

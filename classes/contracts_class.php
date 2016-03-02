@@ -55,7 +55,7 @@ class contracts extends record
 
     private function loadDocs()
     {
-        $dir = ROOT_DIR."docs";
+        $dir = DOCS_DIR;
 
         $docs = array();
         $files = scandir($dir);

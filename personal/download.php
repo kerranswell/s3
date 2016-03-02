@@ -4,7 +4,7 @@ array_shift($nodes);
 
 $file_path = implode("/", $nodes);
 
-$dir = ROOT_DIR."docs";
+$dir = DOCS_DIR;
 $file = $dir."/".$file_path;
 $file_name = explode("/", $file_path);
 $file_name = array_pop($file_name);

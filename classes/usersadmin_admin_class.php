@@ -30,7 +30,7 @@ class usersadmin_admin extends record {
         'status' => array('type' => 'int', 'params' => array(
             'edit' => array('showtype' => 'checkbox'),
             'list' => array('showtype' => 'none'),
-        ), 'title' => 'Статус'),
+        ), 'title' => 'Активен'),
         'role' => array('type' => 'int', 'params' => array(
             'edit' => array('showtype' => 'select', 'xml_options' => '/root/usersadmin_admin_class/user_roles'),
             'list' => array('showtype' => 'label'),
