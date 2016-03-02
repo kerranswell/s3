@@ -17,7 +17,7 @@ CKEDITOR.editorConfig = function( config )
         ['Find','Replace','-','SelectAll'],
         [ 'Bold','Italic','Underline','Strike','-','RemoveFormat' ],
         [ 'NumberedList','BulletedList'],
-        [ 'Table', 'Link','Unlink','Anchor' ],
+        [ 'Table', 'Link','Unlink','Anchor', 'Image' ],
         [ 'SpecialChar'],
         [ 'Maximize', 'ShowBlocks','-','About' ]
     ];
